@@ -1,0 +1,67 @@
+name: Zocdoc API Rate Limits
+description: >-
+  Zocdoc API rate limits are applied to ensure stability and prevent abuse.
+  Specific numerical limits are not publicly disclosed and may vary by partner
+  and use case. Rate limited requests receive an HTTP 429 status code and
+  developers are expected to implement exponential backoff strategies. Limits
+  may be adjusted by Zocdoc without notice, either reduced to prevent abuse or
+  increased to accommodate high-traffic applications.
+specificationVersion: '0.1'
+rateLimits:
+  - name: General API Rate Limit
+    description: >-
+      Applies to all API endpoints across the Zocdoc API. The exact numerical
+      threshold is not publicly documented and is determined on a per-partner
+      basis. Developers should implement exponential backoff when receiving 429
+      responses.
+    type: RequestRate
+    scope: Account
+    errorCode: 429
+    errorMessage: Too Many Requests
+    handling:
+      strategy: ExponentialBackoff
+      description: >-
+        Developers should use exponential backoff to progressively reduce
+        request rate upon receiving 429 responses until the rate limit window
+        resets.
+    notes:
+      - Rate limits may be reduced without notice to prevent abuse
+      - Rate limits may be increased to accommodate high-traffic applications
+      - Specific limits are negotiated per partner use case
+      - Contact Zocdoc via the developer portal for limit details specific to your integration
+  - name: Gzip Compression
+    description: >-
+      Gzip compression is supported for both requests and responses to improve
+      API performance and reduce bandwidth consumption. Use Content-Encoding:
+      gzip for request bodies and Accept-Encoding: gzip for response
+      compression.
+    type: Performance
+    scope: Request
+    headers:
+      request: Content-Encoding: gzip
+      response: Accept-Encoding: gzip
+  - name: Default Page Size
+    description: >-
+      The schedulable entities endpoint has a default page_size of 5,000
+      records per page. Pagination should be used for large result sets.
+    type: Pagination
+    scope: Endpoint
+    endpoint: /v1/schedulable_entities
+    defaultPageSize: 5000
+  - name: Appointment Notes Character Limit
+    description: >-
+      The notes field on appointments has a maximum character limit of 100
+      characters.
+    type: FieldLimit
+    scope: Field
+    field: appointments.notes
+    maximum: 100
+    unit: Characters
+  - name: Attachment Upload Size
+    description: >-
+      Appointment attachment uploads support files up to 100MB in size.
+    type: SizeLimit
+    scope: Upload
+    endpoint: /v1/appointments/{appointment_id}/attachments
+    maximum: 100
+    unit: MB

@@ -1,0 +1,44 @@
+name: Zocdoc API Plans and Pricing
+description: >-
+  Zocdoc for Developers offers a partner-based API access model. Access to the
+  Zocdoc API is not self-serve and requires contacting Zocdoc directly through
+  their developer portal. Pricing and plan tiers are determined based on use
+  case, integration type, and volume requirements negotiated directly with
+  Zocdoc. The API supports both patient booking and provider calendar
+  integration use cases with a sandbox environment for development and testing.
+specificationVersion: '0.1'
+plans:
+  - name: Sandbox Access
+    description: >-
+      Free sandbox environment for development and testing of Zocdoc API
+      integrations. Provides access to all API endpoints against test data with
+      repeatable test scenarios for end-to-end workflow validation.
+    type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+    features:
+      - All API endpoints available for testing
+      - Mock webhook endpoint for testing webhook events
+      - Test data and repeatable test scenarios
+      - OAuth 2.0 authentication via sandbox auth server
+    limitations:
+      - Not for production use
+      - Test data only, no real provider data
+  - name: Production Partner Access
+    description: >-
+      Production API access for qualified partners integrating with Zocdoc's
+      provider network. Access and pricing are determined through direct
+      engagement with Zocdoc's partner team. Use cases include patient booking,
+      provider calendar integration, and insurance API access.
+    type: Production
+    url: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
+    features:
+      - Patient booking API access
+      - Provider calendar integration API
+      - Insurance configuration API (select partners)
+      - Webhook notifications for real-time appointment updates
+      - OAuth 2.0 with Client Credentials and Authorization Code flows
+      - Gzip compression support
+      - Appointment lifecycle management
+    contact:
+      url: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
+      description: Contact Zocdoc to inquire about production API access and pricing

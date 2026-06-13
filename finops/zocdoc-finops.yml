@@ -1,0 +1,86 @@
+name: Zocdoc API FinOps
+description: >-
+  Financial operations guidance for managing Zocdoc API integration costs.
+  Zocdoc API pricing is negotiated directly with Zocdoc on a partner basis,
+  with costs dependent on integration type (patient booking, provider calendar,
+  insurance), usage volume, and specific business requirements. There is no
+  public self-serve pricing tier.
+specificationVersion: '1.0'
+framework: FOCUS
+visibility: Partner-Negotiated
+allocation:
+  - name: API Access Cost
+    description: >-
+      Zocdoc API access costs are determined through direct partnership
+      agreements and are not publicly listed. Costs may be structured around
+      appointment bookings facilitated, active provider integrations, or
+      monthly API call volume depending on the partnership agreement.
+    type: Variable
+    model: Negotiated
+    costDrivers:
+      - name: Appointment Volume
+        description: Number of appointments booked through the API integration
+        type: Usage
+      - name: Provider Integrations
+        description: Number of provider calendars integrated via the API
+        type: Usage
+      - name: Insurance API Access
+        description: Access to the insurance configuration API for select partners
+        type: Feature
+optimization:
+  - name: Use Sandbox for Development
+    description: >-
+      Utilize the free sandbox environment at
+      https://api-developer-sandbox.zocdoc.com for all development and testing
+      to avoid incurring production API costs during integration development.
+    type: CostAvoidance
+    impact: High
+  - name: Implement Gzip Compression
+    description: >-
+      Enable gzip compression on all API requests and responses to reduce
+      bandwidth consumption, which may reduce costs associated with data
+      transfer in high-volume integrations.
+    type: Efficiency
+    implementation:
+      requestHeader: Content-Encoding: gzip
+      responseHeader: Accept-Encoding: gzip
+    impact: Medium
+  - name: Pagination and Page Size Management
+    description: >-
+      Use appropriate page sizes (default 5,000 for schedulable entities) to
+      avoid over-fetching data. Request only the data needed for each
+      operation to minimize unnecessary API calls.
+    type: Efficiency
+    impact: Medium
+  - name: Exponential Backoff for Rate Limits
+    description: >-
+      Implement exponential backoff when receiving 429 rate limit responses
+      rather than retrying immediately to avoid wasted API calls and potential
+      cost escalation from repeated failed requests.
+    type: WasteReduction
+    impact: Low
+  - name: Token Lifecycle Management
+    description: >-
+      Manage OAuth 2.0 access token lifetimes efficiently. Access tokens expire
+      after 60 minutes; refresh tokens last 15 days (30-day maximum). Reuse
+      tokens within their validity window rather than requesting new tokens for
+      each API call to minimize authentication overhead.
+    type: Efficiency
+    tokenLifetimes:
+      accessToken: 60 minutes
+      refreshToken: 15 days inactive / 30 days maximum
+      loginSession: 30 minutes inactive / 1 day maximum
+    impact: Low
+governance:
+  - name: Contact for Pricing
+    description: >-
+      Engage Zocdoc's partnership team to negotiate API access terms and
+      pricing. Establish clear cost structures and volume thresholds in the
+      partnership agreement before beginning production integration.
+    url: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
+  - name: Monitor API Usage
+    description: >-
+      Track API call volumes, error rates (particularly 429s indicating rate
+      limit breaches), and appointment booking metrics to understand usage
+      patterns and forecast cost changes as integration scales.
+    type: Monitoring

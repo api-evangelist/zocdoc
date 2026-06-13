@@ -1,0 +1,84 @@
+aid: zocdoc
+name: Zocdoc
+description: >-
+  Zocdoc is a healthcare appointment booking platform that provides a REST API
+  for accessing provider availability, booking appointments, managing insurance
+  verification, and patient scheduling. The Zocdoc for Developers platform
+  enables integration with Zocdoc's provider network through patient booking,
+  provider calendar integration, and insurance APIs using OAuth 2.0
+  authentication with both sandbox and production environments.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/zocdoc/refs/heads/main/apis.yml
+created: '2026-06-13'
+modified: '2026-06-13'
+specificationVersion: '0.19'
+tags:
+  - Healthcare
+  - Appointments
+  - Booking
+  - Providers
+  - Insurance
+  - Telehealth
+  - Scheduling
+apis:
+  - aid: zocdoc:zocdoc-api
+    name: Zocdoc API
+    description: >-
+      RESTful API for searching and booking healthcare appointments, managing
+      provider availability, handling insurance verification, and integrating
+      with Zocdoc's provider network. Supports patient booking flows,
+      provider calendar integration, appointment lifecycle management, and
+      webhook notifications for real-time updates.
+    humanURL: https://api-docs.zocdoc.com/guides
+    baseURL: https://api-developer.zocdoc.com
+    tags:
+      - Healthcare
+      - Appointments
+      - Providers
+      - Insurance
+      - Scheduling
+      - Webhooks
+    properties:
+      - type: Documentation
+        url: https://api-docs.zocdoc.com/guides
+      - type: OpenAPI
+        url: https://api-docs.zocdoc.com/apis.md
+      - type: Authentication
+        url: https://api-docs.zocdoc.com/guides/authentication
+      - type: Sandbox
+        url: https://api-developer-sandbox.zocdoc.com
+      - type: Webhooks
+        url: https://api-docs.zocdoc.com/guides/webhooks
+      - type: Performance
+        url: https://api-docs.zocdoc.com/guides/performance
+      - type: Testing
+        url: https://api-docs.zocdoc.com/guides/testing-data
+      - type: Changelog
+        url: https://api-docs.zocdoc.com/changelog
+      - type: FAQ
+        url: https://api-docs.zocdoc.com/guides/faqs
+common:
+  - type: Website
+    url: https://www.zocdoc.com
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: GitHubOrg
+    url: https://github.com/Zocdoc
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/zocdoc
+  - type: Blog
+    url: https://medium.com/zocdoc-engineering
+  - type: Pricing
+    url: https://www.zocdoc.com/about/news/zocdoc-launches-its-first-ever-public-api-platform-zocdoc-for-developers/
+  - type: X
+    url: https://x.com/Zocdoc
+  - type: Plans
+    url: plans/zocdoc-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/zocdoc-rate-limits.yml
+  - type: FinOps
+    url: finops/zocdoc-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
