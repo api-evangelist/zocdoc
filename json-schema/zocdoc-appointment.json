@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-developer.zocdoc.com/schemas/appointment",
+  "title": "Appointment",
+  "description": "A Zocdoc appointment booking request body (AppointmentData). Represents the patient, provider-location, visit reason, and timeslot for a new appointment.",
+  "type": "object",
+  "required": ["start_time", "visit_reason_id", "provider_location_id", "patient", "patient_type"],
+  "properties": {
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time of the appointment in ISO-8601 format with timezone offset. Must be a valid start_time from /v1/provider_locations/availability.",
+      "example": "2022-04-27T09:00:00-04:00"
+    },
+    "visit_reason_id": {
+      "type": "string",
+      "description": "Zocdoc visit reason ID. Must be accepted by the provider.",
+      "example": "pc_FRO-18leckytNKtruw5dLR"
+    },
+    "provider_location_id": {
+      "type": "string",
+      "description": "Zocdoc composite provider-location ID.",
+      "example": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890"
+    },
+    "patient_type": {
+      "type": "string",
+      "enum": ["new", "existing"],
+      "description": "Whether the patient is new to or existing at the provider's practice.",
+      "example": "new"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 100,
+      "description": "Optional patient notes. 100 character maximum."
+    },
+    "patient": {
+      "$ref": "#/$defs/Patient"
+    }
+  },
+  "$defs": {
+    "Patient": {
+      "title": "Patient",
+      "description": "Patient demographic and insurance information required to book an appointment.",
+      "type": "object",
+      "required": ["first_name", "last_name", "date_of_birth", "sex_at_birth", "phone_number", "email_address", "patient_address"],
+      "properties": {
+        "patient_id": {
+          "type": "string",
+          "description": "The Zocdoc ID of the patient (if returning)."
+        },
+        "developer_patient_id": {
+          "type": "string",
+          "description": "Third-party developer's own patient identifier."
+        },
+        "first_name": {
+          "type": "string",
+          "description": "Patient's first name."
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Patient's last name."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Patient's date of birth in YYYY-MM-DD format."
+        },
+        "sex_at_birth": {
+          "type": "string",
+          "enum": ["male", "female"],
+          "description": "Patient's sex assigned at birth."
+        },
+        "phone_number": {
+          "type": "string",
+          "pattern": "^[2-9][0-9]{2}[2-9][0-9]{6}$",
+          "description": "Unformatted 10-digit phone number. First and fourth digits cannot be 0 or 1.",
+          "example": "9999999999"
+        },
+        "email_address": {
+          "type": "string",
+          "format": "email",
+          "description": "Patient's email address.",
+          "example": "test@example.com"
+        },
+        "patient_address": {
+          "$ref": "#/$defs/PatientAddress"
+        },
+        "insurance": {
+          "$ref": "#/$defs/PatientInsurance"
+        },
+        "gender": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "female_at_birth",
+              "male_at_birth",
+              "cisgender",
+              "genderfluid",
+              "genderqueer",
+              "intersex",
+              "non_binary",
+              "transgender_man",
+              "transgender_woman",
+              "prefer_not_to_say",
+              "none_apply"
+            ]
+          },
+          "description": "Patient's self-identified gender(s). none_apply and prefer_not_to_say must be used independently."
+        }
+      }
+    },
+    "PatientAddress": {
+      "title": "Patient Address",
+      "type": "object",
+      "required": ["address1", "city", "state", "zip_code"],
+      "properties": {
+        "address1": {
+          "type": "string",
+          "description": "Street address line 1."
+        },
+        "address2": {
+          "type": "string",
+          "description": "Street address line 2."
+        },
+        "city": {
+          "type": "string",
+          "description": "City."
+        },
+        "state": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Two-letter US state code.",
+          "example": "NY"
+        },
+        "zip_code": {
+          "type": "string",
+          "pattern": "^[0-9]{5}$",
+          "description": "5-digit ZIP code.",
+          "example": "36925"
+        }
+      }
+    },
+    "PatientInsurance": {
+      "title": "Patient Insurance",
+      "type": "object",
+      "properties": {
+        "insurance_plan_id": {
+          "type": "string",
+          "description": "Zocdoc insurance plan ID.",
+          "example": "ip_2224"
+        },
+        "insurance_group_number": {
+          "type": "string",
+          "description": "Patient's insurance group number."
+        },
+        "insurance_member_id": {
+          "type": "string",
+          "description": "Patient's insurance card member ID."
+        },
+        "is_self_pay": {
+          "type": "boolean",
+          "description": "Indicates if the patient is self-paying."
+        }
+      }
+    }
+  }
+}

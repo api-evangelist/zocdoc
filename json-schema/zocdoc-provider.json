@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-developer.zocdoc.com/schemas/provider",
+  "title": "Provider",
+  "description": "A Zocdoc healthcare provider (BaseProvider). Contains demographic and professional information about a provider.",
+  "type": "object",
+  "properties": {
+    "provider_id": {
+      "type": "string",
+      "description": "The Zocdoc provider ID.",
+      "example": "pr_abc123-def456_wxyz7890"
+    },
+    "npi": {
+      "type": "string",
+      "description": "The provider's National Provider Identifier (NPI)."
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Professional title (e.g., MD, DO, NP)."
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "gender_identity": {
+      "type": "string",
+      "description": "Provider's gender identity. Possible values include: Female, Male, Non-binary."
+    },
+    "specialties": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of medical specialty names."
+    },
+    "specialty_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of Zocdoc specialty IDs."
+    },
+    "default_visit_reason_id": {
+      "type": "string",
+      "description": "The default Zocdoc visit reason ID for this provider."
+    },
+    "visit_reason_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "All visit reason IDs supported by this provider."
+    },
+    "statement": {
+      "type": "string",
+      "description": "Provider's personal statement or bio."
+    },
+    "provider_photo_url": {
+      "type": "string",
+      "description": "Protocol-relative URL to provider photo. JPEG or PNG, 200–4000px.",
+      "example": "//d2uur722ua7fvv.cloudfront.net/ZeeFace_02.svg"
+    },
+    "languages": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Languages spoken at the practice location.",
+      "example": ["English", "Spanish"]
+    },
+    "profile_url": {
+      "type": "string",
+      "description": "URL to the provider's profile page on Zocdoc.",
+      "example": "https://zocdoc.com/doctor/capivarudo-nojeira-md-517507?utm_source=FakeSource"
+    },
+    "credentials": {
+      "$ref": "#/$defs/ProviderCredentials"
+    }
+  },
+  "$defs": {
+    "ProviderCredentials": {
+      "title": "Provider Credentials",
+      "description": "Education and professional certifications for a provider.",
+      "type": "object",
+      "required": ["certifications", "education"],
+      "properties": {
+        "certifications": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of professional certifications."
+        },
+        "education": {
+          "type": "object",
+          "properties": {
+            "institutions": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Educational institutions attended."
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "appointment_type": "providers",
+  "data": {
+    "start_time": "2024-06-15T10:00:00-04:00",
+    "visit_reason_id": "pc_FRO-18leckytNKtruw5dLR",
+    "provider_location_id": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890",
+    "patient_type": "new",
+    "notes": "First visit, referred by PCP.",
+    "patient": {
+      "developer_patient_id": "patient-001",
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "date_of_birth": "1985-03-22",
+      "sex_at_birth": "female",
+      "phone_number": "9175550100",
+      "email_address": "jane.doe@example.com",
+      "patient_address": {
+        "address1": "123 Main St",
+        "address2": "Apt 4B",
+        "city": "New York",
+        "state": "NY",
+        "zip_code": "10001"
+      },
+      "insurance": {
+        "insurance_plan_id": "ip_2224",
+        "insurance_member_id": "XYZ123456789",
+        "insurance_group_number": "GRP001",
+        "is_self_pay": false
+      },
+      "gender": ["cisgender"]
+    }
+  }
+}

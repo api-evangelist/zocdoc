@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-developer.zocdoc.com/schemas/availability",
+  "title": "Availability",
+  "description": "Availability information for a provider location, returned by /v1/provider_locations/availability. Contains a list of bookable timeslots.",
+  "type": "object",
+  "properties": {
+    "provider_location_id": {
+      "type": "string",
+      "description": "Zocdoc composite provider-location identifier.",
+      "example": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890"
+    },
+    "first_availability": {
+      "$ref": "#/$defs/Timeslot"
+    },
+    "timeslots": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Timeslot"
+      },
+      "description": "List of available appointment start times within the requested date range."
+    }
+  },
+  "$defs": {
+    "Timeslot": {
+      "title": "Timeslot",
+      "description": "A single bookable appointment start time.",
+      "type": "object",
+      "required": ["start_time"],
+      "properties": {
+        "start_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Appointment start time in ISO-8601 format with provider's local timezone offset.",
+          "example": "2022-04-27T09:00:00-04:00"
+        },
+        "visit_reason_id": {
+          "type": "string",
+          "description": "Zocdoc visit reason ID this timeslot is valid for.",
+          "example": "pc_FRO-18leckytNKtruw5dLR"
+        },
+        "booking_url": {
+          "type": "string",
+          "description": "Deep link URL to book this specific timeslot on zocdoc.com. Non-PHI. UTM parameters are automatically added.",
+          "example": "https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844"
+        }
+      }
+    }
+  }
+}

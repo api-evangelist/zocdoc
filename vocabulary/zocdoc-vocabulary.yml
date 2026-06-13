@@ -1,0 +1,316 @@
+vocabulary:
+  name: Zocdoc API Vocabulary
+  description: Domain vocabulary for the Zocdoc healthcare appointment booking platform API
+  version: '1.176'
+  url: https://api-docs.zocdoc.com/guides
+
+terms:
+
+  # Core identifiers
+  - term: npi
+    label: National Provider Identifier
+    description: A unique 10-digit identification number issued to health care providers in the United States.
+    type: identifier
+
+  - term: provider_id
+    label: Provider ID
+    description: The Zocdoc-assigned unique identifier for a healthcare provider.
+    type: identifier
+    example: pr_abc123-def456_wxyz7890
+
+  - term: provider_location_id
+    label: Provider Location ID
+    description: A composite Zocdoc identifier combining provider and location IDs, used for availability lookup and appointment booking.
+    type: identifier
+    example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+
+  - term: location_id
+    label: Location ID
+    description: The Zocdoc-assigned unique identifier for a physical or virtual provider location.
+    type: identifier
+    example: lo_abc123-def456_wxyz7890
+
+  - term: appointment_id
+    label: Appointment ID
+    description: The Zocdoc-assigned unique identifier for a booked appointment.
+    type: identifier
+    example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+
+  - term: specialty_id
+    label: Specialty ID
+    description: The Zocdoc identifier for a medical specialty (e.g., sp_153 for General Practice).
+    type: identifier
+    example: sp_153
+
+  - term: visit_reason_id
+    label: Visit Reason ID
+    description: The Zocdoc identifier for the reason/type of a patient visit (e.g., pc_FRO-18leckytNKtruw5dLR).
+    type: identifier
+    example: pc_FRO-18leckytNKtruw5dLR
+
+  - term: insurance_plan_id
+    label: Insurance Plan ID
+    description: The Zocdoc identifier for a specific insurance plan (e.g., ip_2224).
+    type: identifier
+    example: ip_2224
+
+  - term: insurance_carrier_id
+    label: Insurance Carrier ID
+    description: The Zocdoc identifier for an insurance carrier.
+    type: identifier
+
+  - term: facility_id
+    label: Facility ID
+    description: The Zocdoc-assigned unique identifier for a healthcare facility such as a hospital or clinic.
+    type: identifier
+
+  - term: practice_id
+    label: Practice ID
+    description: The Zocdoc-assigned unique identifier for a medical practice.
+    type: identifier
+
+  - term: developer_patient_id
+    label: Developer Patient ID
+    description: A patient identifier provided by the third-party developer, used to track patient identity in the developer's own system.
+    type: identifier
+
+  # Enumerations
+  - term: appointment_status
+    label: Appointment Status
+    description: The current lifecycle state of an appointment.
+    type: enumeration
+    values:
+      - pending_booking
+      - confirmed
+      - booking_failed
+      - cancelled
+      - no_show
+      - pending_reschedule
+      - rescheduled
+      - reschedule_failed
+
+  - term: patient_type
+    label: Patient Type
+    description: Whether the patient is new or existing to a provider's practice.
+    type: enumeration
+    values:
+      - new
+      - existing
+
+  - term: visit_type
+    label: Visit Type
+    description: The modality of the patient visit.
+    type: enumeration
+    values:
+      - all
+      - in_person
+      - video_visit
+
+  - term: appointment_visit_type
+    label: Appointment Visit Type
+    description: The specific visit modality recorded on a booked appointment.
+    type: enumeration
+    values:
+      - in_person
+      - zocdoc_video_service
+      - third_party_video_service
+
+  - term: cancellation_reason_type
+    label: Cancellation Reason Type
+    description: Standardized reason codes for appointment cancellations.
+    type: enumeration
+    values:
+      - patient_no_longer_needs_appointment
+      - patient_no_longer_available
+      - other_patient_reason
+      - missing_needed_patient_information
+      - payment_or_insurance_issue
+      - patient_or_visit_type_not_accepted
+      - provider_not_available
+      - rescheduling_patient
+      - other_provider_reason
+
+  - term: provider_location_type
+    label: Provider Location Type
+    description: Whether a provider location is physical or virtual.
+    type: enumeration
+    values:
+      - in_person_provider
+      - virtual_provider
+
+  - term: insurance_network_type
+    label: Insurance Network Type
+    description: The managed care or plan network model for an insurance plan.
+    type: enumeration
+    values:
+      - hmo
+      - ppo
+      - pos
+      - epo
+      - indemnity
+      - aso
+      - aco
+      - acp
+      - medicare
+      - medicaid
+      - other
+      - uncategorized
+      - hmo_pos
+
+  - term: insurance_program_type
+    label: Insurance Program Type
+    description: The program category of an insurance plan.
+    type: enumeration
+    values:
+      - commercial
+      - commercial_exchange
+      - medicare
+      - medicaid
+      - workers_compensation
+      - uncategorized
+      - medicare_advantage
+      - medicaid_managed_care
+      - federal
+
+  - term: insurance_status
+    label: Insurance Status
+    description: The current status of an insurance plan in the Zocdoc system.
+    type: enumeration
+    values:
+      - inactive
+      - active
+      - deleted
+
+  - term: care_category
+    label: Care Category
+    description: The broad category of healthcare coverage.
+    type: enumeration
+    values:
+      - health
+      - dental
+      - vision
+
+  - term: building_type
+    label: Building Type
+    description: The classification of a healthcare facility building.
+    type: enumeration
+    values:
+      - clinic
+      - hospital
+
+  - term: appointment_confirmation_type
+    label: Appointment Confirmation Type
+    description: How an appointment's confirmation is processed.
+    type: enumeration
+    values:
+      - auto
+      - manual
+      - pending_evaluation
+
+  - term: accepts_patient_insurance
+    label: Accepts Patient Insurance
+    description: Whether a provider location accepts the patient's insurance.
+    type: enumeration
+    values:
+      - accepted
+      - not_accepted
+      - insurance_not_specified
+
+  - term: attachment_type
+    label: Attachment Type
+    description: The classification of a document uploaded to an appointment.
+    type: enumeration
+    values:
+      - community_care_packet
+      - pcp_patient_referral
+      - patient_front_insurance_card
+      - patient_back_insurance_card
+
+  - term: availability_status
+    label: Availability Status
+    description: The availability level of a schedulable entity over the next 28 days.
+    type: enumeration
+    values:
+      - none
+      - limited
+      - available
+
+  - term: patient_sex
+    label: Patient Sex
+    description: The patient's sex assigned at birth.
+    type: enumeration
+    values:
+      - male
+      - female
+
+  - term: gender
+    label: Gender Identity
+    description: The patient's self-identified gender.
+    type: enumeration
+    values:
+      - female_at_birth
+      - male_at_birth
+      - cisgender
+      - genderfluid
+      - genderqueer
+      - intersex
+      - non_binary
+      - transgender_man
+      - transgender_woman
+      - prefer_not_to_say
+      - none_apply
+
+  # Concepts
+  - term: provider_location
+    label: Provider Location
+    description: A combination of a healthcare provider and a physical or virtual location at which they see patients. The atomic unit for searching availability and booking appointments.
+    type: concept
+
+  - term: timeslot
+    label: Timeslot
+    description: A specific available appointment start time at a provider location for a given visit reason and patient type.
+    type: concept
+
+  - term: booking_requirements
+    label: Booking Requirements
+    description: The set of patient information fields and insurance acceptance types that a provider requires before an appointment can be booked.
+    type: concept
+
+  - term: schedulable_entity
+    label: Schedulable Entity
+    description: A provider location or other bookable unit within a developer's Zocdoc directory that can have timeslots and availability associated with it.
+    type: concept
+
+  - term: published_context
+    label: Published Context
+    description: Controls whether availability results are filtered to Zocdoc-active providers (condition_driven_search) or returned for all slots (direct_listing). Applicable to syndication clients.
+    type: concept
+    values:
+      - direct_listing
+      - condition_driven_search
+
+  - term: webhook_mock
+    label: Webhook Mock
+    description: Sandbox functionality that simulates a real-time appointment webhook notification being sent to a developer's endpoint for testing purposes.
+    type: concept
+
+  - term: calendar_integration
+    label: Calendar Integration
+    description: The provider-facing set of endpoints that allow external EHR or scheduling systems to push available timeslots into the Zocdoc platform.
+    type: concept
+
+  - term: insurance_mapping
+    label: Insurance Mapping
+    description: The association between a provider location and the insurance plans it accepts, which can be managed via API.
+    type: concept
+
+  # Authentication
+  - term: client_credentials_flow
+    label: Client Credentials Flow
+    description: OAuth 2.0 machine-to-machine authentication flow for server-to-server API calls. Token endpoint is https://auth.zocdoc.com/oauth/token.
+    type: authentication_scheme
+
+  - term: authorization_code_flow
+    label: Authorization Code Flow
+    description: OAuth 2.0 user-level authentication flow with PKCE support, enabling a patient to log in and take actions on their own behalf.
+    type: authentication_scheme

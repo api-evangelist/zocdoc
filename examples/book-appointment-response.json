@@ -1,0 +1,15 @@
+{
+  "request_id": "req_a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "data": {
+    "appointment_id": "d04b049a-41b1-4aba-9268-d8973cf72cdd",
+    "appointment_status": "pending_booking",
+    "developer_patient_id": "patient-001",
+    "visit_type": "in_person",
+    "is_provider_resource": false,
+    "location_phone_number": "9175550199",
+    "location_phone_extension": null,
+    "waiting_room_path": null,
+    "confirmation_type": "auto",
+    "notes": "First visit, referred by PCP."
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "zocdoc": "https://api-developer.zocdoc.com/v1/",
+
+    "appointment_id": {
+      "@id": "zocdoc:appointments/appointment_id",
+      "@type": "xsd:string"
+    },
+    "provider_id": {
+      "@id": "zocdoc:providers/provider_id",
+      "@type": "xsd:string"
+    },
+    "provider_location_id": {
+      "@id": "zocdoc:provider_locations/provider_location_id",
+      "@type": "xsd:string"
+    },
+    "location_id": {
+      "@id": "zocdoc:provider_locations/location_id",
+      "@type": "xsd:string"
+    },
+    "npi": {
+      "@id": "schema:identifier",
+      "@type": "xsd:string"
+    },
+    "specialty_id": {
+      "@id": "zocdoc:specialties/specialty_id",
+      "@type": "xsd:string"
+    },
+    "visit_reason_id": {
+      "@id": "zocdoc:visit_reasons/visit_reason_id",
+      "@type": "xsd:string"
+    },
+    "insurance_plan_id": {
+      "@id": "zocdoc:insurance_plans/insurance_plan_id",
+      "@type": "xsd:string"
+    },
+    "insurance_carrier_id": {
+      "@id": "zocdoc:insurance_plans/insurance_carrier_id",
+      "@type": "xsd:string"
+    },
+    "facility_id": {
+      "@id": "zocdoc:facilities/facility_id",
+      "@type": "xsd:string"
+    },
+    "practice_id": {
+      "@id": "zocdoc:practices/practice_id",
+      "@type": "xsd:string"
+    },
+    "developer_patient_id": {
+      "@id": "zocdoc:patients/developer_patient_id",
+      "@type": "xsd:string"
+    },
+
+    "first_name": {
+      "@id": "schema:givenName",
+      "@type": "xsd:string"
+    },
+    "last_name": {
+      "@id": "schema:familyName",
+      "@type": "xsd:string"
+    },
+    "full_name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "date_of_birth": {
+      "@id": "schema:birthDate",
+      "@type": "xsd:date"
+    },
+    "email_address": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    },
+    "phone_number": {
+      "@id": "schema:telephone",
+      "@type": "xsd:string"
+    },
+    "provider_photo_url": {
+      "@id": "schema:image",
+      "@type": "@id"
+    },
+    "profile_url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "booking_url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+
+    "address1": {
+      "@id": "schema:streetAddress",
+      "@type": "xsd:string"
+    },
+    "address2": {
+      "@id": "schema:streetAddress",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "schema:addressLocality",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "schema:addressRegion",
+      "@type": "xsd:string"
+    },
+    "zip_code": {
+      "@id": "schema:postalCode",
+      "@type": "xsd:string"
+    },
+    "latitude": {
+      "@id": "schema:latitude",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@id": "schema:longitude",
+      "@type": "xsd:decimal"
+    },
+    "time_zone": {
+      "@id": "schema:timezone",
+      "@type": "xsd:string"
+    },
+    "distance_to_patient_mi": {
+      "@id": "schema:distance",
+      "@type": "xsd:decimal"
+    },
+
+    "start_time": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "appointment_status": {
+      "@id": "schema:eventStatus",
+      "@type": "xsd:string"
+    },
+    "visit_type": {
+      "@id": "zocdoc:appointments/visit_type",
+      "@type": "xsd:string"
+    },
+    "patient_type": {
+      "@id": "zocdoc:appointments/patient_type",
+      "@type": "xsd:string"
+    },
+    "created_time_utc": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "last_modified_time_utc": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "cancellation_reason_type": {
+      "@id": "zocdoc:appointments/cancellation_reason_type",
+      "@type": "xsd:string"
+    },
+    "cancellation_reason": {
+      "@id": "zocdoc:appointments/cancellation_reason",
+      "@type": "xsd:string"
+    },
+
+    "insurance_plan": {
+      "@id": "schema:MedicalOrganization",
+      "@type": "@id"
+    },
+    "network_type": {
+      "@id": "zocdoc:insurance_plans/network_type",
+      "@type": "xsd:string"
+    },
+    "program_type": {
+      "@id": "zocdoc:insurance_plans/program_type",
+      "@type": "xsd:string"
+    },
+    "care_category": {
+      "@id": "zocdoc:insurance_plans/care_category",
+      "@type": "xsd:string"
+    },
+    "insurance_status": {
+      "@id": "zocdoc:insurance_plans/status",
+      "@type": "xsd:string"
+    },
+    "coverage_area": {
+      "@id": "schema:areaServed",
+      "@type": "@id"
+    },
+    "is_national": {
+      "@id": "zocdoc:insurance_plans/is_national",
+      "@type": "xsd:boolean"
+    },
+    "insurance_member_id": {
+      "@id": "zocdoc:patients/insurance_member_id",
+      "@type": "xsd:string"
+    },
+    "insurance_group_number": {
+      "@id": "zocdoc:patients/insurance_group_number",
+      "@type": "xsd:string"
+    },
+    "is_self_pay": {
+      "@id": "zocdoc:patients/is_self_pay",
+      "@type": "xsd:boolean"
+    },
+
+    "specialties": {
+      "@id": "schema:medicalSpecialty",
+      "@type": "@id"
+    },
+    "languages": {
+      "@id": "schema:knowsLanguage",
+      "@type": "@id"
+    },
+    "gender_identity": {
+      "@id": "schema:gender",
+      "@type": "xsd:string"
+    },
+    "sex_at_birth": {
+      "@id": "zocdoc:patients/sex_at_birth",
+      "@type": "xsd:string"
+    },
+    "statement": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "credentials": {
+      "@id": "schema:hasCredential",
+      "@type": "@id"
+    },
+    "certifications": {
+      "@id": "schema:hasCredential",
+      "@type": "@id"
+    },
+    "education": {
+      "@id": "schema:alumniOf",
+      "@type": "@id"
+    },
+
+    "building_type": {
+      "@id": "zocdoc:facilities/building_type",
+      "@type": "xsd:string"
+    },
+    "practice_name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+
+    "average_overall_rating": {
+      "@id": "schema:ratingValue",
+      "@type": "xsd:decimal"
+    },
+    "total_reviews": {
+      "@id": "schema:reviewCount",
+      "@type": "xsd:integer"
+    },
+
+    "request_id": {
+      "@id": "zocdoc:request_id",
+      "@type": "xsd:string"
+    },
+    "page": {
+      "@id": "schema:pageStart",
+      "@type": "xsd:integer"
+    },
+    "page_size": {
+      "@id": "schema:pageSize",
+      "@type": "xsd:integer"
+    },
+    "total_count": {
+      "@id": "schema:numberOfItems",
+      "@type": "xsd:integer"
+    },
+    "next_url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+
+    "attachment_type": {
+      "@id": "zocdoc:appointments/attachment_type",
+      "@type": "xsd:string"
+    },
+    "go_live_timestamp_utc": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "new_patient_availability": {
+      "@id": "zocdoc:schedulable_entities/new_patient_availability",
+      "@type": "@id"
+    },
+    "existing_patient_availability": {
+      "@id": "zocdoc:schedulable_entities/existing_patient_availability",
+      "@type": "@id"
+    },
+    "availability_status": {
+      "@id": "schema:availability",
+      "@type": "xsd:string"
+    }
+  }
+}
