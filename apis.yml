@@ -54,7 +54,7 @@ apis:
         url: https://api-docs.zocdoc.com/guides/performance
       - type: Testing
         url: https://api-docs.zocdoc.com/guides/testing-data
-      - type: Changelog
+      - type: ChangeLog
         url: https://api-docs.zocdoc.com/changelog
       - type: FAQ
         url: https://api-docs.zocdoc.com/guides/faqs
