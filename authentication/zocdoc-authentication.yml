@@ -1,0 +1,35 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/zocdoc-zocdoc-api-openapi.yml
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+schemes:
+- name: ClientCredentialsFlow
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+    scopes: 6
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
+- name: AuthorizationCodeFlow
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+    scopes: 3
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
