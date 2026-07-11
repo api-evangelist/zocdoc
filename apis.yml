@@ -59,6 +59,10 @@ apis:
       - type: FAQ
         url: https://api-docs.zocdoc.com/guides/faqs
 common:
+  - type: Authentication
+    url: authentication/zocdoc-authentication.yml
+  - type: OAuthScopes
+    url: scopes/zocdoc-scopes.yml
   - type: Website
     url: https://www.zocdoc.com
   - type: Documentation

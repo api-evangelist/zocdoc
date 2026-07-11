@@ -1,0 +1,63 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/zocdoc-zocdoc-api-openapi.yml
+schemes:
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-zocdoc-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-zocdoc-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+scopes:
+- scope: external.anonymous_token.write
+  description: Create anonymous tokens used for discovery endpoints.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
+- scope: external.appointment.read
+  description: Read basic details of your appointments.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
+- scope: external.appointment.write
+  description: Book and modify appointments.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
+- scope: external.credential.rotate
+  description: Rotate the authenticated client secret.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
+- scope: external.provider_insurance.write
+  description: Update the insurance accepted by a provider.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
+- scope: external.schedulable_entity.read
+  description: Read schedulable entities.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-zocdoc-api-openapi.yml
