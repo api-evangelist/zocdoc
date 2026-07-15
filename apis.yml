@@ -59,6 +59,8 @@ apis:
       - type: FAQ
         url: https://api-docs.zocdoc.com/guides/faqs
 common:
+  - type: AgenticAccess
+    url: agentic-access/zocdoc-agentic-access.yml
   - type: DomainSecurity
     url: security/zocdoc-domain-security.yml
   - type: Authentication

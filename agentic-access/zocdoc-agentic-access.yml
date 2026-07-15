@@ -1,0 +1,400 @@
+generated: '2026-07-15'
+method: generated
+source: openapi/zocdoc-zocdoc-api-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 30
+  by_action_class:
+    connected: 20
+    acting: 10
+  by_consequence:
+    read: 20
+    write: 10
+  human_in_the_loop_required: 0
+operations:
+- path: /v1/providers
+  method: get
+  operationId: getProviders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/provider_locations
+  method: get
+  operationId: getProviderLocations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/provider_locations/{provider_location_id}
+  method: get
+  operationId: getProviderLocation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/provider_locations/availability
+  method: get
+  operationId: getProviderLocationsAvailability
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/provider_locations/{provider_location_id}/insurance_mappings
+  method: get
+  operationId: getProviderLocationInsuranceMappings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/provider_locations/{provider_location_id}/insurance_mappings
+  method: post
+  operationId: updateProviderLocationInsuranceMappings
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.provider_insurance.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/providers/{provider_id}/reviews
+  method: get
+  operationId: getProviderReviews
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/appointments
+  method: post
+  operationId: createAppointment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.appointment.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/appointments
+  method: get
+  operationId: getAppointments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - external.appointment.read
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/appointments/{appointment_id}
+  method: get
+  operationId: getAppointment
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - external.appointment.read
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/appointments/{appointment_id}/participants
+  method: get
+  operationId: getAppointmentParticipants
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - external.appointment.read
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/appointments/cancel
+  method: post
+  operationId: cancelAppointment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.appointment.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/appointments/confirm
+  method: post
+  operationId: confirmAppointment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.appointment.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/appointments/reschedule
+  method: post
+  operationId: rescheduleAppointment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.appointment.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/appointments/{appointment_id}/attachments
+  method: post
+  operationId: uploadAppointmentAttachment
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.appointment.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/appointments/update-status
+  method: put
+  operationId: updateAppointmentStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.appointment.write
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/reference/npi
+  method: get
+  operationId: getProviderNpis
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/schedulable_entities
+  method: get
+  operationId: getSchedulableEntities
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - external.schedulable_entity.read
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/credentials/rotate
+  method: post
+  operationId: rotateCredentials
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - external.credential.rotate
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/webhook/mock-request
+  method: post
+  operationId: mockWebhookRequest
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1-beta/facilities
+  method: get
+  operationId: getFacilities
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1-beta/facilities/{facility_id}
+  method: get
+  operationId: getFacility
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/insurance_plans
+  method: get
+  operationId: getInsurancePlans
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/insurance_plans/{insurance_plan_id}
+  method: get
+  operationId: getInsurancePlan
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/specialties
+  method: get
+  operationId: getSpecialties
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/specialties/{specialty_id}
+  method: get
+  operationId: getSpecialtyById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/visit_reasons
+  method: get
+  operationId: getVisitReasons
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/visit_reasons/{visit_reason_id}
+  method: get
+  operationId: getVisitReasonById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/providers/{provider_id}/calendar/timeslots
+  method: get
+  operationId: getProviderCalendarTimeslots
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/providers/{provider_id}/calendar/timeslots
+  method: put
+  operationId: putProviderCalendarTimeslots
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
