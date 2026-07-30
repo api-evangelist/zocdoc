@@ -8,7 +8,20 @@ description: >-
   provider calendar integration, and insurance APIs using OAuth 2.0
   authentication with both sandbox and production environments.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zocdoc.png
 url: https://raw.githubusercontent.com/api-evangelist/zocdoc/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -22,42 +35,270 @@ tags:
   - Telehealth
   - Scheduling
 apis:
-  - aid: zocdoc:zocdoc-api
-    name: Zocdoc API
-    description: >-
-      RESTful API for searching and booking healthcare appointments, managing
-      provider availability, handling insurance verification, and integrating
-      with Zocdoc's provider network. Supports patient booking flows,
-      provider calendar integration, appointment lifecycle management, and
-      webhook notifications for real-time updates.
-    humanURL: https://api-docs.zocdoc.com/guides
-    baseURL: https://api-developer.zocdoc.com
-    tags:
-      - Healthcare
-      - Appointments
-      - Providers
-      - Insurance
-      - Scheduling
-      - Webhooks
-    properties:
-      - type: Documentation
-        url: https://api-docs.zocdoc.com/guides
-      - type: OpenAPI
-        url: https://api-docs.zocdoc.com/apis.md
-      - type: Authentication
-        url: https://api-docs.zocdoc.com/guides/authentication
-      - type: Sandbox
-        url: https://api-developer-sandbox.zocdoc.com
-      - type: Webhooks
-        url: https://api-docs.zocdoc.com/guides/webhooks
-      - type: Performance
-        url: https://api-docs.zocdoc.com/guides/performance
-      - type: Testing
-        url: https://api-docs.zocdoc.com/guides/testing-data
-      - type: ChangeLog
-        url: https://api-docs.zocdoc.com/changelog
-      - type: FAQ
-        url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-appointments-api
+  name: Zocdoc appointments API
+  description: >-
+    Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment
+    statuses and updated information.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - appointments
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-appointments-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-calendar-integration-timeslots-api
+  name: Zocdoc calendar-integration-timeslots API
+  description: Endpoints to manage timeslots for providers.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - calendar-integration-timeslots
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-credentials-api
+  name: Zocdoc credentials API
+  description: Endpoints for managing API credentials.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - credentials
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-credentials-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-facilities-api
+  name: Zocdoc facilities API
+  description: Endpoints to retrieve facilities within the developer's directory.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - facilities
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-facilities-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-insurance-reference-api
+  name: Zocdoc insurance-reference API
+  description: Endpoints to retrieve insurance plans supported by Zocdoc.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - insurance-reference
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-insurance-reference-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-provider-locations-api
+  name: Zocdoc provider-locations API
+  description: >-
+    Endpoints for retrieving and modifying provider location objects and their related insurance plans
+    and availability.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - provider-locations
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-provider-locations-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-providers-api
+  name: Zocdoc providers API
+  description: Endpoints to retrieve providers within the developer's directory.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - providers
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-providers-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-reference-api
+  name: Zocdoc reference API
+  description: Endpoints to retrieve information about the developer's directory.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - reference
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-reference-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-schedulable-entities-api
+  name: Zocdoc schedulable-entities API
+  description: Endpoints to retrieve schedulable entities with availability information.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - schedulable-entities
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-webhook-api
+  name: Zocdoc webhook API
+  description: Sandbox endpoints to mock webhook behavior
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-webhook-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Webhooks
+    url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
 common:
   - type: AgenticAccess
     url: agentic-access/zocdoc-agentic-access.yml
