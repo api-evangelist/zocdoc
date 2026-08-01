@@ -1,0 +1,4068 @@
+openapi: 3.0.0
+info:
+  version: '1.176'
+  title: API Documentation
+servers:
+  - url: https://api-developer-sandbox.zocdoc.com
+    description: Sandbox
+  - url: https://api-developer.zocdoc.com
+    description: Production
+tags:
+  - name: reference
+    description: Endpoints to retrieve information about the developer's directory.
+    x-displayName: NPIs
+  - name: schedulable-entities
+    description: Endpoints to retrieve schedulable entities with availability information.
+    x-displayName: Schedulable entities
+  - name: insurance-reference
+    description: Endpoints to retrieve insurance plans supported by Zocdoc.
+    x-displayName: Insurance
+  - name: providers
+    description: Endpoints to retrieve providers within the developer's directory.
+    x-displayName: Providers
+  - name: provider-locations
+    description: >-
+      Endpoints for retrieving and modifying provider location objects and their
+      related insurance plans and availability.
+    x-displayName: Provider locations
+  - name: facilities
+    description: Endpoints to retrieve facilities within the developer's directory.
+    x-displayName: Facilities
+  - name: calendar-integration-timeslots
+    description: Endpoints to manage timeslots for providers.
+    x-displayName: Calendar integration timeslots
+  - name: appointments
+    description: >-
+      Endpoints for booking, cancelling, and rescheduling appointments,
+      including retrieving current appointment statuses and updated information.
+    x-displayName: Appointments
+  - name: webhook
+    description: Sandbox endpoints to mock webhook behavior
+    x-displayName: Webhook
+  - name: credentials
+    description: Endpoints for managing API credentials.
+    x-displayName: Credentials
+paths:
+  /v1/providers:
+    get:
+      tags:
+        - providers
+      summary: Get providers by NPIs
+      description: >
+        Retrieves specific providers within the developer's directory by NPI
+        search. This endpoint searches active providers that are listed on
+        Zocdoc. It returns the provider's information (such as name, gender
+        identity, specialty), location information and provider location IDs
+        which can be used to look up availability and book appointments. Every
+        developer has a designated provider directory jointly defined and
+        onboarded in partnership with Zocdoc.
+
+
+        The `provider_location_id` returned in the response can be used to
+        retrieve availability in the endpoint
+        /v1/provider_locations/availability.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviders
+      parameters:
+        - name: npis
+          in: query
+          description: >-
+            A comma-delimited list of Provider NPI numbers. A maximum of 50
+            items will be accepted at a time.
+          required: true
+          schema:
+            type: string
+            example: 1234567891,0123456789
+        - name: insurance_plan_id
+          in: query
+          description: >-
+            The Zocdoc ID of the patient's insurance plan. Used to determine if
+            provider takes patient's insurance in response. Use the [Get
+            Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve
+            available plans.
+          required: false
+          schema:
+            type: string
+            example: ip_2224
+        - name: latitude
+          in: query
+          description: >-
+            Latitude of the patient's location. Must be provided together with
+            longitude. When provided, response includes distance and nearest
+            match for each physical location.
+          required: false
+          schema:
+            type: number
+            format: float
+            minimum: -90
+            maximum: 90
+        - name: longitude
+          in: query
+          description: >-
+            Longitude of the patient's location. Must be provided together with
+            latitude. When provided, response includes distance and nearest
+            match for each physical location.
+          required: false
+          schema:
+            type: number
+            format: float
+            minimum: -180
+            maximum: 180
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderResult'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /v1/provider_locations:
+    get:
+      tags:
+        - provider-locations
+      summary: Get provider locations
+      description: >
+        This endpoint accepts parameters such as zip code, specialty, visit
+        reason and accepted insurance to return a filtered set of providers
+        within the developer's directory. The response includes additional
+        information about the provider location objects returned.
+
+
+        The `provider_location_id` returned in the response can be used to
+        retrieve availability in the endpoint
+        /v1/provider_locations/availability.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderLocations
+      parameters:
+        - name: zip_code
+          in: query
+          description: A 5 digit zip code.
+          required: true
+          schema:
+            type: string
+            example: 36925
+        - name: specialty_id
+          in: query
+          description: >-
+            The Zocdoc ID of the provider's specialty. See [Reference
+            Data](/guides/reference-data) for options. One of `specialty_id` or
+            `visit_reason_id` is required. If `visit_reason_id` is not supplied,
+            the default visit reason for the specialty will be used.
+          schema:
+            type: string
+            example: sp_153
+        - name: visit_reason_id
+          in: query
+          description: >-
+            The Zocdoc ID for the visit reason. See [Reference
+            Data](/guides/reference-data) for options. One of `specialty_id` or
+            `visit_reason_id` is required. If both `visit_reason_id` and
+            `specialty_id` are supplied, the specialty must be the visit
+            reason's corresponding specialty.
+          schema:
+            type: string
+            example: pc_FRO-18leckytNKtruw5dLR
+        - name: page
+          in: query
+          description: The zero indexed page of results.
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: The number of results to return per page.
+          schema:
+            type: integer
+        - name: insurance_plan_id
+          in: query
+          description: >-
+            The Zocdoc ID of the patient's insurance plan. Use the [Get
+            Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve
+            available plans.
+          required: false
+          schema:
+            type: string
+            example: ip_2224
+        - name: visit_type
+          in: query
+          description: >-
+            The type of patient visit with the provider. If not provided, the
+            default value is set to `in_person`.
+          required: false
+          schema:
+            $ref: '#/components/schemas/VisitType'
+        - name: max_distance_to_patient_mi
+          in: query
+          description: >-
+            The maximum distance in miles from the physical location to the
+            search location (the center point of the given `zip_code`). Default
+            is 50 miles.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Succesful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderListResult'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /v1/provider_locations/{provider_location_id}:
+    get:
+      tags:
+        - provider-locations
+      summary: Get provider location by id
+      description: Get info about a provider location by provider_location_id
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderLocation
+      parameters:
+        - name: provider_location_id
+          in: path
+          description: The Zocdoc provider location id to get details for.
+          required: true
+          schema:
+            type: string
+            example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+        - name: insurance_plan_id
+          in: query
+          description: >-
+            The Zocdoc ID of the patient's insurance plan. Use the [Get
+            Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve
+            available plans.
+          required: false
+          schema:
+            type: string
+            example: ip_2224
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderLocationResult'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '404':
+          description: Provider location not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+  /v1/provider_locations/availability:
+    get:
+      tags:
+        - provider-locations
+      summary: Get availability for provider locations
+      description: >
+        Retrieves availability for a set of provider locations. Required
+        parameters passed include provider location ids, visit reason id and
+        patient type. Visit reason and patient type (new or existing) are used
+        to calculate the duration of the appointment and break availability into
+        bookable timeslots based on the appointment duration. The response
+        output includes the start times of appointments based on these
+        calculations.
+
+
+        The `start_time` returned is used in the endpoint /v1/appointments to
+        book appointments.
+
+        If no timeslots are available that satisfy the parameters, an empty
+        array will be returned for that Provider Location's timeslots.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderLocationsAvailability
+      parameters:
+        - name: provider_location_ids
+          in: query
+          required: true
+          description: >-
+            A comma-delimited list of Zocdoc `provider_location_ids` retrieved
+            from the /v1/providers or /v1/provider_locations endpoint. A maximum
+            of 50 items will be accepted at a time.
+          schema:
+            type: string
+            example: >-
+              pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890|lo_ghi123-jkl456_mnop7890
+        - name: visit_reason_id
+          in: query
+          required: true
+          description: >-
+            The Zocdoc ID of the visit reason. See [Reference
+            Data](/guides/reference-data) for options.
+          schema:
+            type: string
+            example: pc_FRO-18leckytNKtruw5dLR
+        - name: patient_type
+          in: query
+          required: true
+          description: >-
+            New or existing to indicate if the patient is new to the practice or
+            has been to the office before.
+          schema:
+            $ref: '#/components/schemas/PatientType'
+        - name: start_date_in_provider_local_time
+          in: query
+          description: >-
+            The first date to retrieve availability for, as YYYY-MM-DD. Defaults
+            to current date in US Eastern Time. Can request availability up to a
+            maximum of 150 days into the future.
+          schema:
+            type: string
+            format: date
+        - name: end_date_in_provider_local_time
+          in: query
+          description: >-
+            The last inclusive date to retrieve availability for, as YYYY-MM-DD.
+            Defaults to 7 days after the current date. Must be 31 days or less
+            after the start date.
+          schema:
+            type: string
+            format: date
+        - name: published_context
+          in: query
+          description: >-
+            Determines how availability slots are returned. Direct_listing
+            returns all slots, while condition_driven_search limits results to
+            Zocdoc-active providers with budget. Applicable to syndication
+            clients.
+          required: false
+          schema:
+            $ref: '#/components/schemas/PublishedContext'
+        - name: insurance_plan_id
+          in: query
+          description: >-
+            The Zocdoc ID of the patient's insurance plan. Use the [Get
+            Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve
+            available plans. Used to construct booking_url.
+          required: false
+          schema:
+            type: string
+        - name: insurance_carrier_id
+          in: query
+          description: >-
+            The Zocdoc ID of the patient's insurance carrier. See [Reference
+            Data](/guides/reference-data) for options. Used to construct
+            booking_url.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityResult'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+  /v1/provider_locations/{provider_location_id}/insurance_mappings:
+    get:
+      tags:
+        - provider-locations
+      summary: Get insurance mappings for provider location
+      description: >-
+        Get eligible insurance plans and insurance mappings for a provider
+        location by provider_location_id
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderLocationInsuranceMappings
+      parameters:
+        - name: provider_location_id
+          in: path
+          description: The Zocdoc provider location id to get insurance plans for.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInsuranceMappingsResults'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - provider-locations
+      summary: Submit request to update mapped insurance plans
+      description: >-
+        Submits a request to update mapped insurance plans. This is an
+        asynchronous operation and the response indicates the request was
+        accepted for processing, not that the update is complete.
+      security:
+        - ClientCredentialsFlow:
+            - external.provider_insurance.write
+      operationId: updateProviderLocationInsuranceMappings
+      parameters:
+        - name: provider_location_id
+          in: path
+          description: The Zocdoc provider location id to get insurance plans for.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInsuranceMappingsRequest'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInsuranceMappingsResult'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '500':
+          description: Internal Server Error
+  /v1/providers/{provider_id}/reviews:
+    get:
+      tags:
+        - providers
+      description: Get review summary for a provider by their Zocdoc provider ID.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderReviews
+      parameters:
+        - name: provider_id
+          in: path
+          description: The Zocdoc provider ID.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderReviewsResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Provider not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      summary: Get Provider Reviews
+  /v1/appointments:
+    post:
+      tags:
+        - appointments
+      summary: Create appointment
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.write
+        - AuthorizationCodeFlow:
+            - external.appointment.write
+      operationId: createAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookAppointmentRequestBody'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      description: >
+        This endpoint is used for creating new appointments. Developers should
+        gather the necessary information to pass in the request body as inputs
+        for this endpoint. Only timeslots retrieved from the
+        /v1/provider_locations/availability endpoint will be accepted. After an
+        /appointments call is successfully processed, the system will return an
+        appointment ID.
+
+
+        The `appointment_id` returned is used in the endpoint
+        /v1/appointments/{appointment_id} to track the status of the
+        appointment, and in the endpoint /v1/appointments/cancel to cancel an
+        appointment.
+    get:
+      tags:
+        - appointments
+      summary: Get appointments
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.read
+        - AuthorizationCodeFlow:
+            - external.appointment.read
+      operationId: getAppointments
+      description: >
+        This endpoint retrieves the paginated list of appointment details and
+        statuses for the given credential. By default, appointments will be
+        returned in descending order of start time.
+
+
+        A maximum of 1,000 total appointments will be returned via pagination;
+        if more are expected, use filters and batch requests.
+
+
+        If the request comes from a Zocdoc user credential, only appointments
+        that user has created will be returned. If the request comes from a
+        machine-to-machine credential, any appointments that were booked with
+        that developer will be returned.
+      parameters:
+        - name: page
+          in: query
+          description: >-
+            The zero indexed page of results. A mimimum value of 0 and a maximum
+            of 10 will be accepted.
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: >-
+            The number of results to return per page. A mimimum value of 1 and a
+            maximum of 100 will be accepted.
+          required: false
+          schema:
+            type: integer
+        - name: statuses
+          in: query
+          required: false
+          description: >-
+            A comma-delimited list of Zocodc appointment statuses to filter
+            appointments by.
+          schema:
+            type: string
+            example: pending_booking,confirmed
+        - name: developer_patient_id
+          in: query
+          required: false
+          description: >-
+            The patient identifier provided by 3P developer to filter
+            appointments by.
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          required: false
+          description: The field to sort appointments by. Default is start_time.
+          schema:
+            $ref: '#/components/schemas/AppointmentSortByType'
+        - name: sort_direction
+          in: query
+          required: false
+          description: The direction to sort appointments by. Default is descending.
+          schema:
+            $ref: '#/components/schemas/AppointmentSortDirectionType'
+        - name: practice_ids
+          in: query
+          required: false
+          description: The comma separated values of practice ids to filter appointments by
+          schema:
+            type: string
+            example: pt_abc123-def456_wxyz7890,pt_ghi123-jkl456_mnop7890
+        - name: provider_ids
+          in: query
+          required: false
+          description: The comma separated values of provider ids to filter appointments by
+          schema:
+            type: string
+            example: pr_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890
+        - name: location_ids
+          in: query
+          required: false
+          description: The comma separated values of location ids to filter appointments by
+          schema:
+            type: string
+            example: lo_abc123-def456_wxyz7890,lo_ghi123-jkl456_mnop7890
+        - name: start_time_utc_min
+          in: query
+          required: false
+          description: >-
+            The minimum UTC start time of the appointments to fetch. Exclude
+            appointments that start before this time.
+          schema:
+            type: string
+            format: instant
+            example: '2024-01-01 00:00:00+00:00'
+        - name: start_time_utc_max
+          in: query
+          required: false
+          description: >-
+            The maximum UTC start time of the appointments to fetch. Exclude
+            appointments that start after this time.
+          schema:
+            type: string
+            format: instant
+            example: '2024-01-01 00:00:00+00:00'
+        - name: created_time_utc_min
+          in: query
+          required: false
+          description: >-
+            The minimum UTC created time of the appointments to fetch. Exclude
+            appointments that were created before this time.
+          schema:
+            type: string
+            format: instant
+            example: '2024-01-01 00:00:00+00:00'
+        - name: created_time_utc_max
+          in: query
+          required: false
+          description: >-
+            The maximum UTC created time of the appointments to fetch. Exclude
+            appointments that were created after this time.
+          schema:
+            type: string
+            format: instant
+            example: '2024-01-01 00:00:00+00:00'
+        - name: last_modified_time_utc_min
+          in: query
+          required: false
+          description: >-
+            The minimum UTC last modified time of the appointments to fetch.
+            Exclude appointments that were last modified before this time.
+          schema:
+            type: string
+            format: instant
+            example: '2024-01-01 00:00:00+00:00'
+        - name: last_modified_time_utc_max
+          in: query
+          required: false
+          description: >-
+            The maximum UTC last modified time of the appointments to fetch.
+            Exclude appointments that were last modified after this time.
+          schema:
+            type: string
+            format: instant
+            example: '2024-01-01 00:00:00+00:00'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentStatusListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /v1/appointments/{appointment_id}:
+    get:
+      tags:
+        - appointments
+      summary: Get appointment by id
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.read
+        - AuthorizationCodeFlow:
+            - external.appointment.read
+      operationId: getAppointment
+      parameters:
+        - name: appointment_id
+          in: path
+          required: true
+          description: The Zocdoc ID for the appointment.
+          schema:
+            type: string
+            example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentStatusResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      description: >
+        This endpoint retrieves updated appointment details and the status of a
+        single existing appointment. Developers must send a valid
+        `appointment_id` as input in the request body, and Zocdoc returns the
+        appointment details and status for that appointment. See [Appointment
+        Status definitions](/guides/glossary).
+
+
+        If the appointment was booked with a Zocdoc user credential, only that
+        user will have access to view or modify the appointment. If the
+        appointment was booked with a machine-to-machine credential, the
+        appointment can be viewed and modified by any of the developer's
+        machine-to-machine credentials.
+  /v1/appointments/{appointment_id}/participants:
+    get:
+      tags:
+        - appointments
+      summary: Get participants for appointment
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.read
+        - AuthorizationCodeFlow:
+            - external.appointment.read
+      operationId: getAppointmentParticipants
+      parameters:
+        - name: appointment_id
+          in: path
+          required: true
+          description: The Zocdoc id of the appointment
+          schema:
+            type: string
+            example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentParticipantsResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      description: >
+        This endpoint retrieves the participants of an appointment. Developers
+        must provide a valid `appointment_id` as a path parameter, and Zocdoc
+        returns the participants of that appointment.
+  /v1/appointments/cancel:
+    post:
+      tags:
+        - appointments
+      summary: Cancel appointment
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.write
+        - AuthorizationCodeFlow:
+            - external.appointment.write
+      operationId: cancelAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelAppointmentRequestBody'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentBaseResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      description: >
+        This endpoint is used to request the cancellation of an appointment in a
+        non-cancelled status. (Non-cancelled statuses include: pending_booking,
+        booking_failed, confirmed, pending_reschedule, reschedule_failed and
+        rescheduled)
+
+
+        Developers must send a valid `appointment_id` as input in the request
+        body and may choose to pass a cancellation reason using the standardized
+        `cancellation_reason_type` field. The optional `cancellation_reason`
+        field should only be used when the cancellation reason type is
+        'other_patient_reason' or 'other_provider_reason' to provide additional
+        context.
+
+
+        If the appointment was booked with a Zocdoc user credential, only that
+        user will have access to view or modify the appointment. If the
+        appointment was booked with a machine-to-machine credential, the
+        appointment can be viewed and modified by any of the developer's
+        machine-to-machine credentials.
+  /v1/appointments/confirm:
+    post:
+      tags:
+        - appointments
+      summary: Confirm appointment
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.write
+        - AuthorizationCodeFlow:
+            - external.appointment.write
+      operationId: confirmAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmAppointmentRequestBody'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentBaseResponse'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      description: >
+        This endpoint is used to confirm an appointment in pending booking
+        status. Developers must send a valid `appointment_id` as input in the
+        request body.
+  /v1/appointments/reschedule:
+    post:
+      tags:
+        - appointments
+      summary: Reschedule appointment
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.write
+        - AuthorizationCodeFlow:
+            - external.appointment.write
+      operationId: rescheduleAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RescheduleAppointmentRequestBody'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      description: >
+        This endpoint is used to only modify the appointment time and request
+        the reschedule of an appointment in pending_booking, confirmed,
+        pending_reschedule, or rescheduled status. Developers must send a valid
+        `appointment_id` and a new start time as input in the request body.
+
+
+        If the appointment was booked with a Zocdoc user credential, only that
+        user will have access to view or modify the appointment. If the
+        appointment was booked with a machine-to-machine credential, the
+        appointment can be viewed and modified by any of the developer's
+        machine-to-machine credentials.
+  /v1/appointments/{appointment_id}/attachments:
+    post:
+      tags:
+        - appointments
+      summary: Create attachment for appointment
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.write
+        - AuthorizationCodeFlow:
+            - external.appointment.write
+      operationId: uploadAppointmentAttachment
+      parameters:
+        - name: appointment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadAppointmentAttachmentRequest'
+      responses:
+        '200':
+          description: Successfully uploaded attachment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadAppointmentAttachmentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '500':
+          description: Internal Server Error
+      description: >
+        This endpoint is used to upload attachment documents related to the
+        appointment for the provider to view. You can upload more than one
+        attachment with the same attachment_type for the same appointment_id if
+        needed. The provider will be able to receive all uploaded attachments. 
+
+
+        Only documents of type jpg, png, pdf, and docx are supported. Documents
+        must be less than 100MB. You may not upload attachments to appointments
+        in a failed state or over 7 days after the appointment.
+  /v1/appointments/update-status:
+    put:
+      summary: Update appointment status
+      description: >
+        Use this endpoint to update the status of an appointment to either
+        'arrived' or 'no_show'.
+
+        - `arrived`: Indicates the patient has arrived at the office.
+
+        - `no_show`: Indicates the patient did not show up for their scheduled
+        appointment. Appointment start time should be in the past but no older
+        than 2 days to be marked as no_show.
+      tags:
+        - appointments
+      security:
+        - ClientCredentialsFlow:
+            - external.appointment.write
+        - AuthorizationCodeFlow:
+            - external.appointment.write
+      operationId: updateAppointmentStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalUpdateAppointmentStatusRequestBody'
+      responses:
+        '200':
+          description: Successful status update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentBaseResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '500':
+          description: Internal Server Error
+  /v1/reference/npi:
+    get:
+      tags:
+        - reference
+      summary: Get active provider NPIs
+      description: >
+        Retrieves the list of active provider NPIs within the developer's Zocdoc
+        directory. The NPIs retrieved here can be used to search for providers
+        in the /v1/providers endpoint to facilitate availability, discovery, and
+        booking.
+
+
+        Developers can fetch the NPI list and cache in their system. The
+        available NPIs do not change frequently. Pulling this data once a week
+        and/or after known directory change events should be sufficient.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderNpis
+      parameters:
+        - name: page
+          in: query
+          description: >-
+            The zero indexed page of results. A mimimum value of 0 will be
+            accepted.
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: >-
+            The number of results to return per page. A mimimum value of 1 and a
+            maximum of 60000 will be accepted.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderNpiResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /v1/schedulable_entities:
+    get:
+      tags:
+        - schedulable-entities
+      summary: Get schedulable entities
+      description: >
+        Get the list of schedulable entities within the developer's Zocdoc
+        directory (provider-locations, etc.) with availability information.
+
+
+        NPIs can be used to search for providers in the /v1/providers endpoint
+        to facilitate availability, discovery, and booking. Schedulable entity
+        ids can be used to find provider-locations in the
+        /v1/provider_locations/{provider_location_id} endpoint to facilitate
+        availability, discovery, and booking.
+
+
+        Developers can fetch the schedulable entities list and cache in their
+        system. The available schedulable entities do not change frequently.
+        Pulling this data once a week and/or after known directory change events
+        should be sufficient. However, you may use the `recent_changes_72hrs`
+        parameter and the `recent_change_summary` field to get the list of
+        entities that have changed in the last 72 hours.
+      security:
+        - ClientCredentialsFlow:
+            - external.schedulable_entity.read
+        - AuthorizationCodeFlow:
+            - external.schedulable_entity.read
+      operationId: getSchedulableEntities
+      parameters:
+        - name: page
+          in: query
+          description: >-
+            The zero indexed page of results. A mimimum value of 0 will be
+            accepted.
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: >-
+            The number of results to return per page. The default value is 5000.
+            A mimimum value of 1 and a maximum of 10000 will be accepted.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+        - name: schedule_types
+          in: query
+          description: >-
+            The comma-delimited list of schedule types to include. Will return
+            all schedule types if not provided.
+          required: false
+          schema:
+            type: string
+        - name: recent_changes_72hrs
+          in: query
+          description: >-
+            When true, only includes entities added or updated in the last 72
+            hours
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulableEntitiesResponse'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /v1/credentials/rotate:
+    post:
+      tags:
+        - credentials
+      security:
+        - ClientCredentialsFlow:
+            - external.credential.rotate
+      description: |
+        Rotate the client secret for the authenticated external API client.
+      operationId: rotateCredentials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RotateCredentialBody'
+      responses:
+        '200':
+          description: Credential rotated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RotateCredentialResult'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '404':
+          description: Client not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '500':
+          description: Internal server error
+      summary: Rotate Credentials
+  /v1/webhook/mock-request:
+    post:
+      tags:
+        - webhook
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: mockWebhookRequest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookMockDataRequest'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookMockResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+      summary: Mock webhook request
+  /v1-beta/facilities:
+    get:
+      tags:
+        - facilities
+      summary: Get facilities
+      description: Get a set of facilities within the developer's network.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getFacilities
+      parameters:
+        - name: npis
+          in: query
+          description: >-
+            A comma-delimited list of Provider NPI numbers. A maximum of 50
+            items will be accepted at a time. One of `zip_code` or `npis` is
+            required.
+          schema:
+            type: string
+            example: 1234567891,0123456789
+        - name: zip_code
+          in: query
+          description: >-
+            A 5 digit zip code that will be used as the location to find
+            facilities near by. One of `zip_code` or `npis` is required.
+          schema:
+            type: string
+            example: 36925
+        - name: building_type
+          in: query
+          description: The type of facility building, which can be Clinic or Hospital.
+          schema:
+            $ref: '#/components/schemas/BuildingType'
+        - name: page
+          in: query
+          description: The zero indexed page of results.
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: The number of results to return per page.
+          schema:
+            type: integer
+        - name: visit_reason_id
+          in: query
+          description: >-
+            The Zocdoc ID of the visit reason to search by `zip_code` for. See
+            [Reference Data](/guides/reference-data) for options.
+          schema:
+            type: string
+            example: pc_FRO-18leckytNKtruw5dLR
+        - name: insurance_plan_id
+          in: query
+          description: >-
+            The Zocdoc ID of the patient's insurance plan to search by
+            `zip_code` for. Use the [Get Insurance
+            Plans](#operation/getInsurancePlans) endpoint to retrieve available
+            plans.
+          schema:
+            type: string
+            example: ip_2224
+        - name: max_distance_to_patient_mi
+          in: query
+          description: >-
+            The maximum distance in miles from the facility to the search
+            location (the center point of the given `zip_code`). Default is 50
+            miles.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilitiesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1-beta/facilities/{facility_id}:
+    get:
+      tags:
+        - facilities
+      summary: Get facility by id
+      description: Get facility by facility id.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getFacility
+      parameters:
+        - name: facility_id
+          in: path
+          required: true
+          description: Zocdoc facility id.
+          schema:
+            type: string
+            example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityByIdResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/insurance_plans:
+    get:
+      tags:
+        - insurance-reference
+      summary: Get insurance plans
+      description: Get insurance plans
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getInsurancePlans
+      parameters:
+        - name: page
+          in: query
+          description: The zero indexed page of results.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 200
+        - name: page_size
+          in: query
+          description: The number of results to return per page. Default is 100.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+        - name: status
+          in: query
+          description: The status of the insurance plan. Default is active.
+          schema:
+            $ref: '#/components/schemas/InsuranceStatus'
+        - name: state
+          in: query
+          description: The two letter State code where the insurance plan has coverage.
+          schema:
+            type: string
+            example: NY
+        - name: network_type
+          in: query
+          description: The network type of the insurance plan.
+          schema:
+            $ref: '#/components/schemas/InsuranceNetworkType'
+        - name: program_type
+          in: query
+          description: The program type of the insurance plan.
+          schema:
+            $ref: '#/components/schemas/InsuranceProgramType'
+        - name: care_category
+          in: query
+          description: The care type of the insurance plan.
+          schema:
+            $ref: '#/components/schemas/CareCategory'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsurancePlansResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/insurance_plans/{insurance_plan_id}:
+    get:
+      tags:
+        - insurance-reference
+      summary: Get insurance plan by id
+      description: Get insurance plan by id.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getInsurancePlan
+      parameters:
+        - name: insurance_plan_id
+          in: path
+          required: true
+          description: Zocdoc insurance plan id
+          schema:
+            type: string
+            example: ip_2224
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsurancePlanByIdResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/specialties:
+    get:
+      tags:
+        - reference
+      summary: Get specialties
+      description: Get specialties with optional filtering by care category
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getSpecialties
+      parameters:
+        - name: page
+          in: query
+          description: The zero indexed page of results. Default is 0. Maximum is 200.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 200
+        - name: page_size
+          in: query
+          description: >-
+            The number of results to return per page. Default is 100. Maximum is
+            500.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+        - name: care_category
+          in: query
+          description: Filter by care category
+          schema:
+            $ref: '#/components/schemas/CareCategory'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpecialtiesResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/specialties/{specialty_id}:
+    get:
+      tags:
+        - reference
+      summary: Get specialty by id
+      description: Get specialty by id
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getSpecialtyById
+      parameters:
+        - name: specialty_id
+          in: path
+          required: true
+          description: Zocdoc specialty id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpecialtyByIdResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/visit_reasons:
+    get:
+      tags:
+        - reference
+      summary: Get visit reasons
+      description: Get visit reasons with optional filtering by specialty
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getVisitReasons
+      parameters:
+        - name: page
+          in: query
+          description: The zero indexed page of results. Default is 0. Maximum is 200.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 200
+        - name: page_size
+          in: query
+          description: >-
+            The number of results to return per page. Default is 100. Maximum is
+            500.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+        - name: specialty_id
+          in: query
+          description: Filter by primary specialty id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitReasonsResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/visit_reasons/{visit_reason_id}:
+    get:
+      tags:
+        - reference
+      summary: Get visit reason by id
+      description: Get visit reason by id
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getVisitReasonById
+      parameters:
+        - name: visit_reason_id
+          in: path
+          required: true
+          description: >-
+            Zocdoc visit reason id (format `pc_*`, e.g.
+            `pc_TlZW-r06U0W3pCsIGtSI5B`).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitReasonByIdResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/providers/{provider_id}/calendar/timeslots:
+    get:
+      tags:
+        - calendar-integration-timeslots
+      description: Get timeslots for a provider and date.
+      operationId: getProviderCalendarTimeslots
+      parameters:
+        - name: provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: pr_abc123-def456_wxyz7890
+        - name: date
+          in: query
+          required: true
+          description: >-
+            The date for which to get timeslots in YYYY-MM-DD format. This
+            parameter will match against the local date part of the time slot's
+            `start_time`. For example, a timeslot with start_time of
+            2024-10-01T22:00 and time_zone of America/New_York is considered
+            2024-10-01 when querying timeslots, even though it resolves to
+            2024-10-02 in UTC.
+          schema:
+            type: string
+            format: date
+            example: '2024-10-26'
+        - name: next_page_token
+          in: query
+          required: false
+          description: A token to get the next set of results.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: >-
+            The limit of objects to get in the response. For this endpoint, this
+            is equivalent to page_size.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeslotListResponse'
+        '400':
+          description: Invalid request parameters.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      summary: Get timeslots for provider on date
+    put:
+      description: >
+        This endpoint sets the complete list of available slots for a specific
+        provider on a specific date. Each request must include the entire set of
+        slots for that date. If a provider wishes to list times at multiple
+        locations for a single date, each location must have its own timeslot
+        object added to the array. A new request made for the same provider and
+        date will overwrite the previous set of slots. If you send an empty
+        array, all slots for that provider across all locations on that date
+        will be deleted.
+
+
+        **Note**: The timeslots are stored in an eventually consistent data
+        store. This means there is a small
+
+        possibility that a fetch might not include recently created slots if you
+        fetch timeslots immediately after inserting them.
+
+
+        **Parameter Validations**:
+
+        * The user must have access to the specified `provider_id`.
+
+
+        **Validations for each timeslot in the request body**:
+
+        * `slot.provider_id`:
+            * Must match the `provider_id` specified in the endpoint parameter.
+        * `slot.start_time`:
+            * Must be a valid "local date-time" string in ISO 8601 format, e.g., `2024-09-15T12:13:00`. The seconds component is optional.
+            * The date component must match the `date` parameter.
+        * `slot.time_zone`:
+            * Must be a valid IANA time zone ID (e.g., `America/New_York` or `America/Denver`).
+      operationId: putProviderCalendarTimeslots
+      tags:
+        - calendar-integration-timeslots
+      parameters:
+        - name: provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: pr_abc123-def456_wxyz7890
+        - name: date
+          in: query
+          required: true
+          description: The date for which to put timeslots in YYYY-MM-DD format.
+          schema:
+            type: string
+            format: date
+            example: '2024-10-16'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeslotPutRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeslotPutResponse'
+        '400':
+          description: Invalid request parameters.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      summary: Put provider calendar timeslots
+components:
+  securitySchemes:
+    ClientCredentialsFlow:
+      type: oauth2
+      description: >
+        Machine to machine authentication (for use from client server to
+        Zocdoc).
+
+        Production: `https://auth.zocdoc.com/oauth/token`
+
+        Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.zocdoc.com/oauth/token
+          scopes:
+            external.credential.rotate: Rotate the authenticated client secret.
+            external.appointment.write: Book and modify appointments.
+            external.appointment.read: Read basic details of your appointments.
+            external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
+            external.provider_insurance.write: Update the insurance accepted by a provider.
+            external.schedulable_entity.read: Read schedulable entities.
+    AuthorizationCodeFlow:
+      type: oauth2
+      description: |
+        Log in as a user. Client Secret is not necessary for this login flow.
+        Production: `https://auth.zocdoc.com`
+        Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+      flows:
+        authorizationCode:
+          x-usePkce: true
+          tokenUrl: https://auth.zocdoc.com/oauth/token
+          authorizationUrl: https://auth.zocdoc.com/authorize
+          scopes:
+            external.appointment.write: Book and modify appointments.
+            external.appointment.read: Read basic details of your appointments.
+            external.schedulable_entity.read: Read schedulable entities.
+  schemas:
+    UpdateInsuranceMappingsRequest:
+      type: object
+      required:
+        - operation
+        - insurance_plan_ids
+      properties:
+        insurance_plan_ids:
+          description: List of insurance plan ids
+          type: array
+          items:
+            type: string
+        operation:
+          $ref: '#/components/schemas/InsuranceMappingUpdateOperation'
+    InsuranceMappingUpdateOperation:
+      type: string
+      enum:
+        - Add
+        - Remove
+        - Replace
+    UpdateInsuranceMappingsResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+    GetInsuranceMappingsResults:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/InsuranceMappingData'
+    InsuranceMappingData:
+      type: object
+      required:
+        - insurance_plan_mappings
+        - eligible_insurances
+      properties:
+        insurance_plan_mappings:
+          description: List of insurance plans that are mapped
+          type: array
+          items:
+            $ref: '#/components/schemas/InsurancePlanMapping'
+        eligible_insurances:
+          description: List of insurance networks and their plans that can be mapped
+          type: array
+          items:
+            $ref: '#/components/schemas/EligibleInsurance'
+    InsurancePlanMapping:
+      type: object
+      required:
+        - insurance_plan_id
+      properties:
+        insurance_plan_id:
+          type: string
+    EligibleInsurance:
+      type: object
+      required:
+        - insurance_carrier_id
+        - insurance_carrier_networks
+      properties:
+        insurance_carrier_id:
+          type: string
+        insurance_carrier_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/InsuranceCarrierNetwork'
+    InsuranceCarrierNetwork:
+      type: object
+      required:
+        - program_type
+        - network_type
+        - insurance_plan_ids
+      properties:
+        program_type:
+          type: string
+        network_type:
+          type: string
+        insurance_plan_ids:
+          type: array
+          items:
+            type: string
+    AcceptsPatientInsuranceType:
+      type: string
+      description: Whether the provider location accepts the patient's insurance
+      enum:
+        - accepted
+        - not_accepted
+        - insurance_not_specified
+    AppointmentBaseResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AppointmentBaseResponseData'
+    AppointmentBaseResponseData:
+      required:
+        - appointment_status
+        - appointment_id
+      type: object
+      description: Data that will be returned upon a sucessful booking request
+      properties:
+        appointment_id:
+          type: string
+          description: The Zocdoc ID of the appointment.
+        appointment_status:
+          $ref: '#/components/schemas/AppointmentStatus'
+        developer_patient_id:
+          type: string
+          description: >-
+            The patient identifier provided by 3P developer. Null if not
+            provided.
+    AppointmentData:
+      required:
+        - start_time
+        - visit_reason_id
+        - provider_location_id
+        - patient
+        - patient_type
+      type: object
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          description: >-
+            Date & time of the appointment in ISO-8601 format with a timezone
+            offset. Must be a valid start time from the
+            /v1/provider_locations/availability endpoint.
+          example: '2022-04-27T09:00:00-04:00'
+        visit_reason_id:
+          type: string
+          description: >-
+            The Zocdoc visit reason ID for the appointment. Must be accepted by
+            the provider.
+          example: pc_FRO-18leckytNKtruw5dLR
+        provider_location_id:
+          type: string
+          description: The Zocdoc provider-location ID for the appointment.
+          example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+        patient:
+          $ref: '#/components/schemas/Patient'
+        patient_type:
+          $ref: '#/components/schemas/PatientType'
+        notes:
+          type: string
+          description: Patient notes. 100 character maximum limit.
+    AppointmentResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AppointmentResponseData'
+    AppointmentResponseData:
+      allOf:
+        - $ref: '#/components/schemas/SharedAppointmentResponseData'
+        - type: object
+          required:
+            - visit_type
+          properties:
+            visit_type:
+              $ref: '#/components/schemas/AppointmentVisitType'
+            notes:
+              type: string
+              description: Patient notes. 100 character maximum limit.
+          description: Data that will be returned upon a sucessful booking request
+    AppointmentParticipantsResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AppointmentParticipantsResponseData'
+    AppointmentParticipantsResponseData:
+      type: object
+      required:
+        - patient
+        - provider_id
+        - location_id
+      properties:
+        patient:
+          $ref: '#/components/schemas/AppointmentParticipantPatient'
+        provider_id:
+          type: string
+          description: The Zocdoc id of the provider
+        location_id:
+          type: string
+          description: The Zocdoc id of the location
+    AppointmentStatusListResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/AppointmentStatusResponseData'
+    AppointmentStatusResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AppointmentStatusResponseData'
+    AppointmentStatusResponseData:
+      allOf:
+        - $ref: '#/components/schemas/SharedAppointmentResponseData'
+        - required:
+            - start_time
+            - provider_location_id
+            - visit_reason_id
+          type: object
+          description: Data that will be returned upon an a appointment lookup
+          properties:
+            start_time:
+              type: string
+              format: date-time
+              description: Date & time of the appointment
+              example: '2022-04-27T09:00:00-04:00'
+            created_time_utc:
+              type: string
+              format: instant
+              description: UTC date & time of the appointment creation
+              example: '2024-01-01T09:30:00Z'
+            last_modified_time_utc:
+              type: string
+              format: instant
+              description: UTC date & time of the appointment last modification
+              example: '2024-01-01T09:30:00Z'
+            provider_location_id:
+              type: string
+            practice_id:
+              type: string
+              description: The Zocdoc id of the practice
+            visit_reason_id:
+              type: string
+            visit_type:
+              $ref: '#/components/schemas/AppointmentVisitType'
+            patient_type:
+              $ref: '#/components/schemas/PatientType'
+            notes:
+              type: string
+              description: Patient notes. 100 character maximum limit.
+            cancellation_reason:
+              type: string
+              description: >-
+                Optional free text description for the appointment cancellation.
+                Only use this field when cancellation_reason_type is set to
+                'other_patient_reason' or 'other_provider_reason'.
+            source:
+              type: string
+              description: >-
+                The channel where the appointment was booked (e.g., "Zocdoc
+                Marketplace", "Your website").
+    AppointmentType:
+      type: string
+      enum:
+        - providers
+      description: The type of appointment.
+    AppointmentUpdateType:
+      type: string
+      enum:
+        - updated
+        - cancelled
+        - created
+    AppointmentVisitType:
+      type: string
+      description: The appointment's [visit type](/guides/glossary)
+      enum:
+        - in_person
+        - zocdoc_video_service
+        - third_party_video_service
+    AppointmentSortByType:
+      type: string
+      enum:
+        - start_time_utc
+        - created_time_utc
+        - last_modified_time_utc
+      description: |
+        Field to sort appointments by:
+        * start_time_utc - Sort by appointment start time (default)
+        * created_time_utc - Sort by when appointment was created
+        * last_modified_time_utc - Sort by when appointment was last modified
+    AppointmentSortDirectionType:
+      type: string
+      enum:
+        - ascending
+        - descending
+    Availability:
+      type: object
+      properties:
+        provider_location_id:
+          type: string
+          description: The Zocdoc provider location ID for the availability.
+          example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+        first_availability:
+          $ref: '#/components/schemas/Timeslot'
+        timeslots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Timeslot'
+    AvailabilityResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Availability'
+              description: Response containing the availaibility information.
+    BaseLocation:
+      type: object
+      required:
+        - address1
+        - city
+        - state
+        - zip_code
+        - latitude
+        - longitude
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        state:
+          description: The location's two letter state code.
+          example: NY
+          type: string
+        zip_code:
+          description: The location's 5 digit zip code.
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+        location_name:
+          type: string
+        phone_number:
+          type: string
+          description: >-
+            Unformatted phone number for the location. Returns null for certain
+            API products.
+          example: '9999999999'
+        phone_extension:
+          type: string
+          description: Unformatted extension digits for the location phone number.
+          example: '123'
+        time_zone:
+          type: string
+          description: IANA time zone identifier for the location, e.g., America/New_York.
+          example: America/New_York
+    BaseLocationWithDistance:
+      allOf:
+        - $ref: '#/components/schemas/BaseLocation'
+        - type: object
+          properties:
+            distance_to_patient_mi:
+              type: number
+              format: float
+              description: Distance from patient to provider in miles.
+    BaseProvider:
+      type: object
+      properties:
+        provider_id:
+          type: string
+          description: The Zocdoc provider ID
+        npi:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        title:
+          type: string
+        full_name:
+          type: string
+        gender_identity:
+          type: string
+          description: 'Possible values include: Female, Male, Non-binary'
+        specialties:
+          type: array
+          items:
+            type: string
+        specialty_ids:
+          type: array
+          items:
+            type: string
+        default_visit_reason_id:
+          type: string
+        visit_reason_ids:
+          type: array
+          items:
+            type: string
+        statement:
+          type: string
+        provider_photo_url:
+          type: string
+          description: >-
+            Protocol-relative URL to a provider's photo. URL will change if a
+            new photo is uploaded. Only 1 photo URL will be given at a time.
+            Photos should be 200-4,000 pixels. JPEG and PNG formats are
+            accepted. Photos are reviewed at time of upload and on an annual
+            basis.
+          example: //d2uur722ua7fvv.cloudfront.net/ZeeFace_02.svg
+        languages:
+          type: array
+          items:
+            type: string
+          description: >-
+            Languages spoken at the practice location, might be facilitated by
+            translators on site.
+          example:
+            - English
+            - Spanish
+        profile_url:
+          type: string
+          description: The URL to view the providers profile on Zocdoc.
+          example: >-
+            https://zocdoc.com/doctor/capivarudo-nojeira-md-517507?utm_source=FakeSource
+        credentials:
+          $ref: '#/components/schemas/ProviderCredentials'
+    BaseProviderDetailsLocation:
+      type: object
+      required:
+        - provider_location_id
+        - accepts_patient_insurance
+        - booking_requirements
+      properties:
+        provider_location_id:
+          type: string
+          example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+        accepts_patient_insurance:
+          $ref: '#/components/schemas/AcceptsPatientInsuranceType'
+        first_availability_date_in_provider_local_time:
+          type: string
+          format: date
+          description: >-
+            The first date where provider has availability for new patients with
+            any visit reason in provider's local time zone, formatted as
+            YYYY-MM-DD and up to 90 days in the future.
+        booking_requirements:
+          $ref: '#/components/schemas/BookingRequirements'
+    BaseVirtualLocation:
+      type: object
+      required:
+        - state
+      properties:
+        state:
+          description: The location's two letter state code.
+          example: NY
+          type: string
+        location_name:
+          type: string
+        time_zone:
+          type: string
+          description: IANA time zone identifier for the location, e.g., America/New_York.
+          example: America/New_York
+    BookAppointmentRequestBody:
+      required:
+        - appointment_type
+        - data
+      type: object
+      properties:
+        appointment_type:
+          $ref: '#/components/schemas/AppointmentType'
+        data:
+          $ref: '#/components/schemas/AppointmentData'
+    BookingRequestInsuranceSource:
+      type: string
+      description: The types of insurance coverage that a provider accepts
+      enum:
+        - in_network
+        - out_of_network
+        - self_pay
+    BookingRequirements:
+      type: object
+      required:
+        - required_fields
+        - accepts_booking_requests_from
+      properties:
+        required_fields:
+          type: array
+          items:
+            type: string
+            description: >-
+              Options include `data.patient.insurance.insurance_plan_id` and
+              `data.patient.insurance.insurance_member_id`
+        accepts_booking_requests_from:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingRequestInsuranceSource'
+      description: >-
+        Criteria for booking appointments, defines requirements and mandatory
+        fields specified by Zocdoc providers
+    BuildingType:
+      type: string
+      description: The type of facility building, which can be clinic or hospital.
+      enum:
+        - clinic
+        - hospital
+    CancelAppointmentRequestBody:
+      type: object
+      required:
+        - appointment_id
+      properties:
+        appointment_id:
+          type: string
+          description: The Zocdoc ID of the appointment.
+          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+        cancellation_reason:
+          type: string
+          description: >-
+            Optional free text description for the appointment cancellation.
+            Only use this field when cancellation_reason_type is set to
+            'other_patient_reason' or 'other_provider_reason'.
+        cancellation_reason_type:
+          description: >
+            Enum field describing why the appointment was cancelled. This field
+            is optional but recommended when known for metrics purposes. If the
+            cancellation reason does not match any predefined enum values, use
+            'other_patient_reason' or 'other_provider_reason' and provide a free
+            text explanation in the cancellation_reason field.
+          $ref: '#/components/schemas/CancellationReasonType'
+    CancellationReasonType:
+      type: string
+      description: >-
+        Enum field describing why the appointment was cancelled. This field is
+        optional but recommended when known for metrics purposes. If the
+        cancellation reason does not match any predefined enum values, use
+        'other_patient_reason' or 'other_provider_reason' and provide a free
+        text explanation in the cancellation_reason field.
+      enum:
+        - patient_no_longer_needs_appointment
+        - patient_no_longer_available
+        - other_patient_reason
+        - missing_needed_patient_information
+        - payment_or_insurance_issue
+        - patient_or_visit_type_not_accepted
+        - provider_not_available
+        - rescheduling_patient
+        - other_provider_reason
+    ConfirmAppointmentRequestBody:
+      type: object
+      required:
+        - appointment_id
+      properties:
+        appointment_id:
+          type: string
+          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+    CareCategory:
+      type: string
+      description: |
+        The category of care for an insurance plan
+          * Health: Health and Mental Health Care
+          * Dental: Dental Care
+          * Vision: Vision Care
+      enum:
+        - health
+        - dental
+        - vision
+    CoverageArea:
+      type: object
+      required:
+        - is_national
+      properties:
+        is_national:
+          type: boolean
+        states:
+          type: array
+          description: >-
+            The two letter state codes where the insurance plan has coverage.
+            Will be null when is_national true.
+          items:
+            type: string
+    DeepProfileProvider:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - title
+        - prenominal
+        - postnominal
+        - full_name
+        - gender_identity
+        - specialties
+        - specialty_ids
+        - visit_reason_ids
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        title:
+          type: string
+        prenominal:
+          type: string
+        postnominal:
+          type: string
+        full_name:
+          type: string
+        gender_identity:
+          type: string
+        specialties:
+          type: array
+          items:
+            type: string
+        specialty_ids:
+          type: array
+          items:
+            type: string
+        default_visit_reason_id:
+          type: string
+        visit_reason_ids:
+          type: array
+          items:
+            type: string
+        provider_photo_url:
+          type: string
+        languages:
+          type: array
+          items:
+            type: string
+        statement:
+          type: string
+        credentials:
+          $ref: '#/components/schemas/ProviderCredentials'
+    DeepProfileProviderResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/DeepProfileProvider'
+    Education:
+      type: object
+      properties:
+        institutions:
+          type: array
+          items:
+            type: string
+    FacilitiesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Facility'
+    Facility:
+      type: object
+      required:
+        - facility_id
+        - name
+        - specialties
+        - languages
+        - visit_reason_ids
+        - default_visit_reason_id
+        - location
+        - schedule
+      properties:
+        facility_id:
+          type: string
+          description: Zocdoc id for facility
+        name:
+          type: string
+        npi:
+          type: string
+        building_type:
+          type: string
+        specialties:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        visit_reason_ids:
+          type: array
+          items:
+            type: string
+        default_visit_reason_id:
+          type: string
+        location:
+          $ref: '#/components/schemas/BaseLocation'
+        schedule:
+          $ref: '#/components/schemas/FacilitySchedule'
+        practice:
+          $ref: '#/components/schemas/Practice'
+    FacilityByIdResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Facility'
+    FacilitySchedule:
+      type: object
+      required:
+        - schedule_id
+        - provider_location_id
+        - booking_requirements
+      properties:
+        schedule_id:
+          type: string
+          description: Zocdoc id for bookable schedule
+        provider_location_id:
+          type: string
+          description: Zocdoc provider location id for availability and booking requests
+        booking_requirements:
+          $ref: '#/components/schemas/BookingRequirements'
+    InsuranceCarrier:
+      type: object
+      description: The insurance carrier for the insurance plan
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Zocdoc id for insurance carrier
+        name:
+          type: string
+    InsuranceNetworkType:
+      type: string
+      description: |
+        The type of insurance plan
+          * HMO: Health Maintenance Organization
+          * PPO: Preferred Provider Organization
+          * POS: Point-of-Service
+          * EPO: Exclusive Provider Organization
+          * Indemnity: Traditional fee-for-service plans
+          * ASO: Administrative Services Only
+          * ACO: Accountable Care Organizations
+          * ACP: Accountable Care Program
+          * Medicare: Medicare Advantage plans
+          * Medicaid: Medicaid Managed Care plans
+          * Other
+          * Uncategorized: Uncategorized insurance plans
+      enum:
+        - hmo
+        - ppo
+        - pos
+        - epo
+        - indemnity
+        - aso
+        - aco
+        - acp
+        - medicare
+        - medicaid
+        - other
+        - uncategorized
+        - hmo_pos
+    InsurancePlan:
+      type: object
+      required:
+        - id
+        - name
+        - carrier
+        - network_type
+        - program_type
+        - care_categories
+        - status
+        - coverage_area
+        - ref_metadata
+      properties:
+        id:
+          type: string
+          description: Zocdoc id for insurance plan
+        name:
+          type: string
+        carrier:
+          $ref: '#/components/schemas/InsuranceCarrier'
+        network_type:
+          $ref: '#/components/schemas/InsuranceNetworkType'
+        program_type:
+          $ref: '#/components/schemas/InsuranceProgramType'
+        status:
+          $ref: '#/components/schemas/InsuranceStatus'
+        care_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareCategory'
+        coverage_area:
+          $ref: '#/components/schemas/CoverageArea'
+        ref_metadata:
+          $ref: '#/components/schemas/ReferenceMetadata'
+    InsurancePlanByIdResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/InsurancePlan'
+    SpecialtyData:
+      type: object
+      required:
+        - id
+        - name
+        - care_category
+        - default_visit_reason_id
+        - default_visit_reason_name
+      properties:
+        id:
+          type: string
+          description: Zocdoc specialty id
+        name:
+          type: string
+        care_category:
+          $ref: '#/components/schemas/CareCategory'
+        default_visit_reason_id:
+          type: string
+        default_visit_reason_name:
+          type: string
+    SpecialtyByIdResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SpecialtyData'
+    SpecialtiesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/SpecialtyData'
+    VisitReasonData:
+      type: object
+      required:
+        - id
+        - name
+        - specialty_id
+      properties:
+        id:
+          type: string
+          description: Zocdoc visit reason id
+        name:
+          type: string
+        specialty_id:
+          type: string
+          description: Zocdoc specialty id this visit reason belongs to
+    VisitReasonByIdResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/VisitReasonData'
+    VisitReasonsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/VisitReasonData'
+    InsuranceProgramType:
+      type: string
+      enum:
+        - commercial
+        - commercial_exchange
+        - medicare
+        - medicaid
+        - workers_compensation
+        - uncategorized
+        - medicare_advantage
+        - medicaid_managed_care
+        - federal
+      description: >
+        We've categorized plan types offered by each carrier into their
+        associated programs:
+          * Commercial: The most common plans offered by private companies. Providers contract directly with the private insurance company.
+          * ACA Marketplace (Commercial exchange): Plans available for patients to buy on online marketplaces under the Affordable Care Act. Providers contract with the insurance carrier offering the plan, not the marketplace itself.
+          * Medicare: Medicare advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved by Medicare. They provide coverage to individuals, families, and employer groups, typically through employer-sponsored plans.
+          * Medicaid: Medicaid Managed Care plans provide Medicaid benefits through contracted arrangements between state Medicaid agencies and a managed care organization (MCOs).
+          * Worker's Compensation: State-mandated programs for work-related injuries and illnesses. Providers contract with the employer or a state-designated agency.
+          * Uncategorized: Uncategorized insurance plans
+    InsurancePlansResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/InsurancePlan'
+    InsuranceStatus:
+      type: string
+      description: Status of the insurance plan
+      enum:
+        - inactive
+        - active
+        - deleted
+    Location:
+      allOf:
+        - $ref: '#/components/schemas/BaseProviderDetailsLocation'
+        - $ref: '#/components/schemas/BaseLocationWithDistance'
+        - type: object
+          properties:
+            is_nearest_match:
+              type: boolean
+              description: >-
+                True for the location closest to the provided
+                latitude/longitude. Only populated when latitude and longitude
+                query parameters are provided.
+    PaginatedBaseResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - page
+            - page_size
+            - total_count
+            - next_url
+          properties:
+            page:
+              description: The zero based index of the current page.
+              type: integer
+            page_size:
+              description: The size of the current page.
+              type: integer
+            total_count:
+              description: The total number of result items.
+              type: integer
+            next_url:
+              description: >-
+                A link to the next page of results; null if this is the last
+                page of results.
+              type: string
+    Patient:
+      required:
+        - first_name
+        - last_name
+        - date_of_birth
+        - sex_at_birth
+        - phone_number
+        - email_address
+        - patient_address
+      type: object
+      properties:
+        patient_id:
+          type: string
+          description: The Zocdoc ID of the patient.
+        developer_patient_id:
+          type: string
+          description: The patient identifier provided by 3P developer.
+        first_name:
+          type: string
+          description: The patient's first name.
+        last_name:
+          type: string
+          description: The patient's last name.
+        date_of_birth:
+          type: string
+          format: date
+          description: The patient's date of birth in the format, YYYY-MM-DD.
+        sex_at_birth:
+          $ref: '#/components/schemas/PatientSex'
+        phone_number:
+          type: string
+          description: >-
+            The patient's unformatted 10 digit phone number. The first and
+            fourth digits cannot be a 0 or 1.
+          example: '9999999999'
+        email_address:
+          type: string
+          description: The patient's email address.
+          example: test@example.com
+        patient_address:
+          $ref: '#/components/schemas/PatientAddress'
+        insurance:
+          $ref: '#/components/schemas/PatientInsurance'
+        gender:
+          type: array
+          items:
+            $ref: '#/components/schemas/Gender'
+          description: >-
+            none_apply and prefer_not_to_say must be used independently, all
+            other gender identities can be used in combination with each other.
+    AppointmentParticipantPatient:
+      allOf:
+        - $ref: '#/components/schemas/Patient'
+        - type: object
+          required:
+            - uploaded_attachments
+            - is_booked_by_another_patient
+          properties:
+            uploaded_attachments:
+              type: array
+              items:
+                $ref: '#/components/schemas/UploadedAttachment'
+              description: >-
+                Documents and files that have been uploaded by the patient for
+                this appointment, such as insurance cards, ID cards, or intake
+                forms.
+            is_booked_by_another_patient:
+              type: boolean
+              description: >-
+                Indicates whether this patient's appointment was booked by
+                another patient (e.g., a parent booking for their child or
+                someone booking for a dependent)
+    PatientAddress:
+      required:
+        - address1
+        - city
+        - state
+        - zip_code
+      type: object
+      properties:
+        address1:
+          type: string
+          description: The patient's address, line 1.
+        city:
+          type: string
+          description: The patient's address, city.
+        state:
+          type: string
+          description: The patient's address, two letter state code.
+          example: NY
+        zip_code:
+          type: string
+          description: The patient's address, 5 digit zip code.
+          example: 36925
+        address2:
+          type: string
+          description: The patient's address, line 2.
+    PatientInsurance:
+      type: object
+      properties:
+        insurance_plan_id:
+          type: string
+          description: >-
+            The ID of the patient's insurance plan. Use the [Get Insurance
+            Plans](#operation/getInsurancePlans) endpoint to retrieve available
+            plans.
+          example: ip_2224
+        insurance_group_number:
+          type: string
+          description: The patients insurance group number.
+        insurance_member_id:
+          type: string
+          description: The patients insurance card member ID.
+        is_self_pay:
+          type: boolean
+          description: Indicates is a patient is self paying
+    UploadedAttachment:
+      type: object
+      required:
+        - attachment_type
+        - attachment_url
+      properties:
+        attachment_type:
+          $ref: '#/components/schemas/UploadedAttachmentType'
+        attachment_url:
+          type: string
+          description: >-
+            A full URL to download the attachment pointing to one of auxiliary
+            endpoints in the same API. To access the url the same authentication
+            must be used as the one used to make the request to /participants
+            endpoint.
+        side:
+          $ref: '#/components/schemas/DocumentSide'
+    DocumentSide:
+      type: string
+      description: >-
+        Indicates whether the document image is of the front or back side. This
+        field is typically used for documents like insurance cards or ID cards
+        that have information on both sides.
+      enum:
+        - front
+        - back
+    Practice:
+      type: object
+      required:
+        - practice_id
+        - practice_name
+      properties:
+        practice_id:
+          type: string
+        practice_name:
+          type: string
+    ProviderCredentials:
+      type: object
+      required:
+        - certifications
+        - education
+      properties:
+        certifications:
+          type: array
+          items:
+            type: string
+        education:
+          $ref: '#/components/schemas/Education'
+      description: Provider Credentials include education and certifications.
+    ProviderDetails:
+      allOf:
+        - $ref: '#/components/schemas/BaseProvider'
+        - type: object
+          required:
+            - locations
+            - virtual_locations
+            - practice
+          properties:
+            locations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Location'
+            virtual_locations:
+              type: array
+              items:
+                $ref: '#/components/schemas/VirtualLocation'
+            practice:
+              $ref: '#/components/schemas/Practice'
+    ProviderListResult:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ProviderSearchResult'
+    ProviderLocation:
+      type: object
+      required:
+        - provider_location_id
+        - provider_location_type
+        - accepts_patient_insurance
+        - provider
+        - booking_requirements
+      properties:
+        provider_location_id:
+          type: string
+          example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+        provider_location_type:
+          $ref: '#/components/schemas/ProviderLocationType'
+        accepts_patient_insurance:
+          $ref: '#/components/schemas/AcceptsPatientInsuranceType'
+        first_availability_date_in_provider_local_time:
+          type: string
+          format: date
+          description: >-
+            The first date where provider has availability for new patients with
+            any visit reason in provider's local time zone, formatted as
+            YYYY-MM-DD and up to 90 days in the future.
+        provider:
+          $ref: '#/components/schemas/BaseProvider'
+        location:
+          $ref: '#/components/schemas/BaseLocationWithDistance'
+        virtual_location:
+          $ref: '#/components/schemas/BaseVirtualLocation'
+        practice:
+          $ref: '#/components/schemas/Practice'
+        booking_requirements:
+          $ref: '#/components/schemas/BookingRequirements'
+    ProviderLocationResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/ProviderLocation'
+    ProviderLocationType:
+      type: string
+      enum:
+        - in_person_provider
+        - virtual_provider
+    ProviderNpiResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ProviderNpis'
+    ProviderNpis:
+      type: object
+      properties:
+        npis:
+          type: array
+          items:
+            type: string
+    ProviderResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProvidersByNpi'
+          description: Data that will be returned upon a provider lookup.
+    ProviderReviewsResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ProviderReviewsData'
+    ProviderReviewsData:
+      type: object
+      required:
+        - provider_id
+        - total_reviews
+      properties:
+        provider_id:
+          type: string
+          description: The Zocdoc provider ID
+        total_reviews:
+          type: integer
+          description: Total number of reviews for the provider
+        average_overall_rating:
+          type: number
+          format: double
+          description: >-
+            The average overall rating of the provider (1-5), rounded to 1
+            decimal place
+        average_bedside_rating:
+          type: number
+          format: double
+          description: >-
+            The average bedside rating of the provider (1-5), rounded to 1
+            decimal place
+        average_wait_time_rating:
+          type: number
+          format: double
+          description: >-
+            The average wait time rating of the provider (1-5), rounded to 1
+            decimal place
+    ProviderSearchResult:
+      type: object
+      required:
+        - search_parameters
+        - provider_locations
+      properties:
+        search_parameters:
+          $ref: '#/components/schemas/SearchParameters'
+        provider_locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderLocation'
+    ProvidersByNpi:
+      type: object
+      properties:
+        npi:
+          type: string
+        providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderDetails'
+    ReferenceMetadata:
+      type: object
+      properties:
+        created_timestamp_utc:
+          type: string
+          format: date-time
+          description: >-
+            Date & time of when the reference data was made in ISO-8601 format
+            with a timezone offset representing UTC
+          example: '2022-04-27T09:00:00-00:00'
+        last_updated_timestamp_utc:
+          type: string
+          format: date-time
+          description: >-
+            Date & time of when the reference data was last updated in ISO-8601
+            format with a timezone offset representing UTC
+          example: '2022-04-27T09:00:00-00:00'
+    SearchParameters:
+      type: object
+      required:
+        - specialty_id
+        - visit_reason_id
+      properties:
+        specialty_id:
+          type: string
+          description: >-
+            The Zocdoc ID of the specialty used to search with. If no specialty
+            was provided by the developer, this will be the specialty associated
+            with the visit reason ID that was provided.
+          example: sp_153
+        visit_reason_id:
+          type: string
+          description: >-
+            The Zocdoc ID of the visit reason used to search with. If no visit
+            reason was provided by the developer, this will be the default visit
+            reason for the specialty id that was provided.
+          example: pc_FRO-18leckytNKtruw5dLR
+    SharedAppointmentResponseData:
+      allOf:
+        - $ref: '#/components/schemas/AppointmentBaseResponseData'
+        - type: object
+          required:
+            - is_provider_resource
+            - confirmation_type
+          properties:
+            is_provider_resource:
+              type: boolean
+              description: >-
+                Whether the appointment will be performed by a professional
+                under the supervision of the booked provider.
+            location_phone_number:
+              type: string
+              description: The appointment location's unformatted 10 digit phone number
+              example: '9999999999'
+            location_phone_extension:
+              type: string
+              description: >-
+                The appointment location's unformatted extension number, as
+                digits
+            waiting_room_path:
+              type: string
+              description: >-
+                Patient facing url that can be used to navigate to Zocdoc video
+                service appointments
+            confirmation_type:
+              $ref: '#/components/schemas/AppointmentConfirmationType'
+    Timeslot:
+      type: object
+      required:
+        - start_time
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          description: >-
+            Date & time of the appointment in ISO-8601 format with a timezone
+            offset. The timezone offset will be the provider's local time zone.
+          example: '2022-04-27T09:00:00-04:00'
+        visit_reason_id:
+          type: string
+          description: The Zocdoc ID of the visit reason this timeslot is valid for.
+          example: pc_FRO-18leckytNKtruw5dLR
+        booking_url:
+          type: string
+          description: >-
+            Non-PHI deep link URL that allows developers to book this specific
+            timeslot on zocdoc.com. Utm parameters (utm_medium=partnersynd and
+            utm_source={appClientId}) will be automatically added. Developers
+            will not be able to see the result of the booking.
+          example: >-
+            https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844
+    VirtualLocation:
+      allOf:
+        - $ref: '#/components/schemas/BaseProviderDetailsLocation'
+        - $ref: '#/components/schemas/BaseVirtualLocation'
+    VisitType:
+      type: string
+      description: The type of patient visit with the provider.
+      enum:
+        - all
+        - in_person
+        - video_visit
+      example: all
+    WebhookMockAppointmentData:
+      type: object
+      required:
+        - appointment_id
+        - appointment_updated_timestamp
+        - appointment_update_type
+      properties:
+        appointment_id:
+          type: string
+        appointment_updated_timestamp:
+          type: string
+        appointment_update_type:
+          $ref: '#/components/schemas/AppointmentUpdateType'
+        changed_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangedAttribute'
+          description: >-
+            Array of changed attributes when webhook is triggered due to
+            attribute changes. Each object must contain at least an
+            attribute_path indicating the changed field.
+    ChangedAttribute:
+      type: object
+      required:
+        - attribute_path
+      properties:
+        attribute_path:
+          type: string
+          description: >-
+            The path to the changed attribute in dot notation (e.g.,
+            "appointment.start_time", "patient.uploaded_attachments")
+          example: appointment.start_time
+        attachment_type:
+          type: string
+          description: >-
+            Required when attribute_path is "appointment.attachments", indicates
+            the type of attachment
+    WebhookMockDataRequest:
+      type: object
+      required:
+        - webhook_url
+        - webhook_key
+      properties:
+        webhook_url:
+          type: string
+          description: a valid url to receive the mock webhook request
+        webhook_key:
+          type: string
+          description: a valid key for the signature in base64 format
+        appointment_update_type:
+          $ref: '#/components/schemas/AppointmentUpdateType'
+    WebhookMockRequestData:
+      type: object
+      required:
+        - data_type
+        - appointment_data
+      properties:
+        data_type:
+          type: string
+        appointment_data:
+          $ref: '#/components/schemas/WebhookMockAppointmentData'
+    WebhookMockResponse:
+      type: object
+      required:
+        - event_type
+        - webhook_timestamp
+        - data
+      properties:
+        event_type:
+          type: string
+        webhook_timestamp:
+          type: string
+        data:
+          $ref: '#/components/schemas/WebhookMockRequestData'
+    AppointmentConfirmationType:
+      type: string
+      description: |
+        Specifies how the appointment confirmation will be handled.
+          * auto: means the system will automatically confirm.
+          * manual: means confirmation requires user action.
+          * pending_evaluation: indicates that the confirmation approach is pending evaluation.
+      enum:
+        - auto
+        - manual
+        - pending_evaluation
+    UploadAppointmentAttachmentRequest:
+      type: object
+      required:
+        - attachment
+        - attachment_type
+      properties:
+        attachment:
+          type: string
+          format: binary
+        attachment_type:
+          $ref: '#/components/schemas/AttachmentType'
+    UploadAppointmentAttachmentResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/UploadAppointmentAttachmentResponseData'
+    UploadAppointmentAttachmentResponseData:
+      type: object
+      required:
+        - appointment_id
+        - attachments
+      properties:
+        appointment_id:
+          type: string
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadedAppointmentAttachment'
+    UploadedAppointmentAttachment:
+      type: object
+      required:
+        - attachment_type
+      properties:
+        attachment_type:
+          $ref: '#/components/schemas/AttachmentType'
+    AttachmentType:
+      type: string
+      enum:
+        - community_care_packet
+        - pcp_patient_referral
+        - patient_front_insurance_card
+        - patient_back_insurance_card
+      description: >
+        The type of attachment being uploaded. 
+
+        - `community_care_packet`: Required for VA referrals to Community Care
+        Providers. Use when submitting referral documents required by the
+        Department  of Veterans Affairs for appointments within its extended
+        network.
+
+        - `pcp_patient_referral`: Use to support appointments booked with an
+        approved referral from a primary care doctor.
+    SchedulableEntitiesResponse:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedBaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SchedulableEntitiesData'
+    SchedulableEntitiesOverlapsResponseBody:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/MatchRequestResponseItem'
+    MatchRequestResponseItem:
+      type: object
+      required:
+        - npi
+        - schedule_state
+        - schedulable_entities
+      properties:
+        npi:
+          type: string
+          description: National Provider Identifier
+        schedule_state:
+          $ref: '#/components/schemas/ZocdocSchedulableStatus'
+        schedulable_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/OverlapsSchedulableEntityItem'
+    ZocdocSchedulableStatus:
+      type: string
+      enum:
+        - schedulable
+        - not_schedulable
+        - added_to_queue
+    OverlapsSchedulableEntityItem:
+      type: object
+      required:
+        - id
+        - entity_type
+      properties:
+        id:
+          type: string
+          description: Zocdoc provider location ID (e.g., pr_zzzz|lo_yyyy)
+        entity_type:
+          $ref: '#/components/schemas/OverlapsSchedulableEntityType'
+    OverlapsSchedulableEntityType:
+      type: string
+      description: Entity type
+      enum:
+        - provider_location
+    AppointmentStatusToSet:
+      type: string
+      enum:
+        - arrived
+        - no_show
+      description: |
+        New status to set for the appointment. Accepted values:
+        - `arrived`: Patient has arrived at the office.
+        - `no_show`: Patient did not show up for their appointment.
+    ExternalUpdateAppointmentStatusRequestBody:
+      type: object
+      required:
+        - appointment_id
+        - appointment_status
+      properties:
+        appointment_id:
+          type: string
+          description: The Zocdoc ID of the appointment.
+          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+        appointment_status:
+          $ref: '#/components/schemas/AppointmentStatusToSet'
+    SchedulableEntitiesData:
+      type: object
+      required:
+        - recent_change_summary
+        - schedulable_entities
+      properties:
+        recent_change_summary:
+          $ref: '#/components/schemas/RecentChangeSummary'
+        schedulable_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchedulableEntity'
+    RecentChangeSummary:
+      type: object
+      required:
+        - schedulable_entities_added
+        - schedulable_entities_removed
+        - schedulable_entities_profile_updated
+      properties:
+        schedulable_entities_added:
+          type: array
+          items:
+            type: string
+          description: A provider location was activated
+        schedulable_entities_removed:
+          type: array
+          items:
+            type: string
+          description: A provider location was deactivated
+        schedulable_entities_profile_updated:
+          type: array
+          items:
+            type: string
+          description: >-
+            provider or location profile data changed (NPI, name, specialty,
+            address, default visit reason)
+    SchedulableEntityType:
+      type: string
+      enum:
+        - provider_location
+    AvailabilityStatus:
+      type: string
+      enum:
+        - none
+        - limited
+        - available
+      description: >-
+        The availability status of the schedulable entity for the next 28 days.
+        Limited availablility means that the entity has less than 20 timeslots
+        available for the next 28 days.
+    SchedulableEntity:
+      type: object
+      required:
+        - id
+        - type
+        - go_live_timestamp_utc
+        - profile_last_modified_timestamp_utc
+        - new_patient_availability
+        - existing_patient_availability
+      properties:
+        id:
+          type: string
+        npi:
+          type: string
+        type:
+          $ref: '#/components/schemas/SchedulableEntityType'
+        go_live_timestamp_utc:
+          type: string
+          format: date-time
+          description: >-
+            The timestamp when the schedulable entity became available in the
+            developer's directory.
+        profile_last_modified_timestamp_utc:
+          type: string
+          format: date-time
+          description: >-
+            The timestamp when the schedulable entity's profile was last
+            modified in the developer's directory. This includes basic
+            information on the provider and location records.
+        new_patient_availability:
+          $ref: '#/components/schemas/AvailabilityInfo'
+        existing_patient_availability:
+          $ref: '#/components/schemas/AvailabilityInfo'
+        time_zone:
+          type: string
+          description: IANA time zone identifier for the location, e.g., America/New_York.
+          example: America/New_York
+    AvailabilityInfo:
+      type: object
+      required:
+        - next_28_days
+        - url
+      properties:
+        next_available_utc:
+          type: string
+          format: date-time
+          description: >-
+            The next available date and time in UTC, across all visit reasons,
+            up to 90 days in the future.
+        next_28_days:
+          $ref: '#/components/schemas/AvailabilityStatus'
+        url:
+          type: string
+          description: >-
+            The GET URL to receive the schedulable entity's availability in this
+            API for their default visit reason and the corresponding patient
+            type.
+    PublishedContext:
+      type: string
+      enum:
+        - direct_listing
+        - condition_driven_search
+    BaseResult:
+      required:
+        - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    ErrorType:
+      type: string
+      enum:
+        - api_error
+        - invalid_request
+    Error:
+      required:
+        - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ErrorResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - error_type
+            - errors
+          properties:
+            error_type:
+              $ref: '#/components/schemas/ErrorType'
+            errors:
+              type: array
+              items:
+                $ref: '#/components/schemas/Error'
+    PatientType:
+      type: string
+      description: Whether or not the patient has been to the provider's practice.
+      enum:
+        - existing
+        - new
+      example: new
+    AppointmentStatus:
+      type: string
+      description: >-
+        The status of the appointment. See [Appointment Status
+        definitions](/guides/glossary).
+      enum:
+        - pending_booking
+        - confirmed
+        - booking_failed
+        - cancelled
+        - no_show
+        - pending_reschedule
+        - rescheduled
+        - reschedule_failed
+    PatientSex:
+      type: string
+      description: The patient's sex assigned at birth.
+      enum:
+        - male
+        - female
+    Gender:
+      type: string
+      description: |
+        Patient's gender values
+          * Female at birth - Assigned female at birth
+          * Male at birth - Assigned male at birth
+          * Cisgender - A person whose current gender corresponds to the sex they were assigned at birth
+          * Genderfluid - A person who does not identify with a fixed gender
+          * Genderqueer - A person who does not follow binary gender norms
+          * Intersex - A person born with traits, including genital anatomy, reproductive organs, hormone function, and/or chromosome patterns that may not fit the typical definition of male or female
+          * Non-binary - Umbrella term for a person whose gender identity lies outside the gender binary
+          * Transgender man - A person whose gender is male and whose sex assigned at birth was female
+          * Transgender woman - A person whose gender is female and whose sex assigned at birth was male
+      enum:
+        - female_at_birth
+        - male_at_birth
+        - cisgender
+        - genderfluid
+        - genderqueer
+        - intersex
+        - non_binary
+        - transgender_man
+        - transgender_woman
+        - prefer_not_to_say
+        - none_apply
+    UploadedAttachmentType:
+      type: string
+      enum:
+        - insurance_card_medical
+        - insurance_card_dental
+        - insurance_card_vision
+        - insurance_card_secondary
+        - id_card
+        - intake_form
+        - community_care_packet
+        - pcp_patient_referral
+        - other
+      description: >-
+        Types of attachments that patients have uploaded and are returned in
+        participant data.
+    RescheduleAppointmentRequestBody:
+      type: object
+      required:
+        - appointment_id
+        - start_time
+      properties:
+        appointment_id:
+          type: string
+          description: The Zocdoc id of the appointment
+          example: 63f995c2-49c4-40c8-a93a-140fb32e913b
+        start_time:
+          type: string
+          format: date-time
+          description: >-
+            Date & time of the appointment in ISO-8601 format with a timezone
+            offset
+          example: '2022-04-27T09:00:00-04:00'
+    RotateCredentialBody:
+      type: object
+      required:
+        - application_client_id
+      properties:
+        application_client_id:
+          type: string
+          description: The Auth0 application client ID whose secret should be rotated.
+          example: abc123xyz
+    RotateCredentialResultData:
+      type: object
+      required:
+        - application_client_id
+        - client_secret
+      properties:
+        application_client_id:
+          type: string
+          description: The Auth0 application client ID.
+          example: abc123xyz
+        client_secret:
+          type: string
+          description: The newly rotated client secret.
+          example: AiOiJSUzI1NiIsInR5cCI6IkpXVCJ9
+    RotateCredentialResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/RotateCredentialResultData'
+    IteratedBaseResult:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          properties:
+            limit:
+              type: integer
+              description: >
+                Maximum number of items requested.
+
+                Note: For DynamoDB-style pagination, this may not match the
+                number of items returned.
+            next_page_token:
+              type: string
+              description: Opaque cursor token for the next page. Null if no more pages.
+            next_url:
+              type: string
+              description: Complete URL for fetching the next page (convenience field)
+    CalendarIntegrationTimeslotWeb:
+      description: A bookable appointment start time for a particular provider
+      type: object
+      required:
+        - timeslot_id
+        - created_utc
+      properties:
+        provider_id:
+          type: string
+          description: Provider id
+          example: pr_abc123-def456_wxyz7890
+        location_id:
+          type: string
+          description: Location id
+          example: lo_abc123-def456_wxyz7890
+        start_time:
+          type: string
+          format: date-time-local
+          description: >-
+            The local date and time within the timezone. The seconds may be
+            omitted.
+          example: '2024-09-03T09:30:00'
+        time_zone:
+          type: string
+          description: The IANA time zone id of the timeslot's start time.
+          example: America/New_York
+        allowed_visit_reason_ids:
+          type: array
+          description: >
+            Restrict the timeslot to these visit reasons. Both `null` and an
+            empty array will not restrict the timeslot.
+
+
+            Can work in conjunction with `excluded_visit_reason_ids`.
+            `allowed_visit_reason_ids` are superceded by
+            `excluded_visit_reason_ids`.
+
+            So if a visit reason is included in both `allowed_visit_reason_ids`
+            and `excluded_visit_reason_ids`, the net effect is that visit reason
+
+            being excluded.
+
+
+            | allowed | excluded | => Result |
+
+            | -----   | -------- | --------- |
+
+            | null    | null     | all visit reasons allowed |
+
+            | [A,B]   | null     | only A & B are allowed |
+
+            | null    | [A,B]    | all visit reasons except A & B are allowed |
+
+            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
+
+            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot
+            |
+          items:
+            type: string
+          example:
+            - pc_FRO-18leckytNKtruw5dLR
+        excluded_visit_reason_ids:
+          type: array
+          items:
+            type: string
+          example:
+            - pc_TlZW-r06U0W3pCsIGtSI5B
+          description: >
+            Exclude these visit reasons. Both `null` and an empty array means no
+            visit reasons will be excluded.
+
+
+            Can work in conjunction with `allowed_visit_reason_ids`.
+            `allowed_visit_reason_ids` are superceded by
+            `excluded_visit_reason_ids`.
+
+            So if a visit reason is included in both `allowed_visit_reason_ids`
+            and `excluded_visit_reason_ids`, the net effect is that visit reason
+
+            being excluded.
+
+
+            | allowed | excluded | => Result |
+
+            | -----   | -------- | --------- |
+
+            | null    | null     | all visit reasons allowed |
+
+            | [A,B]   | null     | only A & B are allowed |
+
+            | null    | [A,B]    | all visit reasons except A & B are allowed |
+
+            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
+
+            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot
+            |
+        patient_type:
+          $ref: '#/components/schemas/PatientType'
+        timeslot_id:
+          type: string
+          description: Timeslot id
+          example: slot:ab123
+        created_utc:
+          type: string
+          format: instant
+          description: the time this timeslot was created in Zocdoc's system.
+          example: '2024-01-01T09:30:00Z'
+    TimeslotListResponse:
+      allOf:
+        - $ref: '#/components/schemas/IteratedBaseResult'
+        - type: object
+          description: A list of timeslots.
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/CalendarIntegrationTimeslotWeb'
+    TimeslotBaseRequest:
+      description: a bookable appointment start time for a particular provider
+      type: object
+      required:
+        - provider_id
+        - start_time
+        - location_id
+        - time_zone
+      properties:
+        provider_id:
+          type: string
+          description: Provider id
+          example: pr_abc123-def456_wxyz7890
+        location_id:
+          type: string
+          description: Location id
+          example: lo_abc123-def456_wxyz7890
+        start_time:
+          type: string
+          format: date-time-local
+          description: >-
+            the local date and time within the timezone. The seconds may be
+            omitted.
+          example: '2024-10-16T09:30:00'
+        time_zone:
+          type: string
+          description: The IANA time zone id of the appointment. Must be valid.
+          example: America/New_York
+        allowed_visit_reason_ids:
+          type: array
+          description: >
+            Restrict the timeslot to these visit reasons. Both `null` and an
+            empty array will not restrict the timeslot.
+
+
+            Can work in conjunction with `excluded_visit_reason_ids`.
+            `allowed_visit_reason_ids` are superceded by
+            `excluded_visit_reason_ids`.
+
+            So if a visit reason is included in both `allowed_visit_reason_ids`
+            and `excluded_visit_reason_ids`, the net effect is that visit reason
+
+            being excluded.
+
+
+            | allowed | excluded | => Result |
+
+            | -----   | -------- | --------- |
+
+            | null    | null     | all visit reasons allowed |
+
+            | [A,B]   | null     | only A & B are allowed |
+
+            | null    | [A,B]    | all visit reasons except A & B are allowed |
+
+            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
+
+            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot
+            |
+          items:
+            type: string
+          example:
+            - pc_TlZW-r06U0W3pCsIGtSI5B
+        excluded_visit_reason_ids:
+          type: array
+          items:
+            type: string
+          example:
+            - pc_TAZW-r16U0B3pZeIutSI3L
+          description: >
+            Exclude these visit reasons. Both `null` and an empty array means no
+            visit reasons will be excluded.
+
+
+            Can work in conjunction with `allowed_visit_reason_ids`.
+            `allowed_visit_reason_ids` are superceded by
+            `excluded_visit_reason_ids`.
+
+            So if a visit reason is included in both `allowed_visit_reason_ids`
+            and `excluded_visit_reason_ids`, the net effect is that visit reason
+
+            being excluded.
+
+
+            | allowed | excluded | => Result |
+
+            | -----   | -------- | --------- |
+
+            | null    | null     | all visit reasons allowed |
+
+            | [A,B]   | null     | only A & B are allowed |
+
+            | null    | [A,B]    | all visit reasons except A & B are allowed |
+
+            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
+
+            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot
+            |
+        patient_type:
+          $ref: '#/components/schemas/PatientType'
+    TimeslotPutRequest:
+      required:
+        - timeslots
+      type: object
+      properties:
+        timeslots:
+          type: array
+          minItems: 0
+          maxItems: 1500
+          items:
+            $ref: '#/components/schemas/TimeslotBaseRequest'
+    TimeslotPutErrors:
+      type: object
+      required:
+        - not_found_location_ids
+      properties:
+        not_found_location_ids:
+          type: array
+          items:
+            type: string
+          description: Location IDs that were not found on the Zocdoc side.
+    TimeslotPutResponse:
+      type: object
+      properties:
+        errors:
+          $ref: '#/components/schemas/TimeslotPutErrors'

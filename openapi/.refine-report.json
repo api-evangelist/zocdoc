@@ -1,0 +1,32 @@
+{
+  "provider": "zocdoc",
+  "sources": [
+    "zocdoc-appointments-api-openapi.yml",
+    "zocdoc-calendar-integration-timeslots-api-openapi.yml",
+    "zocdoc-credentials-api-openapi.yml",
+    "zocdoc-facilities-api-openapi.yml",
+    "zocdoc-insurance-reference-api-openapi.yml",
+    "zocdoc-provider-locations-api-openapi.yml",
+    "zocdoc-providers-api-openapi.yml",
+    "zocdoc-reference-api-openapi.yml",
+    "zocdoc-schedulable-entities-api-openapi.yml",
+    "zocdoc-webhook-api-openapi.yml"
+  ],
+  "outputs": [
+    "zocdoc-appointments-api-openapi.yml",
+    "zocdoc-calendar-integration-timeslots-api-openapi.yml",
+    "zocdoc-credentials-api-openapi.yml",
+    "zocdoc-facilities-api-openapi.yml",
+    "zocdoc-insurance-reference-api-openapi.yml",
+    "zocdoc-provider-locations-api-openapi.yml",
+    "zocdoc-providers-api-openapi.yml",
+    "zocdoc-reference-api-openapi.yml",
+    "zocdoc-schedulable-entities-api-openapi.yml",
+    "zocdoc-webhook-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
