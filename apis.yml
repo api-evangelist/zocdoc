@@ -24,7 +24,7 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zocdoc.png
 url: https://raw.githubusercontent.com/api-evangelist/zocdoc/refs/heads/main/apis.yml
 created: '2026-06-13'
-modified: '2026-06-13'
+modified: '2026-08-15'
 specificationVersion: '0.19'
 tags:
   - Healthcare
@@ -47,6 +47,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-appointments-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-appointments-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -73,6 +75,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-calendar-integration-timeslots-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -99,6 +103,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-credentials-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-credentials-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -125,6 +131,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-facilities-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-facilities-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -151,6 +159,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-insurance-reference-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-insurance-reference-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -179,6 +189,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-provider-locations-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-provider-locations-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -205,6 +217,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-providers-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-providers-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -231,6 +245,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-reference-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-reference-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -257,6 +273,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-schedulable-entities-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -283,6 +301,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/zocdoc-webhook-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-webhook-overlay.yaml
   - type: Documentation
     url: https://api-docs.zocdoc.com/guides
   - type: Authentication
@@ -291,6 +311,96 @@ apis:
     url: https://api-developer-sandbox.zocdoc.com
   - type: Webhooks
     url: https://api-docs.zocdoc.com/guides/webhooks
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-reviews-api
+  name: Zocdoc reviews API
+  description: >-
+    Endpoints to retrieve aggregate review summaries for providers, individually or in
+    batches of up to 100 provider IDs.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - reviews
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-reviews-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-reviews-overlay.yaml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: APIReference
+    url: https://api-docs.zocdoc.com/apis
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-specialties-api
+  name: Zocdoc specialties API
+  description: >-
+    Reference endpoints to retrieve the specialties Zocdoc supports and their default
+    visit reasons, optionally filtered by care category.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - specialties
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-specialties-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-specialties-overlay.yaml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: APIReference
+    url: https://api-docs.zocdoc.com/apis
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
+  - type: Performance
+    url: https://api-docs.zocdoc.com/guides/performance
+  - type: Testing
+    url: https://api-docs.zocdoc.com/guides/testing-data
+  - type: ChangeLog
+    url: https://api-docs.zocdoc.com/changelog
+  - type: FAQ
+    url: https://api-docs.zocdoc.com/guides/faqs
+- aid: zocdoc:zocdoc-visit-reasons-api
+  name: Zocdoc visit-reasons API
+  description: >-
+    Reference endpoints to retrieve the visit reasons Zocdoc supports and the specialty
+    each one belongs to. Visit reason drives appointment duration and bookable timeslots.
+  humanURL: https://api-docs.zocdoc.com/guides
+  baseURL: https://api-developer.zocdoc.com
+  tags:
+  - visit-reasons
+  properties:
+  - type: OpenAPI
+    url: openapi/zocdoc-visit-reasons-api-openapi.yml
+  - type: Overlay
+    url: overlays/zocdoc-visit-reasons-overlay.yaml
+  - type: Documentation
+    url: https://api-docs.zocdoc.com/guides
+  - type: APIReference
+    url: https://api-docs.zocdoc.com/apis
+  - type: Authentication
+    url: https://api-docs.zocdoc.com/guides/authentication
+  - type: Sandbox
+    url: https://api-developer-sandbox.zocdoc.com
   - type: Performance
     url: https://api-docs.zocdoc.com/guides/performance
   - type: Testing
@@ -328,6 +438,83 @@ common:
     url: rate-limits/zocdoc-rate-limits.yml
   - type: FinOps
     url: finops/zocdoc-finops.yml
+  - type: Vocabulary
+    url: vocabulary/zocdoc-vocabulary.yml
+  - type: JSONSchema
+    url: json-schema/zocdoc-provider.json
+  - type: JSONLD
+    url: json-ld/zocdoc-context.jsonld
+  - type: SpectralRules
+    url: rules/zocdoc-jsonschema-spectral-rules.yml
+  - type: Examples
+    url: examples/book-appointment-request.json
+  - type: LLMsTxt
+    url: llms/zocdoc-llms.txt
+  - type: WellKnown
+    url: well-known/zocdoc-well-known.yml
+  - type: Packages
+    url: packages/zocdoc-packages.yml
+  - type: MCPServer
+    url: mcp/zocdoc-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/zocdoc-tool-crosswalk.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Conformance
+    url: conformance/zocdoc-conformance.yml
+  - type: ErrorCatalog
+    url: errors/zocdoc-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/zocdoc-lifecycle.yml
+  - type: Conventions
+    url: conventions/zocdoc-conventions.yml
+  - type: ChangeLog
+    url: changelog/zocdoc-changelog.yml
+  - type: Sandbox
+    url: sandbox/zocdoc-sandbox.yml
+  - type: DataModel
+    url: data-model/zocdoc-data-model.yml
+  - type: Webhooks
+    url: asyncapi/zocdoc-webhooks.yml
+  - type: DeveloperPortal
+    url: https://developer.zocdoc.com/
+  - type: APIReference
+    url: https://api-docs.zocdoc.com/apis
+  - type: GettingStarted
+    url: https://api-docs.zocdoc.com/guides
+  - type: Support
+    url: https://api-docs.zocdoc.com/guides/faqs
+  - type: SignUp
+    url: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
+  - type: TermsOfService
+    url: https://www.zocdoc.com/about/terms
+  - type: PrivacyPolicy
+    url: https://www.zocdoc.com/about/consumer-health-data-privacy-policy/
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-15'
+  status: enriched
+  artifacts_added: 39
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    Zocdoc's docs host api-docs.zocdoc.com is fully machine-readable — llms.txt,
+    markdown twins of every guide, and a downloadable OpenAPI bundle — so the
+    pass completed. The only wall hit was www.zocdoc.com and developer.zocdoc.com,
+    which sit behind a DataDome bot challenge and return 403 to every non-browser
+    client including /robots.txt, which is why no compliance/trust-center claim
+    could be verified first-hand.
+  evidence:
+    - url: https://api-docs.zocdoc.com/_bundle/apis/index.yaml
+      status: 200
+    - url: https://api-docs.zocdoc.com/llms.txt
+      status: 200
+    - url: https://auth.zocdoc.com/.well-known/openid-configuration
+      status: 200
+    - url: https://www.zocdoc.com/robots.txt
+      status: 403
+  checked: '2026-08-15'
