@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments insurance-reference API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "insurance-reference",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get insurance plans",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/insurance_plans",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page. Default is 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "The status of the insurance plan. Default is active."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "The two letter State code where the insurance plan has coverage."
+              },
+              {
+                "name": "network_type",
+                "value": "",
+                "type": "query",
+                "description": "The network type of the insurance plan."
+              },
+              {
+                "name": "program_type",
+                "value": "",
+                "type": "query",
+                "description": "The program type of the insurance plan."
+              },
+              {
+                "name": "care_category",
+                "value": "",
+                "type": "query",
+                "description": "The care type of the insurance plan."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get insurance plans"
+        },
+        {
+          "info": {
+            "name": "Get insurance plan by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/insurance_plans/:insurance_plan_id",
+            "params": [
+              {
+                "name": "insurance_plan_id",
+                "value": "",
+                "type": "path",
+                "description": "Zocdoc insurance plan id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get insurance plan by id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

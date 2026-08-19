@@ -1,0 +1,239 @@
+generated: '2026-08-15'
+method: derived
+source: openapi/ (derived one candidate tool per operationId, Zocdoc partner API v1.177)
+status: candidate
+note: 'Zocdoc publishes NO MCP server. Searched the developer docs, the llms.txt index, the
+  github.com/Zocdoc organization (42 repos) and the npm registry: the only Zocdoc MCP package
+  in existence is @striderlabs/mcp-zocdoc, a third-party build by Strider Labs, and Zocdoc
+  neither maintains nor links to it. The tools below are a CANDIDATE surface derived one-for-one
+  from the published OpenAPI operations; no endpoint has been invented and nothing here is
+  a Zocdoc claim. Every candidate tool inherits its real input contract from the referenced
+  operation. What Zocdoc DOES publish for agents is an Agent Skill (see skills/) that drives
+  the public zocdoc.com site by browser automation, not this partner API.'
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+server:
+  name: zocdoc
+  transport: null
+  url: null
+third_party:
+- name: '@striderlabs/mcp-zocdoc'
+  publisher: Strider Labs
+  url: https://www.npmjs.com/package/@striderlabs/mcp-zocdoc
+  repository: https://github.com/striderlabs/mcp-zocdoc
+  version: 0.1.0
+  published: '2026-03-10'
+  official: false
+  mode: local-stdio
+  note: Not endorsed, maintained, or referenced by Zocdoc. Recorded, not credited.
+tools:
+- name: cancel_appointment
+  description: Cancel appointment
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#cancelAppointment
+  method: POST
+  path: /v1/appointments/cancel
+  scopes:
+  - external.appointment.write
+- name: confirm_appointment
+  description: Confirm appointment
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#confirmAppointment
+  method: POST
+  path: /v1/appointments/confirm
+  scopes:
+  - external.appointment.write
+- name: create_appointment
+  description: Create appointment
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#createAppointment
+  method: POST
+  path: /v1/appointments
+  scopes:
+  - external.appointment.write
+- name: get_appointment
+  description: Get appointment by id
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#getAppointment
+  method: GET
+  path: /v1/appointments/{appointment_id}
+  scopes:
+  - external.appointment.read
+- name: get_appointment_participants
+  description: Get participants for appointment
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#getAppointmentParticipants
+  method: GET
+  path: /v1/appointments/{appointment_id}/participants
+  scopes:
+  - external.appointment.read
+- name: get_appointments
+  description: Get appointments
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#getAppointments
+  method: GET
+  path: /v1/appointments
+  scopes:
+  - external.appointment.read
+- name: get_facilities
+  description: Get facilities
+  source_operation: openapi/zocdoc-facilities-api-openapi.yml#getFacilities
+  method: GET
+  path: /v1-beta/facilities
+  scopes: []
+- name: get_facility
+  description: Get facility by id
+  source_operation: openapi/zocdoc-facilities-api-openapi.yml#getFacility
+  method: GET
+  path: /v1-beta/facilities/{facility_id}
+  scopes: []
+- name: get_insurance_plan
+  description: Get insurance plan by id
+  source_operation: openapi/zocdoc-insurance-reference-api-openapi.yml#getInsurancePlan
+  method: GET
+  path: /v1/insurance_plans/{insurance_plan_id}
+  scopes: []
+- name: get_insurance_plans
+  description: Get insurance plans
+  source_operation: openapi/zocdoc-insurance-reference-api-openapi.yml#getInsurancePlans
+  method: GET
+  path: /v1/insurance_plans
+  scopes: []
+- name: get_provider_calendar_timeslots
+  description: Get timeslots for provider on date
+  source_operation: openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml#getProviderCalendarTimeslots
+  method: GET
+  path: /v1/providers/{provider_id}/calendar/timeslots
+  scopes: []
+- name: get_provider_location
+  description: Get provider location by id
+  source_operation: openapi/zocdoc-provider-locations-api-openapi.yml#getProviderLocation
+  method: GET
+  path: /v1/provider_locations/{provider_location_id}
+  scopes: []
+- name: get_provider_location_insurance_mappings
+  description: Get insurance mappings for provider location
+  source_operation: openapi/zocdoc-provider-locations-api-openapi.yml#getProviderLocationInsuranceMappings
+  method: GET
+  path: /v1/provider_locations/{provider_location_id}/insurance_mappings
+  scopes: []
+- name: get_provider_locations
+  description: Get provider locations
+  source_operation: openapi/zocdoc-provider-locations-api-openapi.yml#getProviderLocations
+  method: GET
+  path: /v1/provider_locations
+  scopes: []
+- name: get_provider_locations_availability
+  description: Get availability for provider locations
+  source_operation: openapi/zocdoc-provider-locations-api-openapi.yml#getProviderLocationsAvailability
+  method: GET
+  path: /v1/provider_locations/availability
+  scopes: []
+- name: get_provider_npis
+  description: Get active provider NPIs
+  source_operation: openapi/zocdoc-reference-api-openapi.yml#getProviderNpis
+  method: GET
+  path: /v1/reference/npi
+  scopes: []
+- name: get_provider_reviews
+  description: Get reviews for a single provider
+  source_operation: openapi/zocdoc-reviews-api-openapi.yml#getProviderReviews
+  method: GET
+  path: /v1/providers/{provider_id}/reviews
+  scopes: []
+- name: get_provider_reviews_batch
+  description: Get reviews for providers
+  source_operation: openapi/zocdoc-reviews-api-openapi.yml#getProviderReviewsBatch
+  method: GET
+  path: /v1/providers/reviews
+  scopes: []
+- name: get_providers
+  description: Get providers by NPIs
+  source_operation: openapi/zocdoc-providers-api-openapi.yml#getProviders
+  method: GET
+  path: /v1/providers
+  scopes: []
+- name: get_schedulable_entities
+  description: Get schedulable entities
+  source_operation: openapi/zocdoc-schedulable-entities-api-openapi.yml#getSchedulableEntities
+  method: GET
+  path: /v1/schedulable_entities
+  scopes:
+  - external.schedulable_entity.read
+- name: get_specialties
+  description: Get specialties
+  source_operation: openapi/zocdoc-specialties-api-openapi.yml#getSpecialties
+  method: GET
+  path: /v1/specialties
+  scopes: []
+- name: get_specialty_by_id
+  description: Get specialty by id
+  source_operation: openapi/zocdoc-specialties-api-openapi.yml#getSpecialtyById
+  method: GET
+  path: /v1/specialties/{specialty_id}
+  scopes: []
+- name: get_visit_reason_by_id
+  description: Get visit reason by id
+  source_operation: openapi/zocdoc-visit-reasons-api-openapi.yml#getVisitReasonById
+  method: GET
+  path: /v1/visit_reasons/{visit_reason_id}
+  scopes: []
+- name: get_visit_reasons
+  description: Get visit reasons
+  source_operation: openapi/zocdoc-visit-reasons-api-openapi.yml#getVisitReasons
+  method: GET
+  path: /v1/visit_reasons
+  scopes: []
+- name: mock_webhook_request
+  description: Mock webhook request
+  source_operation: openapi/zocdoc-webhook-api-openapi.yml#mockWebhookRequest
+  method: POST
+  path: /v1/webhook/mock-request
+  scopes: []
+- name: put_provider_calendar_timeslots
+  description: Put provider calendar timeslots
+  source_operation: openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml#putProviderCalendarTimeslots
+  method: PUT
+  path: /v1/providers/{provider_id}/calendar/timeslots
+  scopes: []
+- name: put_schedulable_entities_overlaps
+  description: Submit NPI overlaps
+  source_operation: openapi/zocdoc-schedulable-entities-api-openapi.yml#putSchedulableEntitiesOverlaps
+  method: PUT
+  path: /v1/schedulable_entities/overlaps
+  scopes:
+  - external.schedulable_entity.read
+- name: reschedule_appointment
+  description: Reschedule appointment
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#rescheduleAppointment
+  method: POST
+  path: /v1/appointments/reschedule
+  scopes:
+  - external.appointment.write
+- name: rotate_credentials
+  description: Rotate Credentials
+  source_operation: openapi/zocdoc-credentials-api-openapi.yml#rotateCredentials
+  method: POST
+  path: /v1/credentials/rotate
+  scopes:
+  - external.credential.rotate
+- name: update_appointment_status
+  description: Update appointment status
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#updateAppointmentStatus
+  method: PUT
+  path: /v1/appointments/update-status
+  scopes:
+  - external.appointment.write
+- name: update_provider_location_insurance_mappings
+  description: Submit request to update mapped insurance plans
+  source_operation: openapi/zocdoc-provider-locations-api-openapi.yml#updateProviderLocationInsuranceMappings
+  method: POST
+  path: /v1/provider_locations/{provider_location_id}/insurance_mappings
+  scopes:
+  - external.provider_insurance.write
+- name: upload_appointment_attachment
+  description: Create attachment for appointment
+  source_operation: openapi/zocdoc-appointments-api-openapi.yml#uploadAppointmentAttachment
+  method: POST
+  path: /v1/appointments/{appointment_id}/attachments
+  scopes:
+  - external.appointment.write

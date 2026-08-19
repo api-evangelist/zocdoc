@@ -1,0 +1,252 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments provider-locations API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "provider-locations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get provider locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/provider_locations",
+            "params": [
+              {
+                "name": "zip_code",
+                "value": "",
+                "type": "query",
+                "description": "A 5 digit zip code."
+              },
+              {
+                "name": "specialty_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the provider's specialty. See [Reference Data](/guides/reference-data) for options. One of `specialty_id` or `visit_reason_id` is required. If `visit_reason_id` is not supplied, the default visit reason for the specialty will be used."
+              },
+              {
+                "name": "visit_reason_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID for the visit reason. See [Reference Data](/guides/reference-data) for options. One of `specialty_id` or `visit_reason_id` is required. If both `visit_reason_id` and `specialty_id` are supplied, the specialty must be the visit reason's corresponding specialty."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page."
+              },
+              {
+                "name": "insurance_plan_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+              },
+              {
+                "name": "visit_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of patient visit with the provider. If not provided, the default value is set to `in_person`."
+              },
+              {
+                "name": "max_distance_to_patient_mi",
+                "value": "",
+                "type": "query",
+                "description": "The maximum distance in miles from the physical location to the search location (the center point of the given `zip_code`). Default is 50 miles."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint accepts parameters such as zip code, specialty, visit reason and accepted insurance to return a filtered set of providers within the developer's directory. The response includes additional information about the provider location objects returned.\n\nThe `provider_location_id` returned in the response can be used to retrieve availability in the endpoint /v1/provider_locations/availability.\n"
+        },
+        {
+          "info": {
+            "name": "Get provider location by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/provider_locations/:provider_location_id",
+            "params": [
+              {
+                "name": "provider_location_id",
+                "value": "",
+                "type": "path",
+                "description": "The Zocdoc provider location id to get details for."
+              },
+              {
+                "name": "insurance_plan_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get info about a provider location by provider_location_id"
+        },
+        {
+          "info": {
+            "name": "Get availability for provider locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/provider_locations/availability",
+            "params": [
+              {
+                "name": "provider_location_ids",
+                "value": "",
+                "type": "query",
+                "description": "A comma-delimited list of Zocdoc `provider_location_ids` retrieved from the /v1/providers or /v1/provider_locations endpoint. A maximum of 50 items will be accepted at a time."
+              },
+              {
+                "name": "visit_reason_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the visit reason. See [Reference Data](/guides/reference-data) for options."
+              },
+              {
+                "name": "patient_type",
+                "value": "",
+                "type": "query",
+                "description": "New or existing to indicate if the patient is new to the practice or has been to the office before."
+              },
+              {
+                "name": "start_date_in_provider_local_time",
+                "value": "",
+                "type": "query",
+                "description": "The first date to retrieve availability for, as YYYY-MM-DD. Defaults to current date in US Eastern Time. Can request availability up to a maximum of 150 days into the future."
+              },
+              {
+                "name": "end_date_in_provider_local_time",
+                "value": "",
+                "type": "query",
+                "description": "The last inclusive date to retrieve availability for, as YYYY-MM-DD. Defaults to 7 days after the current date. Must be 31 days or less after the start date."
+              },
+              {
+                "name": "published_context",
+                "value": "",
+                "type": "query",
+                "description": "Determines how availability slots are returned. Direct_listing returns all slots, while condition_driven_search limits results to Zocdoc-active providers with budget. Applicable to syndication clients."
+              },
+              {
+                "name": "insurance_plan_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans. Used to construct booking_url."
+              },
+              {
+                "name": "insurance_carrier_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the patient's insurance carrier. See [Reference Data](/guides/reference-data) for options. Used to construct booking_url."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves availability for a set of provider locations. Required parameters passed include provider location ids, visit reason id and patient type. Visit reason and patient type (new or existing) are used to calculate the duration of the appointment and break availability into bookable timeslots based on the appointment duration. The response output includes the start times of appointments based on these calculations.\n\nThe `start_time` returned is used in the endpoint /v1/appointments to book ap"
+        },
+        {
+          "info": {
+            "name": "Get insurance mappings for provider location",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/provider_locations/:provider_location_id/insurance_mappings",
+            "params": [
+              {
+                "name": "provider_location_id",
+                "value": "",
+                "type": "path",
+                "description": "The Zocdoc provider location id to get insurance plans for."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get eligible insurance plans and insurance mappings for a provider location by provider_location_id"
+        },
+        {
+          "info": {
+            "name": "Submit request to update mapped insurance plans",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/provider_locations/:provider_location_id/insurance_mappings",
+            "params": [
+              {
+                "name": "provider_location_id",
+                "value": "",
+                "type": "path",
+                "description": "The Zocdoc provider location id to get insurance plans for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Submits a request to update mapped insurance plans. This is an asynchronous operation and the response indicates the request was accepted for processing, not that the update is complete."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

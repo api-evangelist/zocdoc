@@ -1,0 +1,609 @@
+{
+  "item": [
+    {
+      "id": "21a277db-6126-4762-95fb-c96e1ee78cd2",
+      "name": "calendar-integration-timeslots",
+      "description": {
+        "content": "Endpoints to manage timeslots for providers.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fb328982-87f9-4f8b-b560-ed373c205e3c",
+          "name": "Get timeslots for provider on date",
+          "request": {
+            "name": "Get timeslots for provider on date",
+            "description": {
+              "content": "Get timeslots for a provider and date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "providers",
+                ":provider_id",
+                "calendar",
+                "timeslots"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "(Required) The date for which to get timeslots in YYYY-MM-DD format. This parameter will match against the local date part of the time slot's `start_time`. For example, a timeslot with start_time of 2024-10-01T22:00 and time_zone of America/New_York is considered 2024-10-01 when querying timeslots, even though it resolves to 2024-10-02 in UTC."
+                },
+                {
+                  "disabled": false,
+                  "key": "next_page_token",
+                  "value": "<string>",
+                  "description": "A token to get the next set of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "The limit of objects to get in the response. For this endpoint, this is equivalent to page_size."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23513818-001d-4625-b20b-a16e5671d6f2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-26"
+                    },
+                    {
+                      "key": "next_page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"timeslot_id\": \"slot:ab123\",\n      \"created_utc\": \"2024-01-01T09:30:00Z\",\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-09-03T09:30:00\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_FRO-18leckytNKtruw5dLR\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"timeslot_id\": \"slot:ab123\",\n      \"created_utc\": \"2024-01-01T09:30:00Z\",\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-09-03T09:30:00\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_FRO-18leckytNKtruw5dLR\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"patient_type\": \"new\"\n    }\n  ],\n  \"request_id\": \"string\",\n  \"limit\": 5344,\n  \"next_page_token\": \"string\",\n  \"next_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9cf1aeee-a053-4460-a0ad-5118def7cbf5",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-26"
+                    },
+                    {
+                      "key": "next_page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cef03cca-19a3-484e-a699-ab30bb742774",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-26"
+                    },
+                    {
+                      "key": "next_page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14e5fca9-a233-46db-8ba6-8378e001f8df",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-26"
+                    },
+                    {
+                      "key": "next_page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9192e891-b9e0-4011-af30-e38cce52e5f3",
+          "name": "Put provider calendar timeslots",
+          "request": {
+            "name": "Put provider calendar timeslots",
+            "description": {
+              "content": "This endpoint sets the complete list of available slots for a specific provider on a specific date. Each request must include the entire set of slots for that date. If a provider wishes to list times at multiple locations for a single date, each location must have its own timeslot object added to the array. A new request made for the same provider and date will overwrite the previous set of slots. If you send an empty array, all slots for that provider across all locations on that date will be deleted.\n\n**Note**: The timeslots are stored in an eventually consistent data store. This means there is a small\npossibility that a fetch might not include recently created slots if you fetch timeslots immediately after inserting them.\n\n**Parameter Validations**:\n* The user must have access to the specified `provider_id`.\n\n**Validations for each timeslot in the request body**:\n* `slot.provider_id`:\n    * Must match the `provider_id` specified in the endpoint parameter.\n* `slot.start_time`:\n    * Must be a valid \"local date-time\" string in ISO 8601 format, e.g., `2024-09-15T12:13:00`. The seconds component is optional.\n    * The date component must match the `date` parameter.\n* `slot.time_zone`:\n    * Must be a valid IANA time zone ID (e.g., `America/New_York` or `America/Denver`).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "providers",
+                ":provider_id",
+                "calendar",
+                "timeslots"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "date",
+                  "value": "<date>",
+                  "description": "(Required) The date for which to put timeslots in YYYY-MM-DD format."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeslots\": [\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    },\n    {\n      \"provider_id\": \"<string>\",\n      \"start_time\": \"<date-time-local>\",\n      \"location_id\": \"<string>\",\n      \"time_zone\": \"<string>\",\n      \"allowed_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"patient_type\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a41bf69b-7dd7-4b1e-9c05-92d58ae7e8a4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-16"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeslots\": [\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": {\n    \"not_found_location_ids\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a1b4d10-0451-400f-b07f-4143686a311a",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-16"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeslots\": [\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fd60faa-09df-4519-9e4a-bbebf7c01d48",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-16"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeslots\": [\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "81a0bfae-c181-40d3-99de-eb2c8613222b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "providers",
+                    ":provider_id",
+                    "calendar",
+                    "timeslots"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2024-10-16"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeslots\": [\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    },\n    {\n      \"provider_id\": \"pr_abc123-def456_wxyz7890\",\n      \"start_time\": \"2024-10-16T09:30:00\",\n      \"location_id\": \"lo_abc123-def456_wxyz7890\",\n      \"time_zone\": \"America/New_York\",\n      \"allowed_visit_reason_ids\": [\n        \"pc_TlZW-r06U0W3pCsIGtSI5B\"\n      ],\n      \"excluded_visit_reason_ids\": [\n        \"pc_TAZW-r16U0B3pZeIutSI3L\"\n      ],\n      \"patient_type\": \"new\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-developer-sandbox.zocdoc.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fe168cf9-97f5-4c73-bbbb-7a8ce2610352",
+    "name": "API Documentation appointments calendar-integration-timeslots API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.",
+      "type": "text/plain"
+    }
+  }
+}

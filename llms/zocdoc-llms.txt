@@ -1,0 +1,84 @@
+# Zocdoc API
+
+> The Zocdoc API enables seamless integration with Zocdoc's healthcare appointment booking platform, allowing developers to access real-time provider availability, patient scheduling, and healthcare directory data. Developers can build applications that use Zocdoc's authoritative understanding of practice and provider availability to build applications that help patients find the right doctor, book appointments, and manage their healthcare.
+
+## API Documentation
+OpenAPI reference for all endpoints and schemas.
+
+ - [API Documentation](https://api-docs.zocdoc.com/apis.md)
+
+## Find Availability and Book Appointments
+End-to-end flow to search availability and book visits.
+
+ - [Find Provider Availability and Book Appointments](https://api-docs.zocdoc.com/guides/patient/book-appointments.md)
+
+## Appointment Actions
+State transitions and allowed operations on appointments.
+
+ - [Appointment Actions](https://api-docs.zocdoc.com/guides/scheduling/appointment-actions.md)
+
+## Changelog
+Highlights of changes and releases; check what's new and breaking.
+
+ - [Changelog](https://api-docs.zocdoc.com/changelog.md)
+
+## Authentication and Access Tokens
+How to obtain and use OAuth tokens to call the API securely.
+
+ - [Authentication and Access Tokens](https://api-docs.zocdoc.com/guides/authentication.md)
+
+## Glossary
+Definitions of domain terms and concepts used throughout the docs.
+
+ - [Glossary](https://api-docs.zocdoc.com/guides/glossary.md)
+
+## Zocdoc for Developers
+Start here for an overview of the platform and developer workflows.
+
+ - [Zocdoc for Developers](https://api-docs.zocdoc.com/guides.md)
+
+## Performance
+Guidance to build fast integrations and measure API performance.
+
+ - [Performance](https://api-docs.zocdoc.com/guides/performance.md)
+
+## Reference Data
+Static datasets and lookups used across APIs (languages, specialties, plans).
+
+ - [Reference Data](https://api-docs.zocdoc.com/guides/reference-data.md)
+
+## API Endpoint Test Scenarios
+Sample payloads and scenarios for safe integration testing.
+
+ - [API Endpoint Test Scenarios](https://api-docs.zocdoc.com/guides/testing-data.md)
+
+## Webhooks
+Event notifications you can subscribe to and how to validate them.
+
+ - [Webhooks](https://api-docs.zocdoc.com/guides/webhooks.md)
+
+## Cancel Appointments
+Endpoints and flows for cancelling patient appointments.
+
+ - [Cancel Appointments](https://api-docs.zocdoc.com/guides/patient/cancel-appointments.md)
+
+## Reschedule Appointments
+How to move appointments while preserving constraints and notifications.
+
+ - [Reschedule Appointments](https://api-docs.zocdoc.com/guides/patient/reschedule-appointments.md)
+
+## Update Insurance Offerings
+Manage accepted insurance plans and network participation.
+
+ - [Update Insurance Offerings](https://api-docs.zocdoc.com/guides/insurance/update-insurance.md)
+
+## Create Timeslots
+How to publish and manage provider availability timeslots.
+
+ - [Create Timeslots](https://api-docs.zocdoc.com/guides/scheduling/create-timeslots.md)
+
+## FAQs
+Quick answers to common questions about the Zocdoc APIs.
+
+ - [FAQs](https://api-docs.zocdoc.com/guides/faqs.md): Quick answers to common questions about the Zocdoc APIs.
+

@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  version: '1.176'
-  title: API Documentation appointments facilities API
-  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.
+  version: '1.177'
+  title: API Documentation facilities API
+  description: Endpoints to retrieve facilities within the developer's directory.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
   description: Sandbox
@@ -26,13 +26,15 @@ paths:
       parameters:
       - name: npis
         in: query
-        description: A comma-delimited list of Provider NPI numbers. A maximum of 50 items will be accepted at a time. One of `zip_code` or `npis` is required.
+        description: A comma-delimited list of Provider NPI numbers. A maximum of 50 items will be accepted
+          at a time. One of `zip_code` or `npis` is required.
         schema:
           type: string
           example: 1234567891,0123456789
       - name: zip_code
         in: query
-        description: A 5 digit zip code that will be used as the location to find facilities near by. One of `zip_code` or `npis` is required.
+        description: A 5 digit zip code that will be used as the location to find facilities near by.
+          One of `zip_code` or `npis` is required.
         schema:
           type: string
           example: 36925
@@ -53,19 +55,22 @@ paths:
           type: integer
       - name: visit_reason_id
         in: query
-        description: The Zocdoc ID of the visit reason to search by `zip_code` for. See [Reference Data](/guides/reference-data) for options.
+        description: The Zocdoc ID of the visit reason to search by `zip_code` for. See [Reference Data](/guides/reference-data)
+          for options.
         schema:
           type: string
           example: pc_FRO-18leckytNKtruw5dLR
       - name: insurance_plan_id
         in: query
-        description: The Zocdoc ID of the patient's insurance plan to search by `zip_code` for. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans.
+        description: The Zocdoc ID of the patient's insurance plan to search by `zip_code` for. Use the
+          [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans.
         schema:
           type: string
           example: ip_2224
       - name: max_distance_to_patient_mi
         in: query
-        description: The maximum distance in miles from the facility to the search location (the center point of the given `zip_code`). Default is 50 miles.
+        description: The maximum distance in miles from the facility to the search location (the center
+          point of the given `zip_code`). Default is 50 miles.
         required: false
         schema:
           type: integer
@@ -127,101 +132,6 @@ paths:
           description: Not found
 components:
   schemas:
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    FacilitiesResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/Facility'
-    PaginatedBaseResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - page
-        - page_size
-        - total_count
-        - next_url
-        properties:
-          page:
-            description: The zero based index of the current page.
-            type: integer
-          page_size:
-            description: The size of the current page.
-            type: integer
-          total_count:
-            description: The total number of result items.
-            type: integer
-          next_url:
-            description: A link to the next page of results; null if this is the last page of results.
-            type: string
-    FacilitySchedule:
-      type: object
-      required:
-      - schedule_id
-      - provider_location_id
-      - booking_requirements
-      properties:
-        schedule_id:
-          type: string
-          description: Zocdoc id for bookable schedule
-        provider_location_id:
-          type: string
-          description: Zocdoc provider location id for availability and booking requests
-        booking_requirements:
-          $ref: '#/components/schemas/BookingRequirements'
-    BookingRequestInsuranceSource:
-      type: string
-      description: The types of insurance coverage that a provider accepts
-      enum:
-      - in_network
-      - out_of_network
-      - self_pay
-    BookingRequirements:
-      type: object
-      required:
-      - required_fields
-      - accepts_booking_requests_from
-      properties:
-        required_fields:
-          type: array
-          items:
-            type: string
-            description: Options include `data.patient.insurance.insurance_plan_id` and `data.patient.insurance.insurance_member_id`
-        accepts_booking_requests_from:
-          type: array
-          items:
-            $ref: '#/components/schemas/BookingRequestInsuranceSource'
-      description: Criteria for booking appointments, defines requirements and mandatory fields specified by Zocdoc providers
-    Practice:
-      type: object
-      required:
-      - practice_id
-      - practice_name
-      properties:
-        practice_id:
-          type: string
-        practice_name:
-          type: string
     BaseLocation:
       type: object
       required:
@@ -265,6 +175,44 @@ components:
           type: string
           description: IANA time zone identifier for the location, e.g., America/New_York.
           example: America/New_York
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    BookingRequestInsuranceSource:
+      type: string
+      description: The types of insurance coverage that a provider accepts
+      enum:
+      - in_network
+      - out_of_network
+      - self_pay
+    BookingRequirements:
+      type: object
+      required:
+      - required_fields
+      - accepts_booking_requests_from
+      properties:
+        required_fields:
+          type: array
+          items:
+            type: string
+            description: Options include `data.patient.insurance.insurance_plan_id` and `data.patient.insurance.insurance_member_id`
+        accepts_booking_requests_from:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingRequestInsuranceSource'
+      description: Criteria for booking appointments, defines requirements and mandatory fields specified
+        by Zocdoc providers
+    BuildingType:
+      type: string
+      description: The type of facility building, which can be clinic or hospital.
+      enum:
+      - clinic
+      - hospital
     Error:
       required:
       - message
@@ -274,6 +222,37 @@ components:
           type: string
         message:
           type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    FacilitiesResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Facility'
     Facility:
       type: object
       required:
@@ -323,26 +302,53 @@ components:
         properties:
           data:
             $ref: '#/components/schemas/Facility'
-    BuildingType:
-      type: string
-      description: The type of facility building, which can be clinic or hospital.
-      enum:
-      - clinic
-      - hospital
-    ErrorResult:
+    FacilitySchedule:
+      type: object
+      required:
+      - schedule_id
+      - provider_location_id
+      - booking_requirements
+      properties:
+        schedule_id:
+          type: string
+          description: Zocdoc id for bookable schedule
+        provider_location_id:
+          type: string
+          description: Zocdoc provider location id for availability and booking requests
+        booking_requirements:
+          $ref: '#/components/schemas/BookingRequirements'
+    PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
       - type: object
         required:
-        - error_type
-        - errors
+        - page
+        - page_size
+        - total_count
+        - next_url
         properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+          page:
+            description: The zero based index of the current page.
+            type: integer
+          page_size:
+            description: The size of the current page.
+            type: integer
+          total_count:
+            description: The total number of result items.
+            type: integer
+          next_url:
+            description: A link to the next page of results; null if this is the last page of results.
+            type: string
+    Practice:
+      type: object
+      required:
+      - practice_id
+      - practice_name
+      properties:
+        practice_id:
+          type: string
+        practice_name:
+          type: string
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2
@@ -357,12 +363,15 @@ components:
         clientCredentials:
           tokenUrl: https://auth.zocdoc.com/oauth/token
           scopes:
-            external.credential.rotate: Rotate the authenticated client secret.
             external.appointment.write: Book and modify appointments.
             external.appointment.read: Read basic details of your appointments.
             external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
             external.provider_insurance.write: Update the insurance accepted by a provider.
             external.schedulable_entity.read: Read schedulable entities.
+            external.booking_intent.write: Create and modify booking intents.
+            external.booking_intent.read: Read booking intents.
+            external.consent.read: Read your partner-connect consent grants.
+            external.partner_consent.write: Revoke your partner-connect consent grants.
     AuthorizationCodeFlow:
       type: oauth2
       description: 'Log in as a user. Client Secret is not necessary for this login flow.

@@ -1,0 +1,142 @@
+generated: '2026-08-15'
+method: derived
+source: >-
+  openapi/ (all 12 tag specs, v1.177) 4xx/5xx responses, plus the documented
+  behaviours at https://api-docs.zocdoc.com/guides/faqs and
+  https://api-docs.zocdoc.com/guides/testing-data
+format: vendor-envelope
+rfc9457: false
+note: >-
+  Zocdoc does NOT use RFC 9457 problem+json. Every error body is
+  `application/json` carrying the vendor `ErrorResult` envelope. There is no
+  machine-readable error CODE anywhere in the contract — the only discriminator
+  is the two-value `error_type` enum, and the human-readable text lives in a
+  free-form `errors[].message`. Agents cannot branch on a stable error
+  identifier; they must branch on HTTP status plus, at best, the optional
+  `errors[].field`. 401 and most 403/500 responses declare NO response body at
+  all, so an agent that hits an auth or server failure gets a bare status.
+envelope:
+  schema: ErrorResult
+  source: openapi/_original/zocdoc-zocdoc-api-openapi.yml#/components/schemas/ErrorResult
+  composed_of: [BaseResult, error_type, errors]
+  fields:
+    - name: request_id
+      required: true
+      from: BaseResult
+      description: Unique request identifier for tracing. Present on success AND error responses.
+    - name: error_type
+      required: true
+      type: enum
+      values: [api_error, invalid_request]
+      description: >-
+        The only machine-readable classification Zocdoc emits. `invalid_request`
+        = caller fault, `api_error` = Zocdoc fault.
+    - name: errors
+      required: true
+      type: array
+      items:
+        - name: message
+          required: true
+          type: string
+          description: Free-form human-readable message. Not stable, not enumerated.
+        - name: field
+          required: false
+          type: string
+          description: >-
+            The offending request field when the failure is a validation error.
+            Present only on some 400s.
+problems:
+  - status: 400
+    title: Bad request / invalid request parameters
+    error_type: invalid_request
+    body: ErrorResult
+    operations_declaring: 29
+    remediation: >-
+      Read `errors[].field` to find the offending parameter. Common causes
+      documented by Zocdoc: an insurance_plan_id that does not exist, a
+      provider_location that requires an insurance member id, a self-pay
+      booking against a location that does not accept self-pay, or an
+      in-network-only location supplied with an out-of-network plan.
+    sandbox_triggers:
+      - 'insurance_plan_id=ip_0 (invalid insurance plan)'
+      - 'provider_location_id=pr_insuranceIdIsRequired|lo_insuranceIdIsRequired'
+      - 'provider_location_id=pr_selfPayNotAccepted|lo_selfPayNotAccepted'
+      - 'provider_location_id=pr_acceptsInNetworkOnly|lo_acceptsInNetworkOnly'
+  - status: 401
+    title: Unauthorized
+    body: none
+    operations_declaring: 32
+    note: >-
+      Declared on every single operation with NO response schema — the caller
+      receives a bare 401. Zocdoc's FAQ lists the three causes: token missing or
+      expired, token environment does not match the base URL (sandbox token
+      against production host or vice versa), or the required scope was not
+      granted.
+    remediation: >-
+      Re-fetch an access token from the environment-matched token endpoint
+      (https://auth.zocdoc.com/oauth/token for production,
+      https://auth-api-developer-sandbox.zocdoc.com/oauth/token for sandbox).
+      Access tokens live 60 minutes.
+  - status: 403
+    title: Forbidden
+    body: ErrorResult on 3 operations, none on the other 29
+    operations_declaring: 32
+    note: >-
+      Scope failure rather than token failure. The token authenticated but does
+      not carry the scope the operation requires (e.g.
+      external.appointment.write for booking,
+      external.provider_insurance.write for insurance mapping updates,
+      external.credential.rotate for credential rotation).
+  - status: 404
+    title: Not found
+    body: ErrorResult on 11 operations, none on 10
+    operations_declaring: 21
+    note: >-
+      Also returned for entities outside the caller's directory, not only for
+      entities that do not exist — every partner has a jointly-defined provider
+      directory and anything outside it reads as absent.
+    sandbox_triggers:
+      - 'appointment_id=83f5cf14-3eb1-4034-be1f-e7c3058aad21'
+      - 'facility_id=45a305f4-00df-43e6-89a9-17c315c22bcd'
+      - 'insurance_plan_id=ip_0'
+      - 'provider_location_id=pr_missing|lo_missing'
+  - status: 409
+    title: Conflict
+    body: ErrorResult
+    operations_declaring: 8
+    note: >-
+      State-machine violation. Raised when an appointment is not in a status
+      that permits the requested transition (cancel/confirm/reschedule/status
+      update) and when insurance mappings are managed at practice or provider
+      level rather than at the location level. Added to getProviders and
+      getProviderLocationsAvailability in the July 2026 release.
+    sandbox_triggers:
+      - 'provider_location_id=pr_ip_mapping_level_prac|lo_ip_mapping_level_prac'
+      - 'provider_location_id=pr_ip_mapping_level_prov|lo_ip_mapping_level_prov'
+  - status: 429
+    title: Too Many Requests
+    body: undeclared
+    operations_declaring: 0
+    note: >-
+      NOT declared on any operation in the OpenAPI, but documented in prose at
+      https://api-docs.zocdoc.com/guides/performance. Zocdoc publishes no
+      numeric limit and no RateLimit/Retry-After response headers — see
+      rate-limits/zocdoc-rate-limits.yml.
+    remediation: Exponential backoff. Zocdoc's stated expectation.
+  - status: 500
+    title: Internal server error
+    body: none
+    operations_declaring: 5
+    error_type: api_error
+    sandbox_triggers:
+      - 'npis=npi_error'
+      - 'zip_code=10112'
+      - 'provider_location_id=pr_error|lo_error'
+      - 'appointment_id=dc69a428-8a73-461b-bd7b-df755910a3fb'
+      - 'facility_id=1d399a6a-283b-4991-89dd-a01ed9960a76'
+gaps:
+  - No enumerated error-code registry — `errors[].message` is free text.
+  - No `application/problem+json`; no `type` URI per problem.
+  - 401 carries no body on any of the 32 operations.
+  - 429 is undeclared in the contract despite being documented in the guides.
+  - No `Retry-After` header documented on 429 or 503.

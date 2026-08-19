@@ -42,8 +42,8 @@ optimization:
       transfer in high-volume integrations.
     type: Efficiency
     implementation:
-      requestHeader: Content-Encoding: gzip
-      responseHeader: Accept-Encoding: gzip
+      requestHeader: 'Content-Encoding: gzip'
+      responseHeader: 'Accept-Encoding: gzip'
     impact: Medium
   - name: Pagination and Page Size Management
     description: >-

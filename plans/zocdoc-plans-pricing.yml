@@ -1,3 +1,18 @@
+generated: '2026-08-15'
+method: searched
+source: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
+docs: https://api-docs.zocdoc.com/guides
+plan_count: 0
+published_pricing: false
+note: >-
+  Zocdoc publishes NO priced plans. There is no pricing page, no tier table, no
+  metered rate card and no self-serve signup — access is a partner agreement
+  negotiated through the contact form, and the API reference itself is the only
+  public artifact. plan_count is 0 deliberately: the two entries below are
+  ACCESS TIERS (a free sandbox and a contract-gated production environment), not
+  purchasable plans, and neither carries a published price, quota or overage.
+  Re-checked 2026-08-15; www.zocdoc.com and developer.zocdoc.com both return 403
+  to non-browser clients, so no pricing page could be read even if one existed.
 name: Zocdoc API Plans and Pricing
 description: >-
   Zocdoc for Developers offers a partner-based API access model. Access to the

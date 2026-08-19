@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments providers API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "providers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get providers by NPIs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/providers",
+            "params": [
+              {
+                "name": "npis",
+                "value": "",
+                "type": "query",
+                "description": "A comma-delimited list of Provider NPI numbers. A maximum of 50 items will be accepted at a time."
+              },
+              {
+                "name": "insurance_plan_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the patient's insurance plan. Used to determine if provider takes patient's insurance in response. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+              },
+              {
+                "name": "latitude",
+                "value": "",
+                "type": "query",
+                "description": "Latitude of the patient's location. Must be provided together with longitude. When provided, response includes distance and nearest match for each physical location."
+              },
+              {
+                "name": "longitude",
+                "value": "",
+                "type": "query",
+                "description": "Longitude of the patient's location. Must be provided together with latitude. When provided, response includes distance and nearest match for each physical location."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves specific providers within the developer's directory by NPI search. This endpoint searches active providers that are listed on Zocdoc. It returns the provider's information (such as name, gender identity, specialty), location information and provider location IDs which can be used to look up availability and book appointments. Every developer has a designated provider directory jointly defined and onboarded in partnership with Zocdoc.\n\nThe `provider_location_id` returned in the response"
+        },
+        {
+          "info": {
+            "name": "Get Provider Reviews",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/providers/:provider_id/reviews",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path",
+                "description": "The Zocdoc provider ID."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get review summary for a provider by their Zocdoc provider ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

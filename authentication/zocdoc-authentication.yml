@@ -1,6 +1,10 @@
-generated: '2026-07-11'
+generated: '2026-08-15'
 method: derived
-source: openapi/zocdoc-zocdoc-api-openapi.yml
+source: openapi/zocdoc-appointments-api-openapi.yml, openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml,
+  openapi/zocdoc-credentials-api-openapi.yml, openapi/zocdoc-facilities-api-openapi.yml, openapi/zocdoc-insurance-reference-api-openapi.yml,
+  openapi/zocdoc-provider-locations-api-openapi.yml, openapi/zocdoc-providers-api-openapi.yml,
+  openapi/zocdoc-reference-api-openapi.yml, openapi/zocdoc-reviews-api-openapi.yml, openapi/zocdoc-schedulable-entities-api-openapi.yml,
+  openapi/zocdoc-specialties-api-openapi.yml, openapi/zocdoc-visit-reasons-api-openapi.yml ...
 summary:
   types:
   - oauth2
@@ -13,13 +17,25 @@ schemes:
   flows:
   - flow: clientCredentials
     tokenUrl: https://auth.zocdoc.com/oauth/token
-    scopes: 6
+    scopes: 9
   description: |-
     Machine to machine authentication (for use from client server to Zocdoc).
     Production: `https://auth.zocdoc.com/oauth/token`
     Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
 - name: AuthorizationCodeFlow
   type: oauth2
   flows:
@@ -32,4 +48,16 @@ schemes:
     Production: `https://auth.zocdoc.com`
     Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml

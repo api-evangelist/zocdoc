@@ -1,0 +1,48 @@
+generated: '2026-08-15'
+method: searched
+source: >-
+  npm registry search + registry.npmjs.org metadata, pypi.org/simple/zocdoc,
+  rubygems.org search API, api.github.com/orgs/Zocdoc/repos, and the Zocdoc
+  developer docs at https://api-docs.zocdoc.com/guides
+official_package_count: 0
+note: >-
+  Zocdoc publishes NO first-party client library in any registry. Searched npm
+  (registry search + scoped lookups), PyPI (404 for `zocdoc`), RubyGems (empty),
+  and all 42 public repositories in the github.com/Zocdoc organization — the org
+  is almost entirely forks of third-party OSS (pants, LightGBM, OpenTelemetry,
+  NUnit) plus two first-party security repos (ZocSec.SecurityAsCode.AWS/GitHub)
+  and one first-party agent skill (zocdoc-agent-skill, captured in skills/).
+  The docs at api-docs.zocdoc.com publish curl examples only — no SDK page, no
+  install instructions, no code-generation download. Integration is
+  hand-rolled HTTP against the OpenAPI at
+  https://api-docs.zocdoc.com/_bundle/apis/index.yaml.
+packages:
+  - language: typescript
+    registry: npm
+    name: "@striderlabs/mcp-zocdoc"
+    url: https://www.npmjs.com/package/@striderlabs/mcp-zocdoc
+    install: npm install @striderlabs/mcp-zocdoc
+    repository: https://github.com/striderlabs/mcp-zocdoc
+    official: false
+    version: 0.1.0
+    published: '2026-03-10'
+    note: >-
+      THIRD PARTY, not Zocdoc. Published by Strider Labs
+      (hello@striderlabs.ai); Zocdoc neither maintains nor links to it. Listed
+      here only so the absence of a first-party equivalent is legible. Single
+      0.1.0 release, unchanged since 2026-03-10.
+registries_checked:
+  - registry: npm
+    query: zocdoc
+    first_party_hits: 0
+  - registry: pypi
+    query: zocdoc
+    status: 404
+    first_party_hits: 0
+  - registry: rubygems
+    query: zocdoc
+    first_party_hits: 0
+  - registry: github
+    org: https://github.com/Zocdoc
+    repos: 42
+    first_party_client_libraries: 0

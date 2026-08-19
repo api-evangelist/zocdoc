@@ -1,0 +1,820 @@
+{
+  "item": [
+    {
+      "id": "ac6019a0-f5db-4914-aad0-5cbf7eeb2096",
+      "name": "facilities",
+      "description": {
+        "content": "Endpoints to retrieve facilities within the developer's directory.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "74b680aa-4937-4880-bf7f-3d3e52b3eb2f",
+          "name": "Get facilities",
+          "request": {
+            "name": "Get facilities",
+            "description": {
+              "content": "Get a set of facilities within the developer's network.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1-beta",
+                "facilities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "npis",
+                  "value": "<string>",
+                  "description": "A comma-delimited list of Provider NPI numbers. A maximum of 50 items will be accepted at a time. One of `zip_code` or `npis` is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "zip_code",
+                  "value": "<string>",
+                  "description": "A 5 digit zip code that will be used as the location to find facilities near by. One of `zip_code` or `npis` is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "building_type",
+                  "value": "<string>",
+                  "description": "The type of facility building, which can be Clinic or Hospital."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The zero indexed page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>",
+                  "description": "The number of results to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "visit_reason_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the visit reason to search by `zip_code` for. See [Reference Data](/guides/reference-data) for options."
+                },
+                {
+                  "disabled": false,
+                  "key": "insurance_plan_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the patient's insurance plan to search by `zip_code` for. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_distance_to_patient_mi",
+                  "value": "<integer>",
+                  "description": "The maximum distance in miles from the facility to the search location (the center point of the given `zip_code`). Default is 50 miles."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fb23eea2-9547-4f77-99b1-2a1424b28cb5",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "npis",
+                      "value": "1234567891,0123456789"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"facility_id\": \"string\",\n      \"name\": \"string\",\n      \"specialties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"languages\": [\n        \"string\",\n        \"string\"\n      ],\n      \"visit_reason_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"default_visit_reason_id\": \"string\",\n      \"location\": {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"NY\",\n        \"zip_code\": \"string\",\n        \"latitude\": 3833.626750340312,\n        \"longitude\": 4640.031361140427,\n        \"address2\": \"string\",\n        \"location_name\": \"string\",\n        \"phone_number\": \"9999999999\",\n        \"phone_extension\": \"123\",\n        \"time_zone\": \"America/New_York\"\n      },\n      \"schedule\": {\n        \"schedule_id\": \"string\",\n        \"provider_location_id\": \"string\",\n        \"booking_requirements\": {\n          \"required_fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"accepts_booking_requests_from\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"npi\": \"string\",\n      \"building_type\": \"string\",\n      \"practice\": {\n        \"practice_id\": \"string\",\n        \"practice_name\": \"string\"\n      }\n    },\n    {\n      \"facility_id\": \"string\",\n      \"name\": \"string\",\n      \"specialties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"languages\": [\n        \"string\",\n        \"string\"\n      ],\n      \"visit_reason_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"default_visit_reason_id\": \"string\",\n      \"location\": {\n        \"address1\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"NY\",\n        \"zip_code\": \"string\",\n        \"latitude\": 4254.231172603693,\n        \"longitude\": 1578.6461205812209,\n        \"address2\": \"string\",\n        \"location_name\": \"string\",\n        \"phone_number\": \"9999999999\",\n        \"phone_extension\": \"123\",\n        \"time_zone\": \"America/New_York\"\n      },\n      \"schedule\": {\n        \"schedule_id\": \"string\",\n        \"provider_location_id\": \"string\",\n        \"booking_requirements\": {\n          \"required_fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"accepts_booking_requests_from\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"npi\": \"string\",\n      \"building_type\": \"string\",\n      \"practice\": {\n        \"practice_id\": \"string\",\n        \"practice_name\": \"string\"\n      }\n    }\n  ],\n  \"next_url\": \"string\",\n  \"page\": 4986,\n  \"page_size\": 8046,\n  \"request_id\": \"string\",\n  \"total_count\": 1125\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cdda5593-3c82-4988-9559-6719a027b1e9",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "npis",
+                      "value": "1234567891,0123456789"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7e0eb1e-76a3-42eb-b697-09532369ec8a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "npis",
+                      "value": "1234567891,0123456789"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "11371dd4-98b2-4ab7-a998-e101ef2856b2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "npis",
+                      "value": "1234567891,0123456789"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8fa96004-2c2a-4e85-a4ff-2cc2d9147abf",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "npis",
+                      "value": "1234567891,0123456789"
+                    },
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3dc0f227-660d-42a7-8e19-01d584e7b8f6",
+          "name": "Get facility by id",
+          "request": {
+            "name": "Get facility by id",
+            "description": {
+              "content": "Get facility by facility id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1-beta",
+                "facilities",
+                ":facility_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "facility_id",
+                  "description": "(Required) Zocdoc facility id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cd019111-03d8-40a8-a41c-875ba46053ab",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Zocdoc facility id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"string\",\n  \"data\": {\n    \"facility_id\": \"string\",\n    \"name\": \"string\",\n    \"specialties\": [\n      \"string\",\n      \"string\"\n    ],\n    \"languages\": [\n      \"string\",\n      \"string\"\n    ],\n    \"visit_reason_ids\": [\n      \"string\",\n      \"string\"\n    ],\n    \"default_visit_reason_id\": \"string\",\n    \"location\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"NY\",\n      \"zip_code\": \"string\",\n      \"latitude\": 3904.1604936814733,\n      \"longitude\": 617.986200779681,\n      \"address2\": \"string\",\n      \"location_name\": \"string\",\n      \"phone_number\": \"9999999999\",\n      \"phone_extension\": \"123\",\n      \"time_zone\": \"America/New_York\"\n    },\n    \"schedule\": {\n      \"schedule_id\": \"string\",\n      \"provider_location_id\": \"string\",\n      \"booking_requirements\": {\n        \"required_fields\": [\n          \"string\",\n          \"string\"\n        ],\n        \"accepts_booking_requests_from\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"npi\": \"string\",\n    \"building_type\": \"string\",\n    \"practice\": {\n      \"practice_id\": \"string\",\n      \"practice_name\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e331aac7-31b5-49c1-b326-520024d41c3e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Zocdoc facility id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"invalid_request\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f823e4a4-7d8c-4f13-a353-af99abd23d0e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Zocdoc facility id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b4e07491-fc0c-4678-9d87-02a1deb8b841",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Zocdoc facility id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "726d7109-8444-47ce-8ade-b6c25ab1834f",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1-beta",
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Zocdoc facility id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-developer-sandbox.zocdoc.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5629ee8e-c1aa-492a-80ef-b12230f4b58c",
+    "name": "API Documentation appointments facilities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.",
+      "type": "text/plain"
+    }
+  }
+}

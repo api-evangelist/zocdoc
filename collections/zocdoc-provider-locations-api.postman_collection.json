@@ -1,0 +1,2200 @@
+{
+  "item": [
+    {
+      "id": "055ae280-b36d-4c8e-a716-f22fc41e52b6",
+      "name": "provider-locations",
+      "description": {
+        "content": "Endpoints for retrieving and modifying provider location objects and their related insurance plans and availability.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "01f9f9c5-ff5a-472e-b0c1-fc62459d19c5",
+          "name": "Get provider locations",
+          "request": {
+            "name": "Get provider locations",
+            "description": {
+              "content": "This endpoint accepts parameters such as zip code, specialty, visit reason and accepted insurance to return a filtered set of providers within the developer's directory. The response includes additional information about the provider location objects returned.\n\nThe `provider_location_id` returned in the response can be used to retrieve availability in the endpoint /v1/provider_locations/availability.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "provider_locations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "zip_code",
+                  "value": "<string>",
+                  "description": "(Required) A 5 digit zip code."
+                },
+                {
+                  "disabled": false,
+                  "key": "specialty_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the provider's specialty. See [Reference Data](/guides/reference-data) for options. One of `specialty_id` or `visit_reason_id` is required. If `visit_reason_id` is not supplied, the default visit reason for the specialty will be used."
+                },
+                {
+                  "disabled": false,
+                  "key": "visit_reason_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID for the visit reason. See [Reference Data](/guides/reference-data) for options. One of `specialty_id` or `visit_reason_id` is required. If both `visit_reason_id` and `specialty_id` are supplied, the specialty must be the visit reason's corresponding specialty."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The zero indexed page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>",
+                  "description": "The number of results to return per page."
+                },
+                {
+                  "disabled": false,
+                  "key": "insurance_plan_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+                },
+                {
+                  "disabled": false,
+                  "key": "visit_type",
+                  "value": "<string>",
+                  "description": "The type of patient visit with the provider. If not provided, the default value is set to `in_person`."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_distance_to_patient_mi",
+                  "value": "<integer>",
+                  "description": "The maximum distance in miles from the physical location to the search location (the center point of the given `zip_code`). Default is 50 miles."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e8c7b6f5-8525-4aad-be8c-8589b29a34b6",
+              "name": "Succesful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialty_id",
+                      "value": "sp_153"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "visit_type",
+                      "value": "all"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"search_parameters\": {\n      \"specialty_id\": \"sp_153\",\n      \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\"\n    },\n    \"provider_locations\": [\n      {\n        \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n        \"provider_location_type\": \"in_person_provider\",\n        \"accepts_patient_insurance\": \"accepted\",\n        \"provider\": {\n          \"provider_id\": \"string\",\n          \"npi\": \"string\",\n          \"first_name\": \"string\",\n          \"last_name\": \"string\",\n          \"title\": \"string\",\n          \"full_name\": \"string\",\n          \"gender_identity\": \"string\",\n          \"specialties\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"specialty_ids\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"default_visit_reason_id\": \"string\",\n          \"visit_reason_ids\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"statement\": \"string\",\n          \"provider_photo_url\": \"//d2uur722ua7fvv.cloudfront.net/ZeeFace_02.svg\",\n          \"languages\": [\n            \"English\",\n            \"Spanish\"\n          ],\n          \"profile_url\": \"https://zocdoc.com/doctor/capivarudo-nojeira-md-517507?utm_source=FakeSource\",\n          \"credentials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"booking_requirements\": {\n          \"required_fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"accepts_booking_requests_from\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"first_availability_date_in_provider_local_time\": \"1972-03-05\",\n        \"location\": {\n          \"distance_to_patient_mi\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"virtual_location\": {\n          \"state\": \"NY\",\n          \"location_name\": \"string\",\n          \"time_zone\": \"America/New_York\"\n        },\n        \"practice\": {\n          \"practice_id\": \"string\",\n          \"practice_name\": \"string\"\n        }\n      },\n      {\n        \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n        \"provider_location_type\": \"in_person_provider\",\n        \"accepts_patient_insurance\": \"insurance_not_specified\",\n        \"provider\": {\n          \"provider_id\": \"string\",\n          \"npi\": \"string\",\n          \"first_name\": \"string\",\n          \"last_name\": \"string\",\n          \"title\": \"string\",\n          \"full_name\": \"string\",\n          \"gender_identity\": \"string\",\n          \"specialties\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"specialty_ids\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"default_visit_reason_id\": \"string\",\n          \"visit_reason_ids\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"statement\": \"string\",\n          \"provider_photo_url\": \"//d2uur722ua7fvv.cloudfront.net/ZeeFace_02.svg\",\n          \"languages\": [\n            \"English\",\n            \"Spanish\"\n          ],\n          \"profile_url\": \"https://zocdoc.com/doctor/capivarudo-nojeira-md-517507?utm_source=FakeSource\",\n          \"credentials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"booking_requirements\": {\n          \"required_fields\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"accepts_booking_requests_from\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"first_availability_date_in_provider_local_time\": \"2005-07-10\",\n        \"location\": {\n          \"distance_to_patient_mi\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"virtual_location\": {\n          \"state\": \"NY\",\n          \"location_name\": \"string\",\n          \"time_zone\": \"America/New_York\"\n        },\n        \"practice\": {\n          \"practice_id\": \"string\",\n          \"practice_name\": \"string\"\n        }\n      }\n    ]\n  },\n  \"next_url\": \"string\",\n  \"page\": 821,\n  \"page_size\": 2649,\n  \"request_id\": \"string\",\n  \"total_count\": 9054\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "309c8fd6-f976-4b43-beaf-dd50a7f7940b",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialty_id",
+                      "value": "sp_153"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "visit_type",
+                      "value": "all"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "518f6c33-a5c1-41c7-a0ea-129ce7b00acd",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialty_id",
+                      "value": "sp_153"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "visit_type",
+                      "value": "all"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bc8ea0bb-c9b6-40bc-9e74-cfcfeb4210d5",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "zip_code",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "specialty_id",
+                      "value": "sp_153"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    },
+                    {
+                      "key": "visit_type",
+                      "value": "all"
+                    },
+                    {
+                      "key": "max_distance_to_patient_mi",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53d263e9-2983-4c47-9307-0c708afd77fd",
+          "name": "Get provider location by id",
+          "request": {
+            "name": "Get provider location by id",
+            "description": {
+              "content": "Get info about a provider location by provider_location_id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "provider_locations",
+                ":provider_location_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "insurance_plan_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider_location_id",
+                  "description": "(Required) The Zocdoc provider location id to get details for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "92e13942-87a3-4749-b3a5-93c1681266f5",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get details for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"string\",\n  \"data\": {\n    \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n    \"provider_location_type\": \"in_person_provider\",\n    \"accepts_patient_insurance\": \"accepted\",\n    \"provider\": {\n      \"provider_id\": \"string\",\n      \"npi\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"title\": \"string\",\n      \"full_name\": \"string\",\n      \"gender_identity\": \"string\",\n      \"specialties\": [\n        \"string\",\n        \"string\"\n      ],\n      \"specialty_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"default_visit_reason_id\": \"string\",\n      \"visit_reason_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"statement\": \"string\",\n      \"provider_photo_url\": \"//d2uur722ua7fvv.cloudfront.net/ZeeFace_02.svg\",\n      \"languages\": [\n        \"English\",\n        \"Spanish\"\n      ],\n      \"profile_url\": \"https://zocdoc.com/doctor/capivarudo-nojeira-md-517507?utm_source=FakeSource\",\n      \"credentials\": {\n        \"certifications\": [\n          \"string\",\n          \"string\"\n        ],\n        \"education\": {\n          \"institutions\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"booking_requirements\": {\n      \"required_fields\": [\n        \"string\",\n        \"string\"\n      ],\n      \"accepts_booking_requests_from\": [\n        \"in_network\",\n        \"in_network\"\n      ]\n    },\n    \"first_availability_date_in_provider_local_time\": \"1991-06-03\",\n    \"location\": {\n      \"address1\": \"string\",\n      \"city\": \"string\",\n      \"state\": \"NY\",\n      \"zip_code\": \"string\",\n      \"latitude\": 5783.834537169197,\n      \"longitude\": 4498.243644874804,\n      \"address2\": \"string\",\n      \"location_name\": \"string\",\n      \"phone_number\": \"9999999999\",\n      \"phone_extension\": \"123\",\n      \"time_zone\": \"America/New_York\",\n      \"distance_to_patient_mi\": 8289.445107261632\n    },\n    \"virtual_location\": {\n      \"state\": \"NY\",\n      \"location_name\": \"string\",\n      \"time_zone\": \"America/New_York\"\n    },\n    \"practice\": {\n      \"practice_id\": \"string\",\n      \"practice_name\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a1ca6d9-8c95-4ecd-a66c-e92386b25b56",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get details for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93ff40a6-6f70-443a-bf22-a72677b18f27",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get details for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2da5551f-0a71-4ce0-a232-953db8495fd1",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get details for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "abd0a7f2-f9da-4ea5-9e40-cac349658f8d",
+              "name": "Provider location not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "ip_2224"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get details for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "02fbdb92-e49b-456b-8934-8a1e078d8a3a",
+          "name": "Get availability for provider locations",
+          "request": {
+            "name": "Get availability for provider locations",
+            "description": {
+              "content": "Retrieves availability for a set of provider locations. Required parameters passed include provider location ids, visit reason id and patient type. Visit reason and patient type (new or existing) are used to calculate the duration of the appointment and break availability into bookable timeslots based on the appointment duration. The response output includes the start times of appointments based on these calculations.\n\nThe `start_time` returned is used in the endpoint /v1/appointments to book appointments.\nIf no timeslots are available that satisfy the parameters, an empty array will be returned for that Provider Location's timeslots.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "provider_locations",
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "provider_location_ids",
+                  "value": "<string>",
+                  "description": "(Required) A comma-delimited list of Zocdoc `provider_location_ids` retrieved from the /v1/providers or /v1/provider_locations endpoint. A maximum of 50 items will be accepted at a time."
+                },
+                {
+                  "disabled": false,
+                  "key": "visit_reason_id",
+                  "value": "<string>",
+                  "description": "(Required) The Zocdoc ID of the visit reason. See [Reference Data](/guides/reference-data) for options."
+                },
+                {
+                  "disabled": false,
+                  "key": "patient_type",
+                  "value": "<string>",
+                  "description": "(Required) New or existing to indicate if the patient is new to the practice or has been to the office before."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date_in_provider_local_time",
+                  "value": "<date>",
+                  "description": "The first date to retrieve availability for, as YYYY-MM-DD. Defaults to current date in US Eastern Time. Can request availability up to a maximum of 150 days into the future."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date_in_provider_local_time",
+                  "value": "<date>",
+                  "description": "The last inclusive date to retrieve availability for, as YYYY-MM-DD. Defaults to 7 days after the current date. Must be 31 days or less after the start date."
+                },
+                {
+                  "disabled": false,
+                  "key": "published_context",
+                  "value": "<string>",
+                  "description": "Determines how availability slots are returned. Direct_listing returns all slots, while condition_driven_search limits results to Zocdoc-active providers with budget. Applicable to syndication clients."
+                },
+                {
+                  "disabled": false,
+                  "key": "insurance_plan_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans. Used to construct booking_url."
+                },
+                {
+                  "disabled": false,
+                  "key": "insurance_carrier_id",
+                  "value": "<string>",
+                  "description": "The Zocdoc ID of the patient's insurance carrier. See [Reference Data](/guides/reference-data) for options. Used to construct booking_url."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e6c791d2-dcac-4eba-be4f-1b4d363bc7c0",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider_location_ids",
+                      "value": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890|lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "patient_type",
+                      "value": "new"
+                    },
+                    {
+                      "key": "start_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "published_context",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_carrier_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"string\",\n  \"data\": [\n    {\n      \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n      \"first_availability\": {\n        \"start_time\": \"2022-04-27T09:00:00-04:00\",\n        \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n        \"booking_url\": \"https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844\"\n      },\n      \"timeslots\": [\n        {\n          \"start_time\": \"2022-04-27T09:00:00-04:00\",\n          \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n          \"booking_url\": \"https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844\"\n        },\n        {\n          \"start_time\": \"2022-04-27T09:00:00-04:00\",\n          \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n          \"booking_url\": \"https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844\"\n        }\n      ]\n    },\n    {\n      \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n      \"first_availability\": {\n        \"start_time\": \"2022-04-27T09:00:00-04:00\",\n        \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n        \"booking_url\": \"https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844\"\n      },\n      \"timeslots\": [\n        {\n          \"start_time\": \"2022-04-27T09:00:00-04:00\",\n          \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n          \"booking_url\": \"https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844\"\n        },\n        {\n          \"start_time\": \"2022-04-27T09:00:00-04:00\",\n          \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n          \"booking_url\": \"https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52794635-ea32-46f4-a573-6e23dd756de2",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider_location_ids",
+                      "value": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890|lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "patient_type",
+                      "value": "new"
+                    },
+                    {
+                      "key": "start_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "published_context",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_carrier_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75140a9a-c72e-46ef-a33b-4378889453fc",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider_location_ids",
+                      "value": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890|lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "patient_type",
+                      "value": "new"
+                    },
+                    {
+                      "key": "start_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "published_context",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_carrier_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "03599762-42ad-4d8b-9296-346d340b6331",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider_location_ids",
+                      "value": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890|lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "patient_type",
+                      "value": "new"
+                    },
+                    {
+                      "key": "start_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "published_context",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_carrier_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c199a6e-8f72-447d-b792-f2ec564159c2",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "provider_location_ids",
+                      "value": "pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890|lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "visit_reason_id",
+                      "value": "pc_FRO-18leckytNKtruw5dLR"
+                    },
+                    {
+                      "key": "patient_type",
+                      "value": "new"
+                    },
+                    {
+                      "key": "start_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date_in_provider_local_time",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "published_context",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "insurance_carrier_id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6dc414b4-82c2-4304-9bbc-69712861ade7",
+          "name": "Get insurance mappings for provider location",
+          "request": {
+            "name": "Get insurance mappings for provider location",
+            "description": {
+              "content": "Get eligible insurance plans and insurance mappings for a provider location by provider_location_id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "provider_locations",
+                ":provider_location_id",
+                "insurance_mappings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider_location_id",
+                  "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1c786c68-3e57-4e20-a26d-c66ffffa8add",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"insurance_plan_mappings\": [\n      {\n        \"insurance_plan_id\": \"string\"\n      },\n      {\n        \"insurance_plan_id\": \"string\"\n      }\n    ],\n    \"eligible_insurances\": [\n      {\n        \"insurance_carrier_id\": \"string\",\n        \"insurance_carrier_networks\": [\n          {\n            \"program_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"insurance_plan_ids\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"program_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"insurance_plan_ids\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"insurance_carrier_id\": \"string\",\n        \"insurance_carrier_networks\": [\n          {\n            \"program_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"insurance_plan_ids\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"program_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"network_type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"insurance_plan_ids\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dff318dd-7e84-476d-8b81-1203b2eea125",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "85fe110f-885e-4b2b-8dbb-653947a5f636",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8642d253-e599-4cb3-8cdd-eea2675e7ec4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "206a68ad-87df-4bd4-95d2-4ea860a78830",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4c6b8f7-8f21-4dcd-b00e-49a311617c89",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67cb2b62-fa6d-4278-bb15-7832fc92a1d3",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4fc7e2f5-cd7e-4274-9aac-e316254d6b9b",
+          "name": "Submit request to update mapped insurance plans",
+          "request": {
+            "name": "Submit request to update mapped insurance plans",
+            "description": {
+              "content": "Submits a request to update mapped insurance plans. This is an asynchronous operation and the response indicates the request was accepted for processing, not that the update is complete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "provider_locations",
+                ":provider_location_id",
+                "insurance_mappings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "provider_location_id",
+                  "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b6e657a8-6f22-4c5e-a54e-b52835860249",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "383aedd0-4fd1-47a2-bc0f-a84076834cbe",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93c81ad9-fa7e-4084-a45d-12037ffd0eb1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14479474-4fc9-43ce-b565-1d40c2d5ba27",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9b143757-16fd-4c1a-9901-860d6a009ec2",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9ab705d-febf-4097-a3ed-5032cd869c58",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cde3e42-0240-4d66-a22f-bbdee40c5022",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "provider_locations",
+                    ":provider_location_id",
+                    "insurance_mappings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "provider_location_id",
+                      "description": "(Required) The Zocdoc provider location id to get insurance plans for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"operation\": \"<string>\",\n  \"insurance_plan_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-developer-sandbox.zocdoc.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "2a83832b-5cd7-4467-9a20-8a7e468b34c7",
+    "name": "API Documentation appointments provider-locations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.",
+      "type": "text/plain"
+    }
+  }
+}

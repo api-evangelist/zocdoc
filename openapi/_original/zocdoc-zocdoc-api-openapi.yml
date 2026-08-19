@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: '1.176'
+  version: '1.177'
   title: API Documentation
 servers:
   - url: https://api-developer-sandbox.zocdoc.com
@@ -9,11 +9,17 @@ servers:
     description: Production
 tags:
   - name: reference
-    description: Endpoints to retrieve information about the developer's directory.
+    description: >-
+      Endpoints to retrieve active provider NPIs within the developer's
+      directory.
     x-displayName: NPIs
   - name: schedulable-entities
-    description: Endpoints to retrieve schedulable entities with availability information.
-    x-displayName: Schedulable entities
+    description: >-
+      Endpoints to manage the providers in the developer's directory. Retrieve
+      the schedulable entities currently in your directory with availability
+      information, or submit a list of NPIs to determine which of those
+      providers are already schedulable.
+    x-displayName: Directory Management
   - name: insurance-reference
     description: Endpoints to retrieve insurance plans supported by Zocdoc.
     x-displayName: Insurance
@@ -25,6 +31,9 @@ tags:
       Endpoints for retrieving and modifying provider location objects and their
       related insurance plans and availability.
     x-displayName: Provider locations
+  - name: reviews
+    description: Endpoints to retrieve provider reviews and ratings.
+    x-displayName: Reviews
   - name: facilities
     description: Endpoints to retrieve facilities within the developer's directory.
     x-displayName: Facilities
@@ -39,9 +48,12 @@ tags:
   - name: webhook
     description: Sandbox endpoints to mock webhook behavior
     x-displayName: Webhook
-  - name: credentials
-    description: Endpoints for managing API credentials.
-    x-displayName: Credentials
+  - name: specialties
+    description: Endpoints to retrieve specialties supported by Zocdoc.
+    x-displayName: Specialties
+  - name: visit-reasons
+    description: Endpoints to retrieve visit reasons supported by Zocdoc.
+    x-displayName: Visit Reasons
 paths:
   /v1/providers:
     get:
@@ -229,6 +241,12 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
   /v1/provider_locations/{provider_location_id}:
     get:
       tags:
@@ -410,6 +428,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
   /v1/provider_locations/{provider_location_id}/insurance_mappings:
     get:
       tags:
@@ -519,7 +543,7 @@ paths:
   /v1/providers/{provider_id}/reviews:
     get:
       tags:
-        - providers
+        - reviews
       description: Get review summary for a provider by their Zocdoc provider ID.
       security:
         - ClientCredentialsFlow: []
@@ -555,7 +579,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      summary: Get Provider Reviews
+      summary: Get reviews for a single provider
+  /v1/providers/reviews:
+    get:
+      tags:
+        - reviews
+      description: |
+        Get review summaries for up to 100 providers in a single call, by their
+        Zocdoc provider IDs. Duplicate IDs are collapsed; returns one item per
+        distinct requested ID, in request order. Providers that are unknown or
+        not accessible to the caller are returned with zero/null ratings.
+      security:
+        - ClientCredentialsFlow: []
+        - AuthorizationCodeFlow: []
+      operationId: getProviderReviewsBatch
+      parameters:
+        - name: provider_ids
+          in: query
+          required: true
+          description: >-
+            A comma-delimited list of Zocdoc provider IDs to fetch review
+            summaries for. Duplicate IDs are collapsed; a maximum of 100
+            distinct items will be accepted at a time. IDs that are unknown or
+            not accessible to the caller are returned with zero reviews and null
+            ratings (not an error).
+          schema:
+            type: string
+            example: pr_xyz123,pr_abc456
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderReviewsBatchResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      summary: Get reviews for providers
   /v1/appointments:
     post:
       tags:
@@ -590,6 +658,12 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
       description: >
         This endpoint is used for creating new appointments. Developers should
         gather the necessary information to pass in the request body as inputs
@@ -1263,29 +1337,35 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
-  /v1/credentials/rotate:
-    post:
+  /v1/schedulable_entities/overlaps:
+    put:
       tags:
-        - credentials
+        - schedulable-entities
+      summary: Submit NPI overlaps
+      description: |
+        Submit NPI overlaps to compare your provider directory with providers
+        bookable on Zocdoc. Send real-time distribution status
+        (`developer_app_state`), unverified addresses and other data required
+        for joint provider operations.
       security:
         - ClientCredentialsFlow:
-            - external.credential.rotate
-      description: |
-        Rotate the client secret for the authenticated external API client.
-      operationId: rotateCredentials
+            - external.schedulable_entity.read
+        - AuthorizationCodeFlow:
+            - external.schedulable_entity.read
+      operationId: putSchedulableEntitiesOverlaps
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RotateCredentialBody'
+              $ref: '#/components/schemas/SchedulableEntitiesOverlapsRequestBody'
       responses:
         '200':
-          description: Credential rotated successfully
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RotateCredentialResult'
+                $ref: '#/components/schemas/SchedulableEntitiesOverlapsResponseBody'
         '400':
           description: Bad request
           content:
@@ -1296,19 +1376,6 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResult'
-        '404':
-          description: Client not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResult'
-        '500':
-          description: Internal server error
-      summary: Rotate Credentials
   /v1/webhook/mock-request:
     post:
       tags:
@@ -1578,7 +1645,7 @@ paths:
   /v1/specialties:
     get:
       tags:
-        - reference
+        - specialties
       summary: Get specialties
       description: Get specialties with optional filtering by care category
       security:
@@ -1629,7 +1696,7 @@ paths:
   /v1/specialties/{specialty_id}:
     get:
       tags:
-        - reference
+        - specialties
       summary: Get specialty by id
       description: Get specialty by id
       security:
@@ -1665,7 +1732,7 @@ paths:
   /v1/visit_reasons:
     get:
       tags:
-        - reference
+        - visit-reasons
       summary: Get visit reasons
       description: Get visit reasons with optional filtering by specialty
       security:
@@ -1716,7 +1783,7 @@ paths:
   /v1/visit_reasons/{visit_reason_id}:
     get:
       tags:
-        - reference
+        - visit-reasons
       summary: Get visit reason by id
       description: Get visit reason by id
       security:
@@ -1892,12 +1959,15 @@ components:
         clientCredentials:
           tokenUrl: https://auth.zocdoc.com/oauth/token
           scopes:
-            external.credential.rotate: Rotate the authenticated client secret.
             external.appointment.write: Book and modify appointments.
             external.appointment.read: Read basic details of your appointments.
             external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
             external.provider_insurance.write: Update the insurance accepted by a provider.
             external.schedulable_entity.read: Read schedulable entities.
+            external.booking_intent.write: Create and modify booking intents.
+            external.booking_intent.read: Read booking intents.
+            external.consent.read: Read your partner-connect consent grants.
+            external.partner_consent.write: Revoke your partner-connect consent grants.
     AuthorizationCodeFlow:
       type: oauth2
       description: |
@@ -3195,6 +3265,20 @@ components:
           description: >-
             The average wait time rating of the provider (1-5), rounded to 1
             decimal place
+    ProviderReviewsBatchResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResult'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              description: >-
+                One item for each distinct requested provider_id, in request
+                order.
+              items:
+                $ref: '#/components/schemas/ProviderReviewsData'
     ProviderSearchResult:
       type: object
       required:
@@ -3469,6 +3553,44 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/SchedulableEntitiesData'
+    SchedulableEntitiesOverlapsRequestBody:
+      type: object
+      required:
+        - overlaps
+        - developer_app_state
+      properties:
+        overlaps:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/MatchRequestInput'
+        developer_app_state:
+          $ref: '#/components/schemas/DeveloperAppStateInput'
+    MatchRequestInput:
+      type: object
+      required:
+        - npi
+      properties:
+        npi:
+          type: string
+          description: National Provider Identifier
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchRequestMetadataItem'
+    MatchRequestMetadataItem:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    DeveloperAppStateInput:
+      type: string
+      enum:
+        - disabled
+        - enabled
+      description: Whether the developer's app is enabled or disabled
     SchedulableEntitiesOverlapsResponseBody:
       allOf:
         - $ref: '#/components/schemas/BaseResult'
@@ -3626,6 +3748,18 @@ components:
           type: string
           description: IANA time zone identifier for the location, e.g., America/New_York.
           example: America/New_York
+        main_specialty_id:
+          type: string
+          description: >-
+            Zocdoc specialty ID of the provider's main specialty (format
+            sp_<id>). Omitted when the provider has no main specialty.
+          example: sp_123
+        main_specialty_name:
+          type: string
+          description: >-
+            Display name of the provider's main specialty. Omitted when the
+            specialty id is absent or cannot be resolved.
+          example: Cardiologist
     AvailabilityInfo:
       type: object
       required:
@@ -3771,38 +3905,6 @@ components:
             Date & time of the appointment in ISO-8601 format with a timezone
             offset
           example: '2022-04-27T09:00:00-04:00'
-    RotateCredentialBody:
-      type: object
-      required:
-        - application_client_id
-      properties:
-        application_client_id:
-          type: string
-          description: The Auth0 application client ID whose secret should be rotated.
-          example: abc123xyz
-    RotateCredentialResultData:
-      type: object
-      required:
-        - application_client_id
-        - client_secret
-      properties:
-        application_client_id:
-          type: string
-          description: The Auth0 application client ID.
-          example: abc123xyz
-        client_secret:
-          type: string
-          description: The newly rotated client secret.
-          example: AiOiJSUzI1NiIsInR5cCI6IkpXVCJ9
-    RotateCredentialResult:
-      allOf:
-        - $ref: '#/components/schemas/BaseResult'
-        - type: object
-          required:
-            - data
-          properties:
-            data:
-              $ref: '#/components/schemas/RotateCredentialResultData'
     IteratedBaseResult:
       allOf:
         - $ref: '#/components/schemas/BaseResult'

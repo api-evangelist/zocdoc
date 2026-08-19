@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  version: '1.176'
-  title: API Documentation appointments webhook API
-  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.
+  version: '1.177'
+  title: API Documentation webhook API
+  description: Sandbox endpoints to mock webhook behavior
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
   description: Sandbox
@@ -48,11 +48,12 @@ paths:
       summary: Mock webhook request
 components:
   schemas:
-    ErrorType:
+    AppointmentUpdateType:
       type: string
       enum:
-      - api_error
-      - invalid_request
+      - updated
+      - cancelled
+      - created
     BaseResult:
       required:
       - request_id
@@ -61,16 +62,48 @@ components:
         request_id:
           type: string
           description: Unique request identifier for tracing
-    WebhookMockRequestData:
+    ChangedAttribute:
       type: object
       required:
-      - data_type
-      - appointment_data
+      - attribute_path
       properties:
-        data_type:
+        attribute_path:
           type: string
-        appointment_data:
-          $ref: '#/components/schemas/WebhookMockAppointmentData'
+          description: The path to the changed attribute in dot notation (e.g., "appointment.start_time",
+            "patient.uploaded_attachments")
+          example: appointment.start_time
+        attachment_type:
+          type: string
+          description: Required when attribute_path is "appointment.attachments", indicates the type of
+            attachment
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
     WebhookMockAppointmentData:
       type: object
       required:
@@ -88,34 +121,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChangedAttribute'
-          description: Array of changed attributes when webhook is triggered due to attribute changes. Each object must contain at least an attribute_path indicating the changed field.
-    ChangedAttribute:
-      type: object
-      required:
-      - attribute_path
-      properties:
-        attribute_path:
-          type: string
-          description: The path to the changed attribute in dot notation (e.g., "appointment.start_time", "patient.uploaded_attachments")
-          example: appointment.start_time
-        attachment_type:
-          type: string
-          description: Required when attribute_path is "appointment.attachments", indicates the type of attachment
-    AppointmentUpdateType:
-      type: string
-      enum:
-      - updated
-      - cancelled
-      - created
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
+          description: Array of changed attributes when webhook is triggered due to attribute changes.
+            Each object must contain at least an attribute_path indicating the changed field.
     WebhookMockDataRequest:
       type: object
       required:
@@ -130,20 +137,16 @@ components:
           description: a valid key for the signature in base64 format
         appointment_update_type:
           $ref: '#/components/schemas/AppointmentUpdateType'
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+    WebhookMockRequestData:
+      type: object
+      required:
+      - data_type
+      - appointment_data
+      properties:
+        data_type:
+          type: string
+        appointment_data:
+          $ref: '#/components/schemas/WebhookMockAppointmentData'
     WebhookMockResponse:
       type: object
       required:
@@ -171,12 +174,15 @@ components:
         clientCredentials:
           tokenUrl: https://auth.zocdoc.com/oauth/token
           scopes:
-            external.credential.rotate: Rotate the authenticated client secret.
             external.appointment.write: Book and modify appointments.
             external.appointment.read: Read basic details of your appointments.
             external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
             external.provider_insurance.write: Update the insurance accepted by a provider.
             external.schedulable_entity.read: Read schedulable entities.
+            external.booking_intent.write: Create and modify booking intents.
+            external.booking_intent.read: Read booking intents.
+            external.consent.read: Read your partner-connect consent grants.
+            external.partner_consent.write: Revoke your partner-connect consent grants.
     AuthorizationCodeFlow:
       type: oauth2
       description: 'Log in as a user. Client Secret is not necessary for this login flow.

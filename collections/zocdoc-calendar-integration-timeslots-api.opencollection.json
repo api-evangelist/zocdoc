@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments calendar-integration-timeslots API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "calendar-integration-timeslots",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get timeslots for provider on date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/providers/:provider_id/calendar/timeslots",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "The date for which to get timeslots in YYYY-MM-DD format. This parameter will match against the local date part of the time slot's `start_time`. For example, a timeslot with start_time of 2024-10-01T22:00 and time_zone of America/New_York is considered 2024-10-01 when querying timeslots, even though it resolves to 2024-10-02 in UTC."
+              },
+              {
+                "name": "next_page_token",
+                "value": "",
+                "type": "query",
+                "description": "A token to get the next set of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of objects to get in the response. For this endpoint, this is equivalent to page_size."
+              }
+            ]
+          },
+          "docs": "Get timeslots for a provider and date."
+        },
+        {
+          "info": {
+            "name": "Put provider calendar timeslots",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/providers/:provider_id/calendar/timeslots",
+            "params": [
+              {
+                "name": "provider_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "The date for which to put timeslots in YYYY-MM-DD format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint sets the complete list of available slots for a specific provider on a specific date. Each request must include the entire set of slots for that date. If a provider wishes to list times at multiple locations for a single date, each location must have its own timeslot object added to the array. A new request made for the same provider and date will overwrite the previous set of slots. If you send an empty array, all slots for that provider across all locations on that date will be d"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

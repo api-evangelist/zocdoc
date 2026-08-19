@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  version: '1.176'
-  title: API Documentation appointments insurance-reference API
-  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.
+  version: '1.177'
+  title: API Documentation insurance-reference API
+  description: Endpoints to retrieve insurance plans supported by Zocdoc.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
   description: Sandbox
@@ -122,11 +122,97 @@ paths:
           description: Not found
 components:
   schemas:
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    CareCategory:
+      type: string
+      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n\
+        \  * Dental: Dental Care\n  * Vision: Vision Care\n"
+      enum:
+      - health
+      - dental
+      - vision
+    CoverageArea:
+      type: object
+      required:
+      - is_national
+      properties:
+        is_national:
+          type: boolean
+        states:
+          type: array
+          description: The two letter state codes where the insurance plan has coverage. Will be null
+            when is_national true.
+          items:
+            type: string
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     ErrorType:
       type: string
       enum:
       - api_error
       - invalid_request
+    InsuranceCarrier:
+      type: object
+      description: The insurance carrier for the insurance plan
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Zocdoc id for insurance carrier
+        name:
+          type: string
+    InsuranceNetworkType:
+      type: string
+      description: "The type of insurance plan\n  * HMO: Health Maintenance Organization\n  * PPO: Preferred\
+        \ Provider Organization\n  * POS: Point-of-Service\n  * EPO: Exclusive Provider Organization\n\
+        \  * Indemnity: Traditional fee-for-service plans\n  * ASO: Administrative Services Only\n  *\
+        \ ACO: Accountable Care Organizations\n  * ACP: Accountable Care Program\n  * Medicare: Medicare\
+        \ Advantage plans\n  * Medicaid: Medicaid Managed Care plans\n  * Other\n  * Uncategorized: Uncategorized\
+        \ insurance plans\n"
+      enum:
+      - hmo
+      - ppo
+      - pos
+      - epo
+      - indemnity
+      - aso
+      - aco
+      - acp
+      - medicare
+      - medicaid
+      - other
+      - uncategorized
+      - hmo_pos
     InsurancePlan:
       type: object
       required:
@@ -161,14 +247,59 @@ components:
           $ref: '#/components/schemas/CoverageArea'
         ref_metadata:
           $ref: '#/components/schemas/ReferenceMetadata'
-    BaseResult:
-      required:
-      - request_id
+    InsurancePlanByIdResponse:
       type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/InsurancePlan'
+    InsurancePlansResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/InsurancePlan'
+    InsuranceProgramType:
+      type: string
+      enum:
+      - commercial
+      - commercial_exchange
+      - medicare
+      - medicaid
+      - workers_compensation
+      - uncategorized
+      - medicare_advantage
+      - medicaid_managed_care
+      - federal
+      description: "We've categorized plan types offered by each carrier into their associated programs:\n\
+        \  * Commercial: The most common plans offered by private companies. Providers contract directly\
+        \ with the private insurance company.\n  * ACA Marketplace (Commercial exchange): Plans available\
+        \ for patients to buy on online marketplaces under the Affordable Care Act. Providers contract\
+        \ with the insurance carrier offering the plan, not the marketplace itself.\n  * Medicare: Medicare\
+        \ advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved\
+        \ by Medicare. They provide coverage to individuals, families, and employer groups, typically\
+        \ through employer-sponsored plans.\n  * Medicaid: Medicaid Managed Care plans provide Medicaid\
+        \ benefits through contracted arrangements between state Medicaid agencies and a managed care\
+        \ organization (MCOs).\n  * Worker's Compensation: State-mandated programs for work-related injuries\
+        \ and illnesses. Providers contract with the employer or a state-designated agency.\n  * Uncategorized:\
+        \ Uncategorized insurance plans\n"
+    InsuranceStatus:
+      type: string
+      description: Status of the insurance plan
+      enum:
+      - inactive
+      - active
+      - deleted
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -191,132 +322,21 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    InsuranceCarrier:
-      type: object
-      description: The insurance carrier for the insurance plan
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: Zocdoc id for insurance carrier
-        name:
-          type: string
-    InsurancePlanByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/InsurancePlan'
-    InsuranceProgramType:
-      type: string
-      enum:
-      - commercial
-      - commercial_exchange
-      - medicare
-      - medicaid
-      - workers_compensation
-      - uncategorized
-      - medicare_advantage
-      - medicaid_managed_care
-      - federal
-      description: "We've categorized plan types offered by each carrier into their associated programs:\n  * Commercial: The most common plans offered by private companies. Providers contract directly with the private insurance company.\n  * ACA Marketplace (Commercial exchange): Plans available for patients to buy on online marketplaces under the Affordable Care Act. Providers contract with the insurance carrier offering the plan, not the marketplace itself.\n  * Medicare: Medicare advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved by Medicare. They provide coverage to individuals, families, and employer groups, typically through employer-sponsored plans.\n  * Medicaid: Medicaid Managed Care plans provide Medicaid benefits through contracted arrangements between state Medicaid agencies and a managed care organization (MCOs).\n  * Worker's Compensation: State-mandated programs for work-related injuries and illnesses. Providers contract with the employer or a state-designated agency.\n  * Uncategorized: Uncategorized insurance plans\n"
-    CoverageArea:
-      type: object
-      required:
-      - is_national
-      properties:
-        is_national:
-          type: boolean
-        states:
-          type: array
-          description: The two letter state codes where the insurance plan has coverage. Will be null when is_national true.
-          items:
-            type: string
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    CareCategory:
-      type: string
-      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
-      enum:
-      - health
-      - dental
-      - vision
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
     ReferenceMetadata:
       type: object
       properties:
         created_timestamp_utc:
           type: string
           format: date-time
-          description: Date & time of when the reference data was made in ISO-8601 format with a timezone offset representing UTC
+          description: Date & time of when the reference data was made in ISO-8601 format with a timezone
+            offset representing UTC
           example: '2022-04-27T09:00:00-00:00'
         last_updated_timestamp_utc:
           type: string
           format: date-time
-          description: Date & time of when the reference data was last updated in ISO-8601 format with a timezone offset representing UTC
+          description: Date & time of when the reference data was last updated in ISO-8601 format with
+            a timezone offset representing UTC
           example: '2022-04-27T09:00:00-00:00'
-    InsuranceNetworkType:
-      type: string
-      description: "The type of insurance plan\n  * HMO: Health Maintenance Organization\n  * PPO: Preferred Provider Organization\n  * POS: Point-of-Service\n  * EPO: Exclusive Provider Organization\n  * Indemnity: Traditional fee-for-service plans\n  * ASO: Administrative Services Only\n  * ACO: Accountable Care Organizations\n  * ACP: Accountable Care Program\n  * Medicare: Medicare Advantage plans\n  * Medicaid: Medicaid Managed Care plans\n  * Other\n  * Uncategorized: Uncategorized insurance plans\n"
-      enum:
-      - hmo
-      - ppo
-      - pos
-      - epo
-      - indemnity
-      - aso
-      - aco
-      - acp
-      - medicare
-      - medicaid
-      - other
-      - uncategorized
-      - hmo_pos
-    InsurancePlansResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/InsurancePlan'
-    InsuranceStatus:
-      type: string
-      description: Status of the insurance plan
-      enum:
-      - inactive
-      - active
-      - deleted
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2
@@ -331,12 +351,15 @@ components:
         clientCredentials:
           tokenUrl: https://auth.zocdoc.com/oauth/token
           scopes:
-            external.credential.rotate: Rotate the authenticated client secret.
             external.appointment.write: Book and modify appointments.
             external.appointment.read: Read basic details of your appointments.
             external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
             external.provider_insurance.write: Update the insurance accepted by a provider.
             external.schedulable_entity.read: Read schedulable entities.
+            external.booking_intent.write: Create and modify booking intents.
+            external.booking_intent.read: Read booking intents.
+            external.consent.read: Read your partner-connect consent grants.
+            external.partner_consent.write: Revoke your partner-connect consent grants.
     AuthorizationCodeFlow:
       type: oauth2
       description: 'Log in as a user. Client Secret is not necessary for this login flow.

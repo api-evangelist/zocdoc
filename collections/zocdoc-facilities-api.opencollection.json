@@ -1,0 +1,116 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments facilities API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "facilities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get facilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1-beta/facilities",
+            "params": [
+              {
+                "name": "npis",
+                "value": "",
+                "type": "query",
+                "description": "A comma-delimited list of Provider NPI numbers. A maximum of 50 items will be accepted at a time. One of `zip_code` or `npis` is required."
+              },
+              {
+                "name": "zip_code",
+                "value": "",
+                "type": "query",
+                "description": "A 5 digit zip code that will be used as the location to find facilities near by. One of `zip_code` or `npis` is required."
+              },
+              {
+                "name": "building_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of facility building, which can be Clinic or Hospital."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page."
+              },
+              {
+                "name": "visit_reason_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the visit reason to search by `zip_code` for. See [Reference Data](/guides/reference-data) for options."
+              },
+              {
+                "name": "insurance_plan_id",
+                "value": "",
+                "type": "query",
+                "description": "The Zocdoc ID of the patient's insurance plan to search by `zip_code` for. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans."
+              },
+              {
+                "name": "max_distance_to_patient_mi",
+                "value": "",
+                "type": "query",
+                "description": "The maximum distance in miles from the facility to the search location (the center point of the given `zip_code`). Default is 50 miles."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a set of facilities within the developer's network."
+        },
+        {
+          "info": {
+            "name": "Get facility by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1-beta/facilities/:facility_id",
+            "params": [
+              {
+                "name": "facility_id",
+                "value": "",
+                "type": "path",
+                "description": "Zocdoc facility id."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get facility by facility id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

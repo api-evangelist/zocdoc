@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  version: '1.177'
+  title: API Documentation reviews API
+  description: Endpoints to retrieve provider reviews and ratings.
+servers:
+- url: https://api-developer-sandbox.zocdoc.com
+  description: Sandbox
+- url: https://api-developer.zocdoc.com
+  description: Production
+tags:
+- name: reviews
+  description: Endpoints to retrieve provider reviews and ratings.
+  x-displayName: Reviews
+paths:
+  /v1/providers/{provider_id}/reviews:
+    get:
+      tags:
+      - reviews
+      description: Get review summary for a provider by their Zocdoc provider ID.
+      security:
+      - ClientCredentialsFlow: []
+      - AuthorizationCodeFlow: []
+      operationId: getProviderReviews
+      parameters:
+      - name: provider_id
+        in: path
+        description: The Zocdoc provider ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderReviewsResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Provider not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+      summary: Get reviews for a single provider
+  /v1/providers/reviews:
+    get:
+      tags:
+      - reviews
+      description: 'Get review summaries for up to 100 providers in a single call, by their
+
+        Zocdoc provider IDs. Duplicate IDs are collapsed; returns one item per
+
+        distinct requested ID, in request order. Providers that are unknown or
+
+        not accessible to the caller are returned with zero/null ratings.
+
+        '
+      security:
+      - ClientCredentialsFlow: []
+      - AuthorizationCodeFlow: []
+      operationId: getProviderReviewsBatch
+      parameters:
+      - name: provider_ids
+        in: query
+        required: true
+        description: A comma-delimited list of Zocdoc provider IDs to fetch review summaries for. Duplicate
+          IDs are collapsed; a maximum of 100 distinct items will be accepted at a time. IDs that are
+          unknown or not accessible to the caller are returned with zero reviews and null ratings (not
+          an error).
+        schema:
+          type: string
+          example: pr_xyz123,pr_abc456
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderReviewsBatchResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      summary: Get reviews for providers
+components:
+  schemas:
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    ProviderReviewsBatchResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            description: One item for each distinct requested provider_id, in request order.
+            items:
+              $ref: '#/components/schemas/ProviderReviewsData'
+    ProviderReviewsData:
+      type: object
+      required:
+      - provider_id
+      - total_reviews
+      properties:
+        provider_id:
+          type: string
+          description: The Zocdoc provider ID
+        total_reviews:
+          type: integer
+          description: Total number of reviews for the provider
+        average_overall_rating:
+          type: number
+          format: double
+          description: The average overall rating of the provider (1-5), rounded to 1 decimal place
+        average_bedside_rating:
+          type: number
+          format: double
+          description: The average bedside rating of the provider (1-5), rounded to 1 decimal place
+        average_wait_time_rating:
+          type: number
+          format: double
+          description: The average wait time rating of the provider (1-5), rounded to 1 decimal place
+    ProviderReviewsResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/ProviderReviewsData'
+  securitySchemes:
+    ClientCredentialsFlow:
+      type: oauth2
+      description: 'Machine to machine authentication (for use from client server to Zocdoc).
+
+        Production: `https://auth.zocdoc.com/oauth/token`
+
+        Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.zocdoc.com/oauth/token
+          scopes:
+            external.appointment.write: Book and modify appointments.
+            external.appointment.read: Read basic details of your appointments.
+            external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
+            external.provider_insurance.write: Update the insurance accepted by a provider.
+            external.schedulable_entity.read: Read schedulable entities.
+            external.booking_intent.write: Create and modify booking intents.
+            external.booking_intent.read: Read booking intents.
+            external.consent.read: Read your partner-connect consent grants.
+            external.partner_consent.write: Revoke your partner-connect consent grants.
+    AuthorizationCodeFlow:
+      type: oauth2
+      description: 'Log in as a user. Client Secret is not necessary for this login flow.
+
+        Production: `https://auth.zocdoc.com`
+
+        Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+
+        '
+      flows:
+        authorizationCode:
+          x-usePkce: true
+          tokenUrl: https://auth.zocdoc.com/oauth/token
+          authorizationUrl: https://auth.zocdoc.com/authorize
+          scopes:
+            external.appointment.write: Book and modify appointments.
+            external.appointment.read: Read basic details of your appointments.
+            external.schedulable_entity.read: Read schedulable entities.

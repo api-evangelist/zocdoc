@@ -1,0 +1,337 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "appointments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get appointments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results. A mimimum value of 0 and a maximum of 10 will be accepted."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page. A mimimum value of 1 and a maximum of 100 will be accepted."
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query",
+                "description": "A comma-delimited list of Zocodc appointment statuses to filter appointments by."
+              },
+              {
+                "name": "developer_patient_id",
+                "value": "",
+                "type": "query",
+                "description": "The patient identifier provided by 3P developer to filter appointments by."
+              },
+              {
+                "name": "sort_by",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort appointments by. Default is start_time."
+              },
+              {
+                "name": "sort_direction",
+                "value": "",
+                "type": "query",
+                "description": "The direction to sort appointments by. Default is descending."
+              },
+              {
+                "name": "practice_ids",
+                "value": "",
+                "type": "query",
+                "description": "The comma separated values of practice ids to filter appointments by"
+              },
+              {
+                "name": "provider_ids",
+                "value": "",
+                "type": "query",
+                "description": "The comma separated values of provider ids to filter appointments by"
+              },
+              {
+                "name": "location_ids",
+                "value": "",
+                "type": "query",
+                "description": "The comma separated values of location ids to filter appointments by"
+              },
+              {
+                "name": "start_time_utc_min",
+                "value": "",
+                "type": "query",
+                "description": "The minimum UTC start time of the appointments to fetch. Exclude appointments that start before this time."
+              },
+              {
+                "name": "start_time_utc_max",
+                "value": "",
+                "type": "query",
+                "description": "The maximum UTC start time of the appointments to fetch. Exclude appointments that start after this time."
+              },
+              {
+                "name": "created_time_utc_min",
+                "value": "",
+                "type": "query",
+                "description": "The minimum UTC created time of the appointments to fetch. Exclude appointments that were created before this time."
+              },
+              {
+                "name": "created_time_utc_max",
+                "value": "",
+                "type": "query",
+                "description": "The maximum UTC created time of the appointments to fetch. Exclude appointments that were created after this time."
+              },
+              {
+                "name": "last_modified_time_utc_min",
+                "value": "",
+                "type": "query",
+                "description": "The minimum UTC last modified time of the appointments to fetch. Exclude appointments that were last modified before this time."
+              },
+              {
+                "name": "last_modified_time_utc_max",
+                "value": "",
+                "type": "query",
+                "description": "The maximum UTC last modified time of the appointments to fetch. Exclude appointments that were last modified after this time."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint retrieves the paginated list of appointment details and statuses for the given credential. By default, appointments will be returned in descending order of start time.\n\nA maximum of 1,000 total appointments will be returned via pagination; if more are expected, use filters and batch requests.\n\nIf the request comes from a Zocdoc user credential, only appointments that user has created will be returned. If the request comes from a machine-to-machine credential, any appointments that "
+        },
+        {
+          "info": {
+            "name": "Create appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint is used for creating new appointments. Developers should gather the necessary information to pass in the request body as inputs for this endpoint. Only timeslots retrieved from the /v1/provider_locations/availability endpoint will be accepted. After an /appointments call is successfully processed, the system will return an appointment ID.\n\nThe `appointment_id` returned is used in the endpoint /v1/appointments/{appointment_id} to track the status of the appointment, and in the endpo"
+        },
+        {
+          "info": {
+            "name": "Get appointment by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/:appointment_id",
+            "params": [
+              {
+                "name": "appointment_id",
+                "value": "",
+                "type": "path",
+                "description": "The Zocdoc ID for the appointment."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint retrieves updated appointment details and the status of a single existing appointment. Developers must send a valid `appointment_id` as input in the request body, and Zocdoc returns the appointment details and status for that appointment. See [Appointment Status definitions](/guides/glossary).\n\nIf the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine creden"
+        },
+        {
+          "info": {
+            "name": "Get participants for appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/:appointment_id/participants",
+            "params": [
+              {
+                "name": "appointment_id",
+                "value": "",
+                "type": "path",
+                "description": "The Zocdoc id of the appointment"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint retrieves the participants of an appointment. Developers must provide a valid `appointment_id` as a path parameter, and Zocdoc returns the participants of that appointment.\n"
+        },
+        {
+          "info": {
+            "name": "Cancel appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/cancel",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint is used to request the cancellation of an appointment in a non-cancelled status. (Non-cancelled statuses include: pending_booking, booking_failed, confirmed, pending_reschedule, reschedule_failed and rescheduled)\n\nDevelopers must send a valid `appointment_id` as input in the request body and may choose to pass a cancellation reason using the standardized `cancellation_reason_type` field. The optional `cancellation_reason` field should only be used when the cancellation reason type "
+        },
+        {
+          "info": {
+            "name": "Confirm appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/confirm",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint is used to confirm an appointment in pending booking status. Developers must send a valid `appointment_id` as input in the request body.\n"
+        },
+        {
+          "info": {
+            "name": "Reschedule appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/reschedule",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint is used to only modify the appointment time and request the reschedule of an appointment in pending_booking, confirmed, pending_reschedule, or rescheduled status. Developers must send a valid `appointment_id` and a new start time as input in the request body.\n\nIf the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed"
+        },
+        {
+          "info": {
+            "name": "Create attachment for appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/:appointment_id/attachments",
+            "params": [
+              {
+                "name": "appointment_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint is used to upload attachment documents related to the appointment for the provider to view. You can upload more than one attachment with the same attachment_type for the same appointment_id if needed. The provider will be able to receive all uploaded attachments. \n\nOnly documents of type jpg, png, pdf, and docx are supported. Documents must be less than 100MB. You may not upload attachments to appointments in a failed state or over 7 days after the appointment.\n"
+        },
+        {
+          "info": {
+            "name": "Update appointment status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/appointments/update-status",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Use this endpoint to update the status of an appointment to either 'arrived' or 'no_show'.\n- `arrived`: Indicates the patient has arrived at the office.\n- `no_show`: Indicates the patient did not show up for their scheduled appointment. Appointment start time should be in the past but no older than 2 days to be marked as no_show.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

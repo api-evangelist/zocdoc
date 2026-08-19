@@ -1,0 +1,94 @@
+generated: '2026-08-15'
+method: searched
+source: https://api-docs.zocdoc.com/guides/webhooks
+spec_type: webhook-catalog
+asyncapi_published: false
+note: >-
+  Zocdoc publishes NO AsyncAPI document. Searched the docs host, the llms.txt
+  index, /asyncapi.yaml and /asyncapi.json on every host, and the
+  github.com/Zocdoc organization — nothing. What Zocdoc DOES publish is a real,
+  detailed webhook contract with HMAC signing, a documented payload, a retry
+  policy and a sandbox mock endpoint, so this file captures that event surface
+  as a catalog rather than fabricating an AsyncAPI. `webhooks:` is also absent
+  from the OpenAPI 3.0.0 document (3.0 has no webhooks keyword).
+transport: https
+subscription:
+  self_serve: false
+  mechanism: >-
+    The receiving URL is submitted to the Zocdoc API team out of band — there is
+    no registration endpoint and no subscription management API. HTTP is
+    permitted for sandbox receivers only.
+security:
+  scheme: hmac-sha256
+  header_signature: webhook-signature
+  header_timestamp: webhook-timestamp
+  timestamp_format: unix epoch seconds
+  timestamp_tolerance: 5 minutes (default)
+  signed_payload: '<webhook_timestamp>.<json payload>'
+  encoding: UTF-8 bytes, key supplied base64-encoded
+  signature_format: 'v1:<base64>;v2:<base64> — version-prefixed, semicolon-separated'
+  key_distribution: shared secret issued by the Zocdoc API team; any base64 string works in sandbox
+  note: >-
+    Zocdoc explicitly states the client MUST verify the signature manually, and
+    warns the payload schema may change at any time.
+delivery:
+  retries: true
+  strategy: exponential backoff
+  max_duration: 48 hours from first attempt
+  timeout: 5 seconds
+  retry_triggers:
+    - connection could not be established
+    - no response within 5 seconds
+    - connection severed before a response
+  status_code_based_retry: false
+  note: >-
+    Zocdoc does NOT retry based on the status code the receiver returns — a
+    receiver that answers 500 quickly gets no redelivery. Only transport-level
+    failures and timeouts are retried. Ordering and exactly-once are not
+    guaranteed or discussed.
+events:
+  - event_type: appointment_updated
+    data_type: appointment_data
+    description: >-
+      Fires on changes to appointments booked via /v1/appointments. For the
+      patient booking use case, notifications are sent ONLY for
+      provider-initiated changes — a partner must update its own state from the
+      API response for its own actions and must not wait for a webhook.
+    payload_fields:
+      - event_type
+      - webhook_timestamp
+      - data.data_type
+      - data.appointment_data.appointment_id
+      - data.appointment_data.appointment_updated_timestamp
+      - data.appointment_data.appointment_update_type
+      - data.appointment_data.changed_attributes[]
+    update_types:
+      - value: updated
+      - value: cancelled
+      - value: created
+        note: provider scheduling use case only
+    changed_attributes:
+      required_when: the webhook fires due to attribute changes
+      fields:
+        - attribute_path
+        - attachment_type
+      note: >-
+        Every object must carry at least `attribute_path`
+        (e.g. `appointment.start_time`); objects for
+        `patient.uploaded_attachments` must also carry `attachment_type`.
+    schemas:
+      - openapi/zocdoc-webhook-api-openapi.yml#/components/schemas/WebhookMockAppointmentData
+      - openapi/zocdoc-webhook-api-openapi.yml#/components/schemas/ChangedAttribute
+      - openapi/zocdoc-webhook-api-openapi.yml#/components/schemas/AppointmentUpdateType
+testing:
+  mock_endpoint: POST /v1/webhook/mock-request
+  operation_id: mockWebhookRequest
+  environment: sandbox
+  detail: sandbox/zocdoc-sandbox.yml
+event_count: 1
+gaps:
+  - Single event type — no provider, location, insurance or directory events.
+  - No AsyncAPI document, so the payload has no machine-readable schema outside the sandbox mock operation.
+  - No subscription management API; endpoints are registered by email.
+  - No delivery log, replay, or dead-letter surface.
+  - No documented event id, so receiver-side deduplication has nothing stable to key on.

@@ -1,0 +1,794 @@
+{
+  "item": [
+    {
+      "id": "d8f7919d-b65c-4148-807a-8593a233f523",
+      "name": "insurance-reference",
+      "description": {
+        "content": "Endpoints to retrieve insurance plans supported by Zocdoc.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a20fd561-d4ad-41d7-9f6f-379c81dc9d14",
+          "name": "Get insurance plans",
+          "request": {
+            "name": "Get insurance plans",
+            "description": {
+              "content": "Get insurance plans",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "insurance_plans"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The zero indexed page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>",
+                  "description": "The number of results to return per page. Default is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "The status of the insurance plan. Default is active."
+                },
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<string>",
+                  "description": "The two letter State code where the insurance plan has coverage."
+                },
+                {
+                  "disabled": false,
+                  "key": "network_type",
+                  "value": "<string>",
+                  "description": "The network type of the insurance plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "program_type",
+                  "value": "<string>",
+                  "description": "The program type of the insurance plan."
+                },
+                {
+                  "disabled": false,
+                  "key": "care_category",
+                  "value": "<string>",
+                  "description": "The care type of the insurance plan."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "45d42f6d-a3b9-41d0-a124-4a6db716e3f4",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "NY"
+                    },
+                    {
+                      "key": "network_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "care_category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"carrier\": {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"network_type\": \"<string>\",\n      \"program_type\": \"<string>\",\n      \"care_categories\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"status\": \"<string>\",\n      \"coverage_area\": {\n        \"is_national\": true,\n        \"states\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"ref_metadata\": {\n        \"created_timestamp_utc\": \"2022-04-27T09:00:00-00:00\",\n        \"last_updated_timestamp_utc\": \"2022-04-27T09:00:00-00:00\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"carrier\": {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"network_type\": \"<string>\",\n      \"program_type\": \"<string>\",\n      \"care_categories\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"status\": \"<string>\",\n      \"coverage_area\": {\n        \"is_national\": true,\n        \"states\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"ref_metadata\": {\n        \"created_timestamp_utc\": \"2022-04-27T09:00:00-00:00\",\n        \"last_updated_timestamp_utc\": \"2022-04-27T09:00:00-00:00\"\n      }\n    }\n  ],\n  \"next_url\": \"string\",\n  \"page\": 1704,\n  \"page_size\": 2877,\n  \"request_id\": \"string\",\n  \"total_count\": 6774\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83e3d09e-b2c2-48f9-b278-36892b2013dc",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "NY"
+                    },
+                    {
+                      "key": "network_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "care_category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27e774f7-d3c3-4dac-96cd-6072b6055fef",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "NY"
+                    },
+                    {
+                      "key": "network_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "care_category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6768ba62-de76-48ea-b503-501fc9baf1b2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "NY"
+                    },
+                    {
+                      "key": "network_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "care_category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e03877c4-0278-4d2f-93f7-0175c05af6aa",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "NY"
+                    },
+                    {
+                      "key": "network_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "program_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "care_category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "efd5d4d6-5009-48e2-9b03-180df335b1bb",
+          "name": "Get insurance plan by id",
+          "request": {
+            "name": "Get insurance plan by id",
+            "description": {
+              "content": "Get insurance plan by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "insurance_plans",
+                ":insurance_plan_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "insurance_plan_id",
+                  "description": "(Required) Zocdoc insurance plan id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ff25b9d1-e9e2-461a-8e03-9a64408dd90f",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans",
+                    ":insurance_plan_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "insurance_plan_id",
+                      "description": "(Required) Zocdoc insurance plan id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"carrier\": {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    \"network_type\": \"<string>\",\n    \"program_type\": \"<string>\",\n    \"care_categories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"status\": \"<string>\",\n    \"coverage_area\": {\n      \"is_national\": true,\n      \"states\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"ref_metadata\": {\n      \"created_timestamp_utc\": \"2022-04-27T09:00:00-00:00\",\n      \"last_updated_timestamp_utc\": \"2022-04-27T09:00:00-00:00\"\n    }\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "614a12d3-0edf-4487-9120-25253467dc21",
+              "name": "Invalid request parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans",
+                    ":insurance_plan_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "insurance_plan_id",
+                      "description": "(Required) Zocdoc insurance plan id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "067271d4-cca5-47f9-912e-f2257797f45d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans",
+                    ":insurance_plan_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "insurance_plan_id",
+                      "description": "(Required) Zocdoc insurance plan id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "293056b9-2d14-44b3-8cf3-3baf713effd6",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans",
+                    ":insurance_plan_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "insurance_plan_id",
+                      "description": "(Required) Zocdoc insurance plan id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b3b56c7e-4ab4-4cc7-8e26-e190b1a34d2d",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "insurance_plans",
+                    ":insurance_plan_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "insurance_plan_id",
+                      "description": "(Required) Zocdoc insurance plan id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-developer-sandbox.zocdoc.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0831d798-9dd2-4b69-8a95-70cf1199017b",
+    "name": "API Documentation appointments insurance-reference API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.",
+      "type": "text/plain"
+    }
+  }
+}

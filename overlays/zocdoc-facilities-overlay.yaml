@@ -1,0 +1,58 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Zocdoc facilities API
+  version: 1.0.0
+extends: openapi/zocdoc-facilities-api-openapi.yml
+x-generated: '2026-08-15'
+x-method: generated
+x-source: apis.yml + repo artifacts (conventions/, errors/, lifecycle/, sandbox/, authentication/, scopes/,
+  asyncapi/)
+x-note: Non-destructive. Records API Evangelist findings about the Zocdoc contract as x- extensions; the
+  harvested spec is never mutated. Every assertion below is sourced from an artifact in this repo.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: zocdoc
+    x-apievangelist-source: https://api-docs.zocdoc.com/_bundle/apis/index.yaml
+    x-apievangelist-harvested: '2026-08-15'
+    x-apievangelist-documentation: https://api-docs.zocdoc.com/guides
+    x-apievangelist-changelog: https://api-docs.zocdoc.com/changelog
+    x-apievangelist-conventions: conventions/zocdoc-conventions.yml
+    x-apievangelist-errors: errors/zocdoc-problem-types.yml
+    x-apievangelist-lifecycle: lifecycle/zocdoc-lifecycle.yml
+    x-apievangelist-sandbox: sandbox/zocdoc-sandbox.yml
+    x-apievangelist-data-model: data-model/zocdoc-data-model.yml
+    x-idempotency:
+      supported: false
+      note: No Idempotency-Key on any operation; retried booking POSTs are unprotected.
+    x-error-format:
+      rfc9457: false
+      envelope: ErrorResult
+      discriminator: error_type
+    x-rate-limit:
+      status: 429
+      published_limit: null
+      response_headers: null
+      strategy: exponential backoff
+      docs: https://api-docs.zocdoc.com/guides/performance
+    x-deprecation-policy:
+      published: false
+      sunset_header: false
+    x-status-page:
+      published: false
+- target: $.servers[?(@.description=="Sandbox")]
+  update:
+    x-environment: sandbox
+    x-token-url: https://auth-api-developer-sandbox.zocdoc.com/oauth/token
+    x-audience: https://api-developer-sandbox.zocdoc.com/
+    x-test-data: https://api-docs.zocdoc.com/guides/testing-data
+- target: $.servers[?(@.description=="Production")]
+  update:
+    x-environment: production
+    x-token-url: https://auth.zocdoc.com/oauth/token
+    x-audience: https://api-developer.zocdoc.com/
+    x-access: partner-onboarding; credentials issued by Zocdoc, no self-serve signup
+- target: $.paths.*.*[?(@.operationId)]
+  update:
+    x-agentic-access: agentic-access/zocdoc-agentic-access.yml
+    x-request-id-field: request_id

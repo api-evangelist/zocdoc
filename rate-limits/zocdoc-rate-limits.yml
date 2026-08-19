@@ -1,3 +1,23 @@
+generated: '2026-08-15'
+method: searched
+source: https://api-docs.zocdoc.com/guides/performance
+docs: https://api-docs.zocdoc.com/guides/performance
+limit_count: 0
+published_numeric_limit: false
+response_headers: []
+retry_after: false
+exhaustion_status: 429
+note: >-
+  Zocdoc documents that a rate limit EXISTS and what happens when you hit it
+  (HTTP 429, exponential backoff expected), but publishes no number, no window,
+  no burst allowance and — the part that matters most to an agent — NO runtime
+  signal. There is no RateLimit-*, no X-RateLimit-*, and no Retry-After header
+  anywhere in the docs, and 429 is not declared on any of the 32 operations in
+  the OpenAPI. A client cannot see how close it is to the ceiling, cannot know
+  when the window resets, and only learns the limit by breaching it.
+  limit_count is 0 because zero numeric limits are published; the entries below
+  after "General API Rate Limit" are payload/pagination CEILINGS, which Zocdoc
+  does publish, not request-rate limits.
 name: Zocdoc API Rate Limits
 description: >-
   Zocdoc API rate limits are applied to ensure stability and prevent abuse.
@@ -38,8 +58,8 @@ rateLimits:
     type: Performance
     scope: Request
     headers:
-      request: Content-Encoding: gzip
-      response: Accept-Encoding: gzip
+      request: 'Content-Encoding: gzip'
+      response: 'Accept-Encoding: gzip'
   - name: Default Page Size
     description: >-
       The schedulable entities endpoint has a default page_size of 5,000

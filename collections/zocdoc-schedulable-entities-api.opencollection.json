@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments schedulable-entities API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "schedulable-entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get schedulable entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/schedulable_entities",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results. A mimimum value of 0 will be accepted."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page. The default value is 5000. A mimimum value of 1 and a maximum of 10000 will be accepted."
+              },
+              {
+                "name": "schedule_types",
+                "value": "",
+                "type": "query",
+                "description": "The comma-delimited list of schedule types to include. Will return all schedule types if not provided."
+              },
+              {
+                "name": "recent_changes_72hrs",
+                "value": "",
+                "type": "query",
+                "description": "When true, only includes entities added or updated in the last 72 hours"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get the list of schedulable entities within the developer's Zocdoc directory (provider-locations, etc.) with availability information.\n\nNPIs can be used to search for providers in the /v1/providers endpoint to facilitate availability, discovery, and booking. Schedulable entity ids can be used to find provider-locations in the /v1/provider_locations/{provider_location_id} endpoint to facilitate availability, discovery, and booking.\n\nDevelopers can fetch the schedulable entities list and cache in "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,91 @@
+generated: '2026-08-15'
+method: searched
+source: https://api-docs.zocdoc.com/changelog
+versioning:
+  scheme: uri-path
+  current: v1
+  prerelease: v1-beta
+  document_version: '1.177'
+  document_version_observed: '2026-08-15'
+  changelog_format: Keep a Changelog
+  semver_claimed: true
+  docs: https://api-docs.zocdoc.com/changelog
+  note: >-
+    The changelog header states the project "adheres to Semantic Versioning",
+    but the versioned artefact is the OpenAPI DOCUMENT (1.176 -> 1.177), not the
+    API — the callable surface has been `/v1` throughout and no major-version
+    bump has ever been published. There is no version header, no date-pinning,
+    and no way for a client to pin the contract it was built against.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: []
+  note: >-
+    Zocdoc publishes NO deprecation policy, no notice period, and no RFC 8594
+    Sunset/Deprecation header support. No operation in the spec carries
+    `deprecated: true`. Removals are therefore silent — which is not
+    hypothetical here, see withdrawn_operations.
+withdrawn_operations:
+  - operation: rotateCredentials
+    path: /v1/credentials/rotate
+    tag: credentials
+    present_in: '1.176'
+    absent_from: '1.177'
+    evidence:
+      - url: https://api-docs.zocdoc.com/_bundle/apis/index.yaml
+        status: 200
+        finding: >-
+          Operation, its `credentials` tag, and its RotateCredentialBody /
+          RotateCredentialResult / RotateCredentialResultData schemas are absent
+          from the published 1.177 bundle.
+      - url: https://api-docs.zocdoc.com/apis/credentials/rotatecredentials.md
+        status: 404
+        finding: Reference page removed from the published docs.
+    changelog_entry: none
+    note: >-
+      The endpoint was ADDED to the security/scope documentation in March 2026
+      and its operationId was corrected in May 2026 — then it disappeared from
+      the published contract with no changelog entry, no `deprecated: true`
+      marker and no sunset notice. The 1.176 harvest is retained at
+      openapi/zocdoc-credentials-api-openapi.yml as the historical record. The
+      `external.credential.rotate` scope is still published in the auth
+      metadata.
+release_cadence:
+  observed: monthly
+  window_observed: 2025-08 through 2026-07
+  months_with_entries: 12
+  note: >-
+    Zocdoc has shipped a dated changelog entry every month for a year. Entries
+    are grouped Added / Improved. No "Removed", "Deprecated" or "Breaking"
+    section has ever appeared, which is why the credentials withdrawal above is
+    invisible in the changelog.
+breaking_changes_declared: 0
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  probes:
+    - url: https://status.zocdoc.com
+      status: 000
+      finding: DNS does not resolve.
+    - url: https://zocdoc.statuspage.io
+      status: 200
+      finding: >-
+        NOT a Zocdoc status page. Serves Atlassian's Statuspage marketing site
+        and /api/v2/status.json redirects to www.statuspage.io — the subdomain
+        is unclaimed, not a provisioned page.
+  note: >-
+    No public status page, no incident history, no uptime commitment. Zocdoc's
+    only operational-transparency surface is the changelog.
+support:
+  channel: partner contact form
+  url: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
+  faqs: https://api-docs.zocdoc.com/guides/faqs
+  note: >-
+    No public developer community, forum, Slack/Discord, or issue tracker.
+    Webhook endpoints must be registered by emailing the Zocdoc API team.

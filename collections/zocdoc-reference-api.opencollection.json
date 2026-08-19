@@ -1,0 +1,188 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API Documentation appointments reference API",
+    "version": "1.176"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "reference",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get active provider NPIs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/reference/npi",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results. A mimimum value of 0 will be accepted."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page. A mimimum value of 1 and a maximum of 60000 will be accepted."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves the list of active provider NPIs within the developer's Zocdoc directory. The NPIs retrieved here can be used to search for providers in the /v1/providers endpoint to facilitate availability, discovery, and booking.\n\nDevelopers can fetch the NPI list and cache in their system. The available NPIs do not change frequently. Pulling this data once a week and/or after known directory change events should be sufficient.\n"
+        },
+        {
+          "info": {
+            "name": "Get specialties",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/specialties",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results. Default is 0. Maximum is 200."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page. Default is 100. Maximum is 500."
+              },
+              {
+                "name": "care_category",
+                "value": "",
+                "type": "query",
+                "description": "Filter by care category"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get specialties with optional filtering by care category"
+        },
+        {
+          "info": {
+            "name": "Get specialty by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/specialties/:specialty_id",
+            "params": [
+              {
+                "name": "specialty_id",
+                "value": "",
+                "type": "path",
+                "description": "Zocdoc specialty id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get specialty by id"
+        },
+        {
+          "info": {
+            "name": "Get visit reasons",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/visit_reasons",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The zero indexed page of results. Default is 0. Maximum is 200."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return per page. Default is 100. Maximum is 500."
+              },
+              {
+                "name": "specialty_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by primary specialty id"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get visit reasons with optional filtering by specialty"
+        },
+        {
+          "info": {
+            "name": "Get visit reason by id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-developer-sandbox.zocdoc.com/v1/visit_reasons/:visit_reason_id",
+            "params": [
+              {
+                "name": "visit_reason_id",
+                "value": "",
+                "type": "path",
+                "description": "Zocdoc visit reason id (format `pc_*`, e.g. `pc_TlZW-r06U0W3pCsIGtSI5B`)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://auth.zocdoc.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get visit reason by id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

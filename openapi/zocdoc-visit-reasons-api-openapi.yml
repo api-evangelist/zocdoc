@@ -1,0 +1,238 @@
+openapi: 3.0.0
+info:
+  version: '1.177'
+  title: API Documentation visit-reasons API
+  description: Endpoints to retrieve visit reasons supported by Zocdoc.
+servers:
+- url: https://api-developer-sandbox.zocdoc.com
+  description: Sandbox
+- url: https://api-developer.zocdoc.com
+  description: Production
+tags:
+- name: visit-reasons
+  description: Endpoints to retrieve visit reasons supported by Zocdoc.
+  x-displayName: Visit Reasons
+paths:
+  /v1/visit_reasons:
+    get:
+      tags:
+      - visit-reasons
+      summary: Get visit reasons
+      description: Get visit reasons with optional filtering by specialty
+      security:
+      - ClientCredentialsFlow: []
+      - AuthorizationCodeFlow: []
+      operationId: getVisitReasons
+      parameters:
+      - name: page
+        in: query
+        description: The zero indexed page of results. Default is 0. Maximum is 200.
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 200
+      - name: page_size
+        in: query
+        description: The number of results to return per page. Default is 100. Maximum is 500.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+      - name: specialty_id
+        in: query
+        description: Filter by primary specialty id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitReasonsResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /v1/visit_reasons/{visit_reason_id}:
+    get:
+      tags:
+      - visit-reasons
+      summary: Get visit reason by id
+      description: Get visit reason by id
+      security:
+      - ClientCredentialsFlow: []
+      - AuthorizationCodeFlow: []
+      operationId: getVisitReasonById
+      parameters:
+      - name: visit_reason_id
+        in: path
+        required: true
+        description: Zocdoc visit reason id (format `pc_*`, e.g. `pc_TlZW-r06U0W3pCsIGtSI5B`).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitReasonByIdResponse'
+        '400':
+          description: Invalid request parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+components:
+  schemas:
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    PaginatedBaseResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - page
+        - page_size
+        - total_count
+        - next_url
+        properties:
+          page:
+            description: The zero based index of the current page.
+            type: integer
+          page_size:
+            description: The size of the current page.
+            type: integer
+          total_count:
+            description: The total number of result items.
+            type: integer
+          next_url:
+            description: A link to the next page of results; null if this is the last page of results.
+            type: string
+    VisitReasonByIdResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/VisitReasonData'
+    VisitReasonData:
+      type: object
+      required:
+      - id
+      - name
+      - specialty_id
+      properties:
+        id:
+          type: string
+          description: Zocdoc visit reason id
+        name:
+          type: string
+        specialty_id:
+          type: string
+          description: Zocdoc specialty id this visit reason belongs to
+    VisitReasonsResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/VisitReasonData'
+  securitySchemes:
+    ClientCredentialsFlow:
+      type: oauth2
+      description: 'Machine to machine authentication (for use from client server to Zocdoc).
+
+        Production: `https://auth.zocdoc.com/oauth/token`
+
+        Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.zocdoc.com/oauth/token
+          scopes:
+            external.appointment.write: Book and modify appointments.
+            external.appointment.read: Read basic details of your appointments.
+            external.anonymous_token.write: Create anonymous tokens used for discovery endpoints.
+            external.provider_insurance.write: Update the insurance accepted by a provider.
+            external.schedulable_entity.read: Read schedulable entities.
+            external.booking_intent.write: Create and modify booking intents.
+            external.booking_intent.read: Read booking intents.
+            external.consent.read: Read your partner-connect consent grants.
+            external.partner_consent.write: Revoke your partner-connect consent grants.
+    AuthorizationCodeFlow:
+      type: oauth2
+      description: 'Log in as a user. Client Secret is not necessary for this login flow.
+
+        Production: `https://auth.zocdoc.com`
+
+        Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+
+        '
+      flows:
+        authorizationCode:
+          x-usePkce: true
+          tokenUrl: https://auth.zocdoc.com/oauth/token
+          authorizationUrl: https://auth.zocdoc.com/authorize
+          scopes:
+            external.appointment.write: Book and modify appointments.
+            external.appointment.read: Read basic details of your appointments.
+            external.schedulable_entity.read: Read schedulable entities.

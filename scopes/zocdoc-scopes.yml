@@ -1,9 +1,14 @@
-generated: '2026-07-11'
+generated: '2026-08-15'
 method: derived
-source: openapi/zocdoc-zocdoc-api-openapi.yml
+source: openapi/zocdoc-appointments-api-openapi.yml, openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml,
+  openapi/zocdoc-credentials-api-openapi.yml, openapi/zocdoc-facilities-api-openapi.yml, openapi/zocdoc-insurance-reference-api-openapi.yml,
+  openapi/zocdoc-provider-locations-api-openapi.yml, openapi/zocdoc-providers-api-openapi.yml,
+  openapi/zocdoc-reference-api-openapi.yml, openapi/zocdoc-reviews-api-openapi.yml, openapi/zocdoc-schedulable-entities-api-openapi.yml,
+  openapi/zocdoc-specialties-api-openapi.yml, openapi/zocdoc-visit-reasons-api-openapi.yml,
+  openapi/zocdoc-webhook-api-openapi.yml
 schemes:
 - name: ClientCredentialsFlow
-  source: openapi/zocdoc-zocdoc-api-openapi.yml
+  source: openapi/zocdoc-appointments-api-openapi.yml
   flows:
   - flow: clientCredentials
     tokenUrl: https://auth.zocdoc.com/oauth/token
@@ -12,7 +17,235 @@ schemes:
     Production: `https://auth.zocdoc.com/oauth/token`
     Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
 - name: AuthorizationCodeFlow
-  source: openapi/zocdoc-zocdoc-api-openapi.yml
+  source: openapi/zocdoc-appointments-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-credentials-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-credentials-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-facilities-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-facilities-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-insurance-reference-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-insurance-reference-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-provider-locations-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-provider-locations-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-providers-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-providers-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-reference-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-reference-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-reviews-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-reviews-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-schedulable-entities-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-schedulable-entities-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-specialties-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-specialties-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-visit-reasons-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-visit-reasons-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.zocdoc.com/authorize
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Log in as a user. Client Secret is not necessary for this login flow.
+    Production: `https://auth.zocdoc.com`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com`
+- name: ClientCredentialsFlow
+  source: openapi/zocdoc-webhook-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth.zocdoc.com/oauth/token
+  description: |-
+    Machine to machine authentication (for use from client server to Zocdoc).
+    Production: `https://auth.zocdoc.com/oauth/token`
+    Sandbox: `https://auth-api-developer-sandbox.zocdoc.com/oauth/token`
+- name: AuthorizationCodeFlow
+  source: openapi/zocdoc-webhook-api-openapi.yml
   flows:
   - flow: authorizationCode
     authorizationUrl: https://auth.zocdoc.com/authorize
@@ -27,37 +260,165 @@ scopes:
   flows:
   - clientCredentials
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
 - scope: external.appointment.read
   description: Read basic details of your appointments.
   flows:
   - authorizationCode
   - clientCredentials
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
 - scope: external.appointment.write
   description: Book and modify appointments.
   flows:
   - authorizationCode
   - clientCredentials
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
+- scope: external.booking_intent.read
+  description: Read booking intents.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
+- scope: external.booking_intent.write
+  description: Create and modify booking intents.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
+- scope: external.consent.read
+  description: Read your partner-connect consent grants.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
 - scope: external.credential.rotate
   description: Rotate the authenticated client secret.
   flows:
   - clientCredentials
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+- scope: external.partner_consent.write
+  description: Revoke your partner-connect consent grants.
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
 - scope: external.provider_insurance.write
   description: Update the insurance accepted by a provider.
   flows:
   - clientCredentials
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml
 - scope: external.schedulable_entity.read
   description: Read schedulable entities.
   flows:
   - authorizationCode
   - clientCredentials
   sources:
-  - openapi/zocdoc-zocdoc-api-openapi.yml
+  - openapi/zocdoc-appointments-api-openapi.yml
+  - openapi/zocdoc-calendar-integration-timeslots-api-openapi.yml
+  - openapi/zocdoc-credentials-api-openapi.yml
+  - openapi/zocdoc-facilities-api-openapi.yml
+  - openapi/zocdoc-insurance-reference-api-openapi.yml
+  - openapi/zocdoc-provider-locations-api-openapi.yml
+  - openapi/zocdoc-providers-api-openapi.yml
+  - openapi/zocdoc-reference-api-openapi.yml
+  - openapi/zocdoc-reviews-api-openapi.yml
+  - openapi/zocdoc-schedulable-entities-api-openapi.yml
+  - openapi/zocdoc-specialties-api-openapi.yml
+  - openapi/zocdoc-visit-reasons-api-openapi.yml
+  - openapi/zocdoc-webhook-api-openapi.yml

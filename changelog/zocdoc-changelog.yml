@@ -1,0 +1,76 @@
+generated: '2026-08-15'
+method: searched
+source: https://api-docs.zocdoc.com/changelog
+machine_readable_source: https://api-docs.zocdoc.com/changelog.md
+scheme: dated-monthly
+format: Keep a Changelog
+current_version: '1.177'
+current_version_source: https://api-docs.zocdoc.com/_bundle/apis/index.yaml
+sections_used: [Added, Improved]
+sections_never_used: [Removed, Deprecated, Fixed, Security, Breaking]
+note: >-
+  A real, well-maintained, dated changelog covering twelve consecutive months.
+  Its blind spot is removals: the file has no Removed/Deprecated section and the
+  withdrawal of /v1/credentials/rotate between 1.176 and 1.177 is not recorded
+  anywhere in it (see lifecycle/zocdoc-lifecycle.yml). Entries below are the
+  recent window, verbatim in substance from the provider's own page.
+entries:
+  - date: '2026-07'
+    breaking: false
+    added:
+      - '`main_specialty_id` (sp_<id>) and `main_specialty_name` on the schedulable entity object.'
+      - 'Get Provider Reviews Batch — GET /v1/providers/reviews — review summaries for up to 100 providers in one call.'
+      - '409 Conflict documented on Get Providers and Get Availability.'
+    improved:
+      - 'Reference Data split into separate Specialties and Visit Reasons sections in the docs navigation.'
+  - date: '2026-06'
+    breaking: false
+    added:
+      - '`phone_number` and `phone_extension` on the location object (null for certain API products).'
+      - '`time_zone` (IANA, e.g. America/New_York) on location and availability objects.'
+      - 'Reference Data endpoints: GET /v1/specialties, GET /v1/specialties/{specialty_id}, GET /v1/visit_reasons, GET /v1/visit_reasons/{visit_reason_id}.'
+      - '`latitude` / `longitude` query params on Get Providers, returning `distance` and `is_nearest_match` per physical location.'
+    improved:
+      - '`notes` on appointment objects now enforces a 100-character maximum.'
+      - 'schedulable entities `page_size` default 60,000 -> 5,000, max 60,000 -> 10,000.'
+  - date: '2026-05'
+    breaking: false
+    added:
+      - '`provider_id` on the base provider object, returned everywhere provider data is.'
+      - '`source` on the appointment object (booking channel, e.g. "Zocdoc Marketplace", "Your website").'
+      - 'Attachment types `patient_front_insurance_card` and `patient_back_insurance_card`.'
+      - 'Insurance plan types `hmo_pos`, `medicare_advantage`, `medicaid_managed_care`, `federal`.'
+      - 'PUT timeslots now returns a response body with error details for unknown location IDs.'
+    improved:
+      - 'Attachment upload limit raised 10MB -> 100MB.'
+      - 'Timeslots `page_size` range enforced at 1–10,000.'
+      - 'operationId corrected: rotateCredential -> rotateCredentials.'
+  - date: '2026-03'
+    breaking: false
+    added:
+      - 'Provider Reviews endpoint GET /v1/providers/{provider_id}/reviews (requires the scope to be enabled on your client).'
+      - 'Security requirement and OAuth scope on POST /v1/credentials/rotate.'
+    improved:
+      - 'Clarified that for the patient booking use case, webhooks fire only for provider-initiated changes.'
+      - 'Corrected the API server URLs shown in the docs (sandbox and production).'
+  - date: '2026-01'
+    breaking: false
+    added:
+      - '`profile_url` on the provider object.'
+  - date: '2025-11'
+    breaking: false
+    added:
+      - '`insurance_carrier_id`, `insurance_plan_id` and `published_context` on GET /v1/provider_locations/availability for syndication use cases.'
+  - date: '2025-09'
+    breaking: false
+    added:
+      - 'Full launch of GET /v1/schedulable_entities.'
+      - 'Schedulable Entities Feed guide.'
+  - date: '2025-08'
+    breaking: false
+    added:
+      - 'gzip compression on both request and response bodies.'
+      - '`booking_url` on the Timeslot object.'
+      - 'FAQ section in the documentation.'
+    improved:
+      - 'Availability max range expanded to 31 days.'

@@ -1,0 +1,120 @@
+generated: '2026-08-15'
+method: probed
+source: live GET of /.well-known/* on every apis.yml host and OpenAPI servers[] host
+note: >-
+  Only auth.zocdoc.com serves a real /.well-known document. The API hosts
+  (api-developer.zocdoc.com, api-developer-sandbox.zocdoc.com) 404 every path.
+  api-docs.zocdoc.com answers /.well-known/oauth-authorization-server with the
+  Redocly documentation platform's OWN authorization server
+  (issuer https://auth.cloud.redocly.com) — that document belongs to Redocly,
+  the docs vendor, not to Zocdoc, so it is recorded but NOT saved as a Zocdoc
+  artifact. developer.zocdoc.com answers 200 with an HTML SPA shell for every
+  /.well-known/* path (including agent-card.json and agent.json) — a catch-all,
+  not a document; treated as a miss.
+hosts:
+  - host: https://auth.zocdoc.com
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        content_type: application/json
+        file: zocdoc-openid-configuration.json
+        note: >-
+          Real OIDC discovery document. issuer https://auth.zocdoc.com/,
+          Auth0-operated on Zocdoc's own domain. Confirms the authorization,
+          token, jwks, revocation and device-code endpoints the OpenAPI
+          securitySchemes reference.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: application/json
+        note: >-
+          Byte-identical to the openid-configuration document (RFC 8414 alias);
+          not saved twice.
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://api-developer.zocdoc.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://api-docs.zocdoc.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: application/json
+        saved: false
+        note: >-
+          Third-party document. issuer https://auth.cloud.redocly.com — the
+          Redocly docs platform hosting api-docs.zocdoc.com. Not a Zocdoc
+          authorization server; not credited to Zocdoc.
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://www.zocdoc.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+        note: Bot challenge — www.zocdoc.com returns 403 to every non-browser client.
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://developer.zocdoc.com
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 200
+        saved: false
+        note: >-
+          HTML SPA catch-all (334 KB of `<!doctype html>`), not JSON. Rejected
+          per the A2A probe rule — no agent card exists.
+      - path: /.well-known/agent.json
+        status: 200
+        saved: false
+        note: Same HTML SPA catch-all.
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        saved: false
+        note: Same HTML SPA catch-all.
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403

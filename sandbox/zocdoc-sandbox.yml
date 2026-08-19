@@ -1,0 +1,147 @@
+generated: '2026-08-15'
+method: searched
+source: https://api-docs.zocdoc.com/guides/testing-data
+docs:
+  testing: https://api-docs.zocdoc.com/guides/testing-data
+  authentication: https://api-docs.zocdoc.com/guides/authentication
+  webhooks: https://api-docs.zocdoc.com/guides/webhooks
+note: >-
+  Zocdoc publishes a genuinely strong sandbox: a fully separate environment with
+  its own credentials and its own authorization server, plus a published table
+  of magic identifiers that force every appointment status and every error class
+  deterministically. Every value below is quoted verbatim from Zocdoc's own
+  testing-data page — none are invented. There are no "test cards" here; the
+  payments-shaped equivalent is the magic `pr_*|lo_*` provider-location ids and
+  the fixed appointment UUIDs.
+environments:
+  - mode: sandbox
+    base_url: https://api-developer-sandbox.zocdoc.com
+    token_url: https://auth-api-developer-sandbox.zocdoc.com/oauth/token
+    audience_m2m: https://api-developer-sandbox.zocdoc.com/
+    audience_user: DeveloperApiPatient-Sandbox
+    credentials: separate client_id / client_secret issued per partner
+    self_serve: false
+  - mode: production
+    base_url: https://api-developer.zocdoc.com
+    token_url: https://auth.zocdoc.com/oauth/token
+    audience_m2m: https://api-developer.zocdoc.com/
+    audience_user: DeveloperApiPatient
+    credentials: separate client_id / client_secret issued per partner
+    self_serve: false
+separation:
+  key_prefixes: none
+  mechanism: >-
+    Separate hosts, separate authorization servers and separate audiences rather
+    than a key prefix. A token minted for one environment is rejected by the
+    other — Zocdoc names this mismatch as the first thing to check on a 401.
+  credential_distribution: >-
+    Sandbox secrets may be distributed to developers; production secrets are
+    restricted to secure backend services (Zocdoc's stated policy).
+test_clocks: false
+time_simulation: false
+magic_values:
+  - surface: GET /v1/providers
+    parameter: npis
+    values:
+      - {value: npi_error, effect: 500 error response}
+      - {value: npi_missing, effect: no matching providers}
+      - {value: npi_multipleproviders, effect: multiple matching providers}
+      - {value: npi_multiplelocations, effect: provider with multiple locations}
+      - {value: npi_allvirtual, effect: provider with one virtual location}
+      - {value: npi_hasvirtual, effect: provider with both in-person and virtual locations}
+      - {value: npi_insuranceIdRequired, effect: provider requiring insurance member id and plan id}
+  - surface: GET /v1/provider_locations
+    parameter: zip_code
+    values:
+      - {value: '10112', effect: 500 error response}
+      - {value: '99734', effect: no matching provider locations}
+      - {value: '11201', effect: response includes booking requirements}
+  - surface: provider_location_id (multiple endpoints)
+    parameter: provider_location_id
+    values:
+      - {value: pr_error / lo_error, effect: 500 error response}
+      - {value: pr_missing / lo_missing, effect: 404 error response}
+      - {value: pr_insuranceIdIsRequired / lo_insuranceIdIsRequired, effect: returns booking requirements; 400 on book if insurance omitted}
+      - {value: pr_selfPayNotAccepted / lo_selfPayNotAccepted, effect: self-pay refused; 400 on book when is_self_pay true}
+      - {value: pr_acceptsInNetworkOnly / lo_acceptsInNetworkOnly, effect: in-network only; 400 on book when a plan is supplied}
+      - {value: pr_no_availbility / lo_no_availbility, effect: availability returns empty (Zocdoc's spelling)}
+      - {value: pr_noAcceptedInsurancePla / lo_noAcceptedInsurancePla, effect: empty insurance mappings}
+      - {value: pr_allInsurancePlansAccep / lo_allInsurancePlansAccep, effect: full insurance mappings; 202 on mapping update}
+      - {value: pr_ip_mapping_level_prac / lo_ip_mapping_level_prac, effect: 409 — mappings managed at practice level}
+      - {value: pr_ip_mapping_level_prov / lo_ip_mapping_level_prov, effect: 409 — mappings managed at provider level}
+  - surface: POST /v1/appointments — status forcing
+    parameter: provider_location_id
+    values:
+      - {value: pr_pending / lo_pending, effect: returns a pending_booking appointment}
+      - {value: pr_confirmed / lo_confirmed, effect: returns a confirmed appointment}
+      - {value: pr_bookingfailed / lo_bookingfailed, effect: returns a booking_failed appointment}
+      - {value: pr_cancelled / lo_cancelled, effect: returns a cancelled appointment}
+      - {value: pr_noshow / lo_noshow, effect: returns a no_show appointment}
+      - {value: pr_pendingreschedule / lo_pendingreschedule, effect: returns a pending_reschedule appointment}
+      - {value: pr_rescheduled / lo_rescheduled, effect: returns a rescheduled appointment}
+      - {value: pr_reschedulefailed / lo_reschedulefailed, effect: returns a reschedule_failed appointment}
+  - surface: GET /v1/insurance_plans/{insurance_plan_id}
+    parameter: insurance_plan_id
+    values:
+      - {value: ip_0, effect: 400 on search endpoints / 404 on direct lookup}
+      - {value: ip_5432, effect: national coverage plan}
+      - {value: ip_2345, effect: CA state coverage}
+      - {value: ip_2052, effect: Medicare plan}
+      - {value: ip_8281, effect: Medicaid plan}
+      - {value: ip_9111, effect: active status}
+      - {value: ip_2667, effect: inactive status}
+      - {value: ip_5292, effect: deleted status}
+      - {value: ip_2600, effect: health plan}
+      - {value: ip_6501, effect: dental plan}
+      - {value: ip_5907, effect: vision plan}
+  - surface: GET /v1/insurance_plans
+    parameter: state
+    values:
+      - {value: AK, effect: empty list of plans}
+  - surface: GET /v1-beta/facilities
+    parameter: npis
+    values:
+      - {value: '2988113970', effect: NPI corresponding to one facility}
+      - {value: '5884143085', effect: NPI corresponding to multiple facilities}
+  - surface: PUT /v1/schedulable_entities/overlaps
+    parameter: npi
+    values:
+      - {value: npi_overlaps_not_found, effect: schedulable status NotSchedulable}
+      - {value: npi_overlaps_pending, effect: schedulable status AddedToQueue}
+fixture_appointments:
+  note: Fixed appointment UUIDs that always return the stated status in sandbox.
+  values:
+    - {appointment_id: 2b29f79b-6d7f-472a-9603-d0c378bc9531, status: pending_booking, provider_location: pr_pending/lo_pending, visit_reason: pc_FRO-18leckytNKtruw5dLR}
+    - {appointment_id: d2ee5bd8-643a-42c8-8c5a-be450e903430, status: confirmed (new patient), provider_location: pr_confirmed/lo_confirmed, visit_reason: pc_TlZW-r06U0W3pCsIGtSI5B}
+    - {appointment_id: 423e6a11-8dac-4873-b933-d8d02f9a370f, status: confirmed (existing patient), provider_location: pr_confirmed/lo_confirmed, visit_reason: pc_TlZW-r06U0W3pCsIGtSI5B}
+    - {appointment_id: 34e4ead3-ca69-4448-9438-58702dd1048f, status: booking_failed, provider_location: pr_bookingfailed/lo_bookingfailed, visit_reason: pc_zZWhkaURvEGlZpSimNILaB}
+    - {appointment_id: 21990114-ea71-4d7d-9d1e-00c43ae44bcd, status: cancelled, provider_location: pr_cancelled/lo_cancelled, visit_reason: pc_p1KdCTTzuU6A04ZjEt837x}
+    - {appointment_id: a0a7770d-e667-416c-9f06-9c3b40a7bb84, status: no_show, provider_location: pr_noshow/lo_noshow, visit_reason: pc_T1T3MOA0kUuE201i1ZfIWR}
+    - {appointment_id: 63f995c2-49c4-40c8-a93a-140fb32e913b, status: pending_reschedule, provider_location: pr_pendingreschedule/lo_pendingreschedule, visit_reason: pc_FRO-18leckytNKtruw5dLR}
+    - {appointment_id: 8507d05f-cbe5-4732-b72a-22add9c80120, status: rescheduled, provider_location: pr_rescheduled/lo_rescheduled, visit_reason: pc_peZqujk5w0jL8SblyLoIoz}
+    - {appointment_id: 84d04f67-b2cf-4afd-ab64-193072498ed5, status: reschedule_failed, provider_location: pr_reschedulefailed/lo_reschedulefailed, visit_reason: pc_PS_BTW9rmkuIfaIH_Hxdwg}
+  errors:
+    - {appointment_id: 83f5cf14-3eb1-4034-be1f-e7c3058aad21, effect: 404 error response}
+    - {appointment_id: dc69a428-8a73-461b-bd7b-df755910a3fb, effect: 500 error response}
+    - {appointment_id: 08399012-db42-4f0b-92a5-4fbceffcbd58, effect: returns multiple existing attachments}
+  applies_to:
+    - GET /v1/appointments
+    - GET /v1/appointments/{appointment_id}
+    - POST /v1/appointments/cancel
+    - POST /v1/appointments/reschedule
+    - POST /v1/appointments/{appointment_id}/attachments
+webhook_simulation:
+  endpoint: POST /v1/webhook/mock-request
+  operation_id: mockWebhookRequest
+  environment: sandbox only
+  inputs: [webhook_url, webhook_key, appointment_update_type]
+  http_allowed: true
+  note: >-
+    Sandbox is the only place Zocdoc permits a plain-HTTP webhook receiver, and
+    the only place any base64 string works as the signing key. Zocdoc's docs
+    name webhook.site as an acceptable receiver and publish an example sandbox
+    key value in the guide.
+gaps:
+  - No self-serve sandbox signup — credentials are issued by Zocdoc per partner.
+  - No test clocks / time travel; availability windows are relative to real time.
+  - No fixture reset or seed-data API.

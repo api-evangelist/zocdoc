@@ -1,0 +1,3401 @@
+{
+  "item": [
+    {
+      "id": "43af08f3-d9d4-418e-b324-3c8ad2cd9751",
+      "name": "appointments",
+      "description": {
+        "content": "Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "55ee52b8-8d8a-40fa-85a9-8d39fb5f9e01",
+          "name": "Create appointment",
+          "request": {
+            "name": "Create appointment",
+            "description": {
+              "content": "This endpoint is used for creating new appointments. Developers should gather the necessary information to pass in the request body as inputs for this endpoint. Only timeslots retrieved from the /v1/provider_locations/availability endpoint will be accepted. After an /appointments call is successfully processed, the system will return an appointment ID.\n\nThe `appointment_id` returned is used in the endpoint /v1/appointments/{appointment_id} to track the status of the appointment, and in the endpoint /v1/appointments/cancel to cancel an appointment.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_type\": \"<string>\",\n  \"data\": {\n    \"start_time\": \"<dateTime>\",\n    \"visit_reason_id\": \"<string>\",\n    \"provider_location_id\": \"<string>\",\n    \"patient\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"sex_at_birth\": \"<string>\",\n      \"phone_number\": \"<string>\",\n      \"email_address\": \"<string>\",\n      \"patient_address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"zip_code\": \"<string>\",\n        \"address2\": \"<string>\"\n      },\n      \"patient_id\": \"<string>\",\n      \"developer_patient_id\": \"<string>\",\n      \"insurance\": {\n        \"insurance_plan_id\": \"<string>\",\n        \"insurance_group_number\": \"<string>\",\n        \"insurance_member_id\": \"<string>\",\n        \"is_self_pay\": \"<boolean>\"\n      },\n      \"gender\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"patient_type\": \"<string>\",\n    \"notes\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ba002fb4-3fb1-4549-90f1-e9bf87787318",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_type\": \"<string>\",\n  \"data\": {\n    \"start_time\": \"2022-04-27T09:00:00-04:00\",\n    \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n    \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n    \"patient\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"sex_at_birth\": \"<string>\",\n      \"phone_number\": \"9999999999\",\n      \"email_address\": \"test@example.com\",\n      \"patient_address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"NY\",\n        \"zip_code\": \"<string>\",\n        \"address2\": \"<string>\"\n      },\n      \"patient_id\": \"<string>\",\n      \"developer_patient_id\": \"<string>\",\n      \"insurance\": {\n        \"insurance_plan_id\": \"ip_2224\",\n        \"insurance_group_number\": \"<string>\",\n        \"insurance_member_id\": \"<string>\",\n        \"is_self_pay\": \"<boolean>\"\n      },\n      \"gender\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"patient_type\": \"new\",\n    \"notes\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_id\": \"string\",\n    \"appointment_status\": \"no_show\",\n    \"confirmation_type\": \"pending_evaluation\",\n    \"is_provider_resource\": false,\n    \"visit_type\": \"third_party_video_service\",\n    \"developer_patient_id\": \"string\",\n    \"location_phone_number\": \"9999999999\",\n    \"location_phone_extension\": \"string\",\n    \"waiting_room_path\": \"string\",\n    \"notes\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39f3c6d5-2709-4258-944a-216ec6777206",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_type\": \"<string>\",\n  \"data\": {\n    \"start_time\": \"2022-04-27T09:00:00-04:00\",\n    \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n    \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n    \"patient\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"sex_at_birth\": \"<string>\",\n      \"phone_number\": \"9999999999\",\n      \"email_address\": \"test@example.com\",\n      \"patient_address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"NY\",\n        \"zip_code\": \"<string>\",\n        \"address2\": \"<string>\"\n      },\n      \"patient_id\": \"<string>\",\n      \"developer_patient_id\": \"<string>\",\n      \"insurance\": {\n        \"insurance_plan_id\": \"ip_2224\",\n        \"insurance_group_number\": \"<string>\",\n        \"insurance_member_id\": \"<string>\",\n        \"is_self_pay\": \"<boolean>\"\n      },\n      \"gender\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"patient_type\": \"new\",\n    \"notes\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f00dd575-903e-4fb2-8a7d-993972e5a9ef",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_type\": \"<string>\",\n  \"data\": {\n    \"start_time\": \"2022-04-27T09:00:00-04:00\",\n    \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n    \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n    \"patient\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"sex_at_birth\": \"<string>\",\n      \"phone_number\": \"9999999999\",\n      \"email_address\": \"test@example.com\",\n      \"patient_address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"NY\",\n        \"zip_code\": \"<string>\",\n        \"address2\": \"<string>\"\n      },\n      \"patient_id\": \"<string>\",\n      \"developer_patient_id\": \"<string>\",\n      \"insurance\": {\n        \"insurance_plan_id\": \"ip_2224\",\n        \"insurance_group_number\": \"<string>\",\n        \"insurance_member_id\": \"<string>\",\n        \"is_self_pay\": \"<boolean>\"\n      },\n      \"gender\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"patient_type\": \"new\",\n    \"notes\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c7b98b76-317f-4f35-9973-8817ef535637",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_type\": \"<string>\",\n  \"data\": {\n    \"start_time\": \"2022-04-27T09:00:00-04:00\",\n    \"visit_reason_id\": \"pc_FRO-18leckytNKtruw5dLR\",\n    \"provider_location_id\": \"pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890\",\n    \"patient\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"date_of_birth\": \"<date>\",\n      \"sex_at_birth\": \"<string>\",\n      \"phone_number\": \"9999999999\",\n      \"email_address\": \"test@example.com\",\n      \"patient_address\": {\n        \"address1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"NY\",\n        \"zip_code\": \"<string>\",\n        \"address2\": \"<string>\"\n      },\n      \"patient_id\": \"<string>\",\n      \"developer_patient_id\": \"<string>\",\n      \"insurance\": {\n        \"insurance_plan_id\": \"ip_2224\",\n        \"insurance_group_number\": \"<string>\",\n        \"insurance_member_id\": \"<string>\",\n        \"is_self_pay\": \"<boolean>\"\n      },\n      \"gender\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"patient_type\": \"new\",\n    \"notes\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da5a8edf-5b6a-423c-9254-046c856eabd5",
+          "name": "Get appointments",
+          "request": {
+            "name": "Get appointments",
+            "description": {
+              "content": "This endpoint retrieves the paginated list of appointment details and statuses for the given credential. By default, appointments will be returned in descending order of start time.\n\nA maximum of 1,000 total appointments will be returned via pagination; if more are expected, use filters and batch requests.\n\nIf the request comes from a Zocdoc user credential, only appointments that user has created will be returned. If the request comes from a machine-to-machine credential, any appointments that were booked with that developer will be returned.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The zero indexed page of results. A mimimum value of 0 and a maximum of 10 will be accepted."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>",
+                  "description": "The number of results to return per page. A mimimum value of 1 and a maximum of 100 will be accepted."
+                },
+                {
+                  "disabled": false,
+                  "key": "statuses",
+                  "value": "<string>",
+                  "description": "A comma-delimited list of Zocodc appointment statuses to filter appointments by."
+                },
+                {
+                  "disabled": false,
+                  "key": "developer_patient_id",
+                  "value": "<string>",
+                  "description": "The patient identifier provided by 3P developer to filter appointments by."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_by",
+                  "value": "<string>",
+                  "description": "The field to sort appointments by. Default is start_time."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort_direction",
+                  "value": "<string>",
+                  "description": "The direction to sort appointments by. Default is descending."
+                },
+                {
+                  "disabled": false,
+                  "key": "practice_ids",
+                  "value": "<string>",
+                  "description": "The comma separated values of practice ids to filter appointments by"
+                },
+                {
+                  "disabled": false,
+                  "key": "provider_ids",
+                  "value": "<string>",
+                  "description": "The comma separated values of provider ids to filter appointments by"
+                },
+                {
+                  "disabled": false,
+                  "key": "location_ids",
+                  "value": "<string>",
+                  "description": "The comma separated values of location ids to filter appointments by"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time_utc_min",
+                  "value": "<instant>",
+                  "description": "The minimum UTC start time of the appointments to fetch. Exclude appointments that start before this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time_utc_max",
+                  "value": "<instant>",
+                  "description": "The maximum UTC start time of the appointments to fetch. Exclude appointments that start after this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_time_utc_min",
+                  "value": "<instant>",
+                  "description": "The minimum UTC created time of the appointments to fetch. Exclude appointments that were created before this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_time_utc_max",
+                  "value": "<instant>",
+                  "description": "The maximum UTC created time of the appointments to fetch. Exclude appointments that were created after this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "last_modified_time_utc_min",
+                  "value": "<instant>",
+                  "description": "The minimum UTC last modified time of the appointments to fetch. Exclude appointments that were last modified before this time."
+                },
+                {
+                  "disabled": false,
+                  "key": "last_modified_time_utc_max",
+                  "value": "<instant>",
+                  "description": "The maximum UTC last modified time of the appointments to fetch. Exclude appointments that were last modified after this time."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e84713ce-7782-402a-b798-25f75e31b5a8",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "pending_booking,confirmed"
+                    },
+                    {
+                      "key": "developer_patient_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "practice_ids",
+                      "value": "pt_abc123-def456_wxyz7890,pt_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "provider_ids",
+                      "value": "pr_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "location_ids",
+                      "value": "lo_abc123-def456_wxyz7890,lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "start_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "start_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"appointment_id\": \"string\",\n      \"appointment_status\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"confirmation_type\": \"pending_evaluation\",\n      \"is_provider_resource\": false,\n      \"provider_location_id\": \"string\",\n      \"start_time\": \"2022-04-27T09:00:00-04:00\",\n      \"visit_reason_id\": \"string\",\n      \"developer_patient_id\": \"string\",\n      \"location_phone_number\": \"9999999999\",\n      \"location_phone_extension\": \"string\",\n      \"waiting_room_path\": \"string\",\n      \"created_time_utc\": \"2024-01-01T09:30:00Z\",\n      \"last_modified_time_utc\": \"2024-01-01T09:30:00Z\",\n      \"practice_id\": \"string\",\n      \"visit_type\": \"in_person\",\n      \"patient_type\": \"new\",\n      \"notes\": \"string\",\n      \"cancellation_reason\": \"string\",\n      \"source\": \"string\"\n    },\n    {\n      \"appointment_id\": \"string\",\n      \"appointment_status\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"confirmation_type\": \"manual\",\n      \"is_provider_resource\": true,\n      \"provider_location_id\": \"string\",\n      \"start_time\": \"2022-04-27T09:00:00-04:00\",\n      \"visit_reason_id\": \"string\",\n      \"developer_patient_id\": \"string\",\n      \"location_phone_number\": \"9999999999\",\n      \"location_phone_extension\": \"string\",\n      \"waiting_room_path\": \"string\",\n      \"created_time_utc\": \"2024-01-01T09:30:00Z\",\n      \"last_modified_time_utc\": \"2024-01-01T09:30:00Z\",\n      \"practice_id\": \"string\",\n      \"visit_type\": \"zocdoc_video_service\",\n      \"patient_type\": \"new\",\n      \"notes\": \"string\",\n      \"cancellation_reason\": \"string\",\n      \"source\": \"string\"\n    }\n  ],\n  \"next_url\": \"string\",\n  \"page\": 6765,\n  \"page_size\": 6317,\n  \"request_id\": \"string\",\n  \"total_count\": 8801\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "176946eb-d6bc-4aa3-9ef1-efad962e6742",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "pending_booking,confirmed"
+                    },
+                    {
+                      "key": "developer_patient_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "practice_ids",
+                      "value": "pt_abc123-def456_wxyz7890,pt_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "provider_ids",
+                      "value": "pr_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "location_ids",
+                      "value": "lo_abc123-def456_wxyz7890,lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "start_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "start_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e22f16ff-fe7b-4918-aa39-8baf3552b192",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "pending_booking,confirmed"
+                    },
+                    {
+                      "key": "developer_patient_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "practice_ids",
+                      "value": "pt_abc123-def456_wxyz7890,pt_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "provider_ids",
+                      "value": "pr_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "location_ids",
+                      "value": "lo_abc123-def456_wxyz7890,lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "start_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "start_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "194cd60d-562b-43b3-bb93-0e38d848d945",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "statuses",
+                      "value": "pending_booking,confirmed"
+                    },
+                    {
+                      "key": "developer_patient_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "practice_ids",
+                      "value": "pt_abc123-def456_wxyz7890,pt_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "provider_ids",
+                      "value": "pr_abc123-def456_wxyz7890,pr_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "location_ids",
+                      "value": "lo_abc123-def456_wxyz7890,lo_ghi123-jkl456_mnop7890"
+                    },
+                    {
+                      "key": "start_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "start_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "created_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_min",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    },
+                    {
+                      "key": "last_modified_time_utc_max",
+                      "value": "2024-01-01 00:00:00+00:00"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ac7016ff-c044-4c52-adc7-9557f6000135",
+          "name": "Get appointment by id",
+          "request": {
+            "name": "Get appointment by id",
+            "description": {
+              "content": "This endpoint retrieves updated appointment details and the status of a single existing appointment. Developers must send a valid `appointment_id` as input in the request body, and Zocdoc returns the appointment details and status for that appointment. See [Appointment Status definitions](/guides/glossary).\n\nIf the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed and modified by any of the developer's machine-to-machine credentials.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                ":appointment_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "appointment_id",
+                  "description": "(Required) The Zocdoc ID for the appointment."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2e2cfb0f-92f5-4fc8-9f12-d73e3654c958",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc ID for the appointment."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_id\": \"string\",\n    \"appointment_status\": \"reschedule_failed\",\n    \"confirmation_type\": \"auto\",\n    \"is_provider_resource\": false,\n    \"provider_location_id\": \"string\",\n    \"start_time\": \"2022-04-27T09:00:00-04:00\",\n    \"visit_reason_id\": \"string\",\n    \"developer_patient_id\": \"string\",\n    \"location_phone_number\": \"9999999999\",\n    \"location_phone_extension\": \"string\",\n    \"waiting_room_path\": \"string\",\n    \"created_time_utc\": \"2024-01-01T09:30:00Z\",\n    \"last_modified_time_utc\": \"2024-01-01T09:30:00Z\",\n    \"practice_id\": \"string\",\n    \"visit_type\": \"in_person\",\n    \"patient_type\": \"new\",\n    \"notes\": \"string\",\n    \"cancellation_reason\": \"string\",\n    \"source\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28ce2dd6-12b4-4fcd-9b7f-8d50ff0697db",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc ID for the appointment."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "efb53219-ef2f-4b37-84cd-b0f4ab7339e4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc ID for the appointment."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d3a27acd-bd16-44f9-bd8f-412abee156d1",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc ID for the appointment."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d6a0956-720a-419f-afde-68d0ed858661",
+          "name": "Get participants for appointment",
+          "request": {
+            "name": "Get participants for appointment",
+            "description": {
+              "content": "This endpoint retrieves the participants of an appointment. Developers must provide a valid `appointment_id` as a path parameter, and Zocdoc returns the participants of that appointment.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                ":appointment_id",
+                "participants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "appointment_id",
+                  "description": "(Required) The Zocdoc id of the appointment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b3eabd3b-c348-4b1d-b007-49284bbb2f77",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "participants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc id of the appointment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"patient\": {\n      \"date_of_birth\": \"<date>\",\n      \"email_address\": \"test@example.com\",\n      \"first_name\": \"<string>\",\n      \"is_booked_by_another_patient\": true,\n      \"last_name\": \"<string>\",\n      \"patient_address\": {\n        \"address1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"city\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"state\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"zip_code\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"address2\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"phone_number\": \"9999999999\",\n      \"sex_at_birth\": \"<string>\",\n      \"uploaded_attachments\": [\n        {\n          \"attachment_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"attachment_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"side\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"attachment_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"attachment_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"side\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"patient_id\": \"<string>\",\n      \"developer_patient_id\": \"<string>\",\n      \"insurance\": {\n        \"insurance_plan_id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"insurance_group_number\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"insurance_member_id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"is_self_pay\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"gender\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"provider_id\": \"string\",\n    \"location_id\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d227371c-8bf9-4cb7-9896-c3841b767efc",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "participants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc id of the appointment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cc82149e-d2d2-472a-8861-003afb540d6f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "participants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc id of the appointment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bb37aae3-ca30-4b3d-8df0-b2733b79c96b",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "participants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) The Zocdoc id of the appointment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85717325-db17-4ce9-a105-6bf9356165ff",
+          "name": "Cancel appointment",
+          "request": {
+            "name": "Cancel appointment",
+            "description": {
+              "content": "This endpoint is used to request the cancellation of an appointment in a non-cancelled status. (Non-cancelled statuses include: pending_booking, booking_failed, confirmed, pending_reschedule, reschedule_failed and rescheduled)\n\nDevelopers must send a valid `appointment_id` as input in the request body and may choose to pass a cancellation reason using the standardized `cancellation_reason_type` field. The optional `cancellation_reason` field should only be used when the cancellation reason type is 'other_patient_reason' or 'other_provider_reason' to provide additional context.\n\nIf the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed and modified by any of the developer's machine-to-machine credentials.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                "cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_id\": \"<string>\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c65dab33-1195-4304-bbaf-b9a4003bf31e",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_status\": \"rescheduled\",\n    \"appointment_id\": \"string\",\n    \"developer_patient_id\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04b0ab4c-044f-4fea-81db-7a3f4f09996d",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ad6be4ab-54a9-491a-a04c-4b3d20f8dd8b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "305c22b9-75be-43bc-8069-f5b6f707f18a",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "74cffdda-349b-4a00-98d2-86d715a43088",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2875a1e4-fe62-4023-badd-4e4e8db6290e",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"cancellation_reason\": \"<string>\",\n  \"cancellation_reason_type\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "faaa630a-38a8-4a3a-b128-477a395c0767",
+          "name": "Confirm appointment",
+          "request": {
+            "name": "Confirm appointment",
+            "description": {
+              "content": "This endpoint is used to confirm an appointment in pending booking status. Developers must send a valid `appointment_id` as input in the request body.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                "confirm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4c2eb75f-b654-4e76-b8ac-499b0f1d4ef1",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_status\": \"rescheduled\",\n    \"appointment_id\": \"string\",\n    \"developer_patient_id\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b7a3727-e96d-49f0-a0b7-4602fd43e128",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec31e38f-016e-471e-988a-7bed24a2df4c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1fd185e5-a878-4244-bfa0-e1fb9df42f08",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "41b34c9d-267d-43ec-ba72-de8d4668a460",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3f75399-4ecb-4011-86d8-a5c065417acd",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "confirm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1f9c1e21-3618-41cb-b747-2277ec90d4c4",
+          "name": "Reschedule appointment",
+          "request": {
+            "name": "Reschedule appointment",
+            "description": {
+              "content": "This endpoint is used to only modify the appointment time and request the reschedule of an appointment in pending_booking, confirmed, pending_reschedule, or rescheduled status. Developers must send a valid `appointment_id` and a new start time as input in the request body.\n\nIf the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed and modified by any of the developer's machine-to-machine credentials.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                "reschedule"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_id\": \"<string>\",\n  \"start_time\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d961ef64-5b9d-4477-9bb9-3ceaf930bc31",
+              "name": "Successful",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "reschedule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"63f995c2-49c4-40c8-a93a-140fb32e913b\",\n  \"start_time\": \"2022-04-27T09:00:00-04:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_id\": \"string\",\n    \"appointment_status\": \"no_show\",\n    \"confirmation_type\": \"pending_evaluation\",\n    \"is_provider_resource\": false,\n    \"visit_type\": \"third_party_video_service\",\n    \"developer_patient_id\": \"string\",\n    \"location_phone_number\": \"9999999999\",\n    \"location_phone_extension\": \"string\",\n    \"waiting_room_path\": \"string\",\n    \"notes\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2449337-7bc1-47b7-ac7e-e1b9fd41c260",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "reschedule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"63f995c2-49c4-40c8-a93a-140fb32e913b\",\n  \"start_time\": \"2022-04-27T09:00:00-04:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99a82eff-131f-4bda-bd07-4db6bd271461",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "reschedule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"63f995c2-49c4-40c8-a93a-140fb32e913b\",\n  \"start_time\": \"2022-04-27T09:00:00-04:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3fca395d-3737-44c4-89e4-10785eb4142f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "reschedule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"63f995c2-49c4-40c8-a93a-140fb32e913b\",\n  \"start_time\": \"2022-04-27T09:00:00-04:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "51195950-b83d-4755-a51e-d7f8cb0bb55a",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "reschedule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"63f995c2-49c4-40c8-a93a-140fb32e913b\",\n  \"start_time\": \"2022-04-27T09:00:00-04:00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e2de70ad-6b37-483a-bb9a-7a542a831b68",
+          "name": "Create attachment for appointment",
+          "request": {
+            "name": "Create attachment for appointment",
+            "description": {
+              "content": "This endpoint is used to upload attachment documents related to the appointment for the provider to view. You can upload more than one attachment with the same attachment_type for the same appointment_id if needed. The provider will be able to receive all uploaded attachments. \n\nOnly documents of type jpg, png, pdf, and docx are supported. Documents must be less than 100MB. You may not upload attachments to appointments in a failed state or over 7 days after the appointment.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                ":appointment_id",
+                "attachments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "appointment_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "attachment",
+                  "type": "file",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "attachment_type",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "91a126e1-8abe-4333-bcfd-b71504bb6433",
+              "name": "Successfully uploaded attachment",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment_type",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_id\": \"string\",\n    \"attachments\": [\n      {\n        \"attachment_type\": \"<string>\"\n      },\n      {\n        \"attachment_type\": \"<string>\"\n      }\n    ]\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05d75d5a-5818-4b1f-a5d2-a9a51efcd3ba",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment_type",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b772496-ee57-4332-8270-8ac5c72cdbba",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment_type",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "586954eb-34e3-4662-86cf-8195e1321e29",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment_type",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "992e5323-672f-431b-9d76-df76706cb2d3",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment_type",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dcd63545-0b30-404e-814d-1765d04d9097",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    ":appointment_id",
+                    "attachments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "appointment_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment",
+                      "value": "<binary>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "attachment_type",
+                      "value": "<string>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a650c47f-7b85-4752-8aa6-39807cf58213",
+          "name": "Update appointment status",
+          "request": {
+            "name": "Update appointment status",
+            "description": {
+              "content": "Use this endpoint to update the status of an appointment to either 'arrived' or 'no_show'.\n- `arrived`: Indicates the patient has arrived at the office.\n- `no_show`: Indicates the patient did not show up for their scheduled appointment. Appointment start time should be in the past but no older than 2 days to be marked as no_show.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "appointments",
+                "update-status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "external.credential.rotate external.appointment.write external.appointment.read external.anonymous_token.write external.provider_insurance.write external.schedulable_entity.read"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://auth.zocdoc.com/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_id\": \"<string>\",\n  \"appointment_status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c0c3065d-e318-4261-83cd-c1ab5123451d",
+              "name": "Successful status update",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"appointment_status\": \"rescheduled\",\n    \"appointment_id\": \"string\",\n    \"developer_patient_id\": \"string\"\n  },\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6eb1c0b0-750f-49b1-b5b2-091ce3edc259",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bc3774e5-eb16-4102-9630-4820594b7823",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c4c99f2-e4be-48cc-b4c2-98ff11710616",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7a360adb-0fef-41ee-a0e2-e3e0d7e20b8c",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "98c530a8-f361-4cd7-bd6a-9d5843b4ca18",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_type\": \"api_error\",\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"message\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6267f541-ab01-42c7-9334-6298b7e6d5e7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "appointments",
+                    "update-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"appointment_id\": \"d04b049a-41b1-4aba-9268-d8973cf72cdd\",\n  \"appointment_status\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-developer-sandbox.zocdoc.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d11dd37b-66ae-4302-a1eb-f3917c4b0294",
+    "name": "API Documentation appointments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.",
+      "type": "text/plain"
+    }
+  }
+}

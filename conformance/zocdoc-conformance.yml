@@ -1,0 +1,180 @@
+generated: '2026-08-15'
+method: derived
+source: >-
+  openapi/ (v1.177), well-known/zocdoc-openid-configuration.json (probed
+  2026-08-15), https://api-docs.zocdoc.com/guides/authentication,
+  https://api-docs.zocdoc.com/guides/webhooks
+note: >-
+  Standards conformance asserted from artifacts in this repo and documents
+  fetched from Zocdoc's own hosts. NO compliance-program claim is recorded here:
+  www.zocdoc.com returns 403 to every non-browser client, so Zocdoc's SOC 2 /
+  HITRUST statements could not be verified first-hand and are therefore not
+  asserted. No `Compliance` pointer is emitted.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      OpenAPI securitySchemes declare two oauth2 schemes
+      (ClientCredentialsFlow, AuthorizationCodeFlow); token endpoint
+      https://auth.zocdoc.com/oauth/token confirmed in the OIDC discovery
+      document.
+  - id: rfc6749-client-credentials
+    conforms: true
+    evidence: 'grant_types_supported includes client_credentials; documented in the auth guide.'
+  - id: rfc6749-authorization-code
+    conforms: true
+    evidence: 'grant_types_supported includes authorization_code; authorization_endpoint https://auth.zocdoc.com/authorize.'
+  - id: rfc7636-pkce
+    conforms: true
+    evidence: >-
+      Zocdoc REQUIRES PKCE on the Authorization Code grant and supports S256
+      only, explicitly rejecting `plain` — stricter than the discovery document,
+      which advertises both S256 and plain.
+  - id: oidc-discovery
+    conforms: true
+    evidence: >-
+      https://auth.zocdoc.com/.well-known/openid-configuration returns 200 with
+      a complete discovery document (issuer, authorization/token/userinfo/jwks/
+      revocation/registration endpoints).
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: true
+    evidence: >-
+      https://auth.zocdoc.com/.well-known/oauth-authorization-server returns 200
+      with the same metadata document.
+  - id: openid-connect
+    conforms: partial
+    evidence: >-
+      The authorization server is a full OIDC provider (id_token signing
+      RS256/PS256/HS256, `openid`/`profile`/`email` scopes, userinfo endpoint),
+      but the partner API itself never asks for `openid` — its published scopes
+      are all `external.*` resource scopes and no id_token is used for API
+      access.
+  - id: rfc7519-jwt-bearer
+    conforms: true
+    evidence: 'Authorization: Bearer <JWT> on every operation; auth guide shows a JWT example.'
+  - id: rfc9449-dpop
+    conforms: unknown
+    evidence: >-
+      dpop_signing_alg_values_supported [ES256] is advertised by the
+      authorization server, but Zocdoc's API documentation never mentions DPoP
+      and no operation requires it.
+  - id: oauth-scopes
+    conforms: true
+    evidence: '10 external.* scopes declared across both flows — see scopes/zocdoc-scopes.yml.'
+  - id: rfc8615-well-known
+    conforms: partial
+    evidence: >-
+      Served on auth.zocdoc.com only. The API hosts 404 every /.well-known/
+      path; no security.txt, no api-catalog.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: '/.well-known/security.txt 404s on auth.zocdoc.com and api-developer.zocdoc.com; 403 on www.zocdoc.com.'
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors use a vendor ErrorResult envelope with an `error_type` enum, not
+      application/problem+json — see errors/zocdoc-problem-types.yml.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: 'No Sunset/Deprecation header, no deprecation policy, no deprecated operation in the spec.'
+  - id: idempotency-key
+    conforms: false
+    evidence: >-
+      No Idempotency-Key parameter on any of the 32 operations, including the
+      non-idempotent booking POSTs.
+  - id: rfc9110-rate-limit-headers
+    conforms: false
+    evidence: >-
+      429 is documented in prose but no RateLimit-*/X-RateLimit-*/Retry-After
+      header is published and 429 is not declared on any operation.
+  - id: openapi-3.0
+    conforms: true
+    evidence: >-
+      openapi 3.0.0, 28 paths, 32 operations, 136 component schemas, published
+      for download at https://api-docs.zocdoc.com/_bundle/apis/index.yaml.
+  - id: openapi-3.1
+    conforms: false
+    evidence: Document is 3.0.0; no 3.1 variant published.
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      No AsyncAPI document anywhere. A real webhook contract exists and is
+      captured at asyncapi/zocdoc-webhooks.yml.
+  - id: graphql
+    conforms: partial
+    evidence: >-
+      A live GraphQL endpoint (https://api.zocdoc.com/directory/v3/gql) is
+      documented by Zocdoc in its own agent-skill repository and answers POST
+      with 200, but introspection is refused (HotChocolate HC0046) so no SDL is
+      published.
+  - id: hmac-webhook-signing
+    conforms: true
+    evidence: >-
+      HMAC-SHA256 over `<timestamp>.<payload>` with a shared base64 key,
+      versioned `webhook-signature` header and a 5-minute `webhook-timestamp`
+      tolerance — the Standard Webhooks shape.
+  - id: standard-webhooks
+    conforms: partial
+    evidence: >-
+      Header names and the versioned-signature format follow the Standard
+      Webhooks pattern, but Zocdoc publishes no message id (`webhook-id`), so
+      receiver-side deduplication has no stable key.
+  - id: fhir-r4
+    conforms: false
+    evidence: >-
+      No FHIR resources, no FHIR media types, no /metadata CapabilityStatement.
+      Zocdoc models its own Provider/Location/Appointment/InsurancePlan domain.
+  - id: hl7-v2
+    conforms: false
+    evidence: No HL7 v2 surface.
+  - id: smart-on-fhir
+    conforms: false
+    evidence: >-
+      Scopes are Zocdoc-proprietary `external.*`, not SMART
+      `patient/*.read`-style scopes; no /.well-known/smart-configuration.
+  - id: nppes-npi
+    conforms: true
+    evidence: >-
+      The National Provider Identifier is the primary external provider key —
+      GET /v1/reference/npi returns the directory as NPIs and getProviders
+      searches by NPI. Zocdoc's glossary names NPI as a HIPAA Administrative
+      Simplification Standard.
+  - id: iana-timezone
+    conforms: true
+    evidence: '`time_zone` field emits IANA identifiers (e.g. America/New_York), added June 2026.'
+  - id: iso8601-datetime
+    conforms: true
+    evidence: 'Dates as YYYY-MM-DD; timestamps as ISO 8601 instants.'
+  - id: pagination-offset
+    conforms: true
+    evidence: 'PaginatedBaseResult: page, page_size, total_count, next_url.'
+  - id: pagination-cursor
+    conforms: true
+    evidence: 'IteratedBaseResult: limit, next_page_token, next_url.'
+  - id: rfc1952-gzip
+    conforms: true
+    evidence: 'Content-Encoding: gzip on requests and Accept-Encoding: gzip on responses, both supported since August 2025.'
+  - id: json-api
+    conforms: false
+    evidence: Vendor response envelope, not JSON:API.
+  - id: odata
+    conforms: false
+  - id: scim2
+    conforms: false
+  - id: fapi
+    conforms: false
+    evidence: >-
+      No mTLS, no private_key_jwt requirement, no PAR, no JARM. The
+      authorization server advertises private_key_jwt but Zocdoc's documented
+      flows use client_secret and public PKCE clients.
+  - id: psd2
+    conforms: false
+    applicable: false
+compliance_program:
+  published_pointer: false
+  note: >-
+    Zocdoc states elsewhere that it undergoes SOC 2 Type II and HITRUST CSF
+    audits and acts as a HIPAA Business Associate, but every zocdoc.com URL
+    carrying that claim returns 403 to non-browser clients, so it is NOT
+    asserted here and no `Compliance` or `TrustCenter` pointer is emitted. See
+    security/zocdoc-vulnerability-disclosure.yml for what was probeable.

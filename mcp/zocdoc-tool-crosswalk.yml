@@ -1,0 +1,150 @@
+generated: '2026-08-15'
+method: derived
+source: >-
+  openapi/ (v1.177, 32 operations) + the GraphQL surface Zocdoc documents in its
+  own agent-skill repo (https://github.com/Zocdoc/zocdoc-agent-skill) + live
+  probe of https://api.zocdoc.com/directory/v3/gql
+note: >-
+  Zocdoc runs TWO non-overlapping surfaces and they serve different audiences.
+  The PARTNER REST API (api-developer.zocdoc.com, OAuth 2.0, contract-gated
+  onboarding) is the one with an OpenAPI. The PUBLIC DIRECTORY GraphQL endpoint
+  (api.zocdoc.com/directory/v3/gql) is what zocdoc.com itself calls and what
+  Zocdoc's own published Agent Skill drives — anonymous, browser-session-bound,
+  and with introspection disabled. There is no MCP server, so the crosswalk
+  binds GraphQL operations and published-skill capabilities to REST
+  operationIds instead of MCP tools. Nothing here is invented: every REST
+  operationId below is verbatim from the spec, and every GraphQL operation name
+  is verbatim from Zocdoc's own repository.
+surfaces:
+  openapi:
+    path: openapi/
+    spec_version: '1.177'
+    servers:
+      - https://api-developer.zocdoc.com
+      - https://api-developer-sandbox.zocdoc.com
+    operations: 32
+    gated: partner-onboarding
+    note: >-
+      The spec is public at https://api-docs.zocdoc.com/_bundle/apis/index.yaml;
+      credentials are not — client_id/client_secret are issued per partner.
+  graphql:
+    endpoint: https://api.zocdoc.com/directory/v3/gql
+    gated: true
+    introspection: disabled
+    probe:
+      status: 200
+      error: 'Introspection is not allowed for the current request. (HC0046)'
+      fetched: '2026-08-15'
+    note: >-
+      Endpoint is live and answers POST, but __schema is refused, so no SDL was
+      captured and none was fabricated. Operation names below come from the
+      query documents Zocdoc publishes in its own agent-skill repository.
+  mcp:
+    url: null
+    published: false
+    note: No first-party MCP server. See mcp/zocdoc-mcp.yml (status candidate).
+  agent_skill:
+    source: https://github.com/Zocdoc/zocdoc-agent-skill
+    surface: public-website
+    note: Captured verbatim in skills/.
+crosswalk:
+  - tool: providerLocationsAvailability
+    binding: graphql
+    category: availability
+    rest:
+      - getProviderLocationsAvailability
+    confidence: medium
+    note: >-
+      Same capability, different contract. The GraphQL operation returns
+      `availability.times[].timeslots[].startTime` for composite
+      `provider_id|location_id` ids with no auth; the REST operation returns
+      `AvailabilityResult` for `provider_location_ids` under
+      `external.schedulable_entity.read` / anonymous-token scope and adds
+      insurance, visit-reason and patient-type inputs the GraphQL query does not
+      expose. Confidence is medium because the GraphQL response schema could not
+      be introspected.
+  - tool: zocdoc-doctor-finder / provider search
+    binding: agent-skill
+    category: discovery
+    rest:
+      - getProviderLocations
+      - getProviders
+    confidence: low
+    note: >-
+      The published skill reads providers out of `window.__REDUX_STATE__` on
+      zocdoc.com search pages rather than calling any documented API. The REST
+      operations are the partner-API equivalents of the same capability, not the
+      code path the skill takes.
+  - tool: zocdoc-doctor-finder / provider reviews and ratings
+    binding: agent-skill
+    category: reputation
+    rest:
+      - getProviderReviews
+      - getProviderReviewsBatch
+    confidence: low
+    note: >-
+      Skill reads `averageRating` / `reviewCount` off the rendered page; REST
+      exposes the same data as a first-class resource (batch form added
+      July 2026).
+mcp_only: []
+graphql_only:
+  - tool: providerLocations(ids:) Redux/search projection
+    reason: >-
+      The public directory GraphQL surface returns marketing-layer fields with
+      no REST counterpart — `spoData` (sponsored-ad decision data), `badges`
+      (Highly Recommended / Patient Choice), `monolithId`, `profileUrl` and
+      `frontEndCirclePictureUrl`. The partner REST API deliberately does not
+      expose sponsorship or badge data.
+rest_only:
+  - capability: appointment lifecycle
+    operations:
+      - createAppointment
+      - confirmAppointment
+      - cancelAppointment
+      - rescheduleAppointment
+      - updateAppointmentStatus
+      - getAppointment
+      - getAppointments
+      - getAppointmentParticipants
+      - uploadAppointmentAttachment
+    note: >-
+      No public GraphQL or agent surface reaches these — booking requires
+      partner credentials and handles PHI. Zocdoc's own skill states it cannot
+      complete a booking for exactly this reason.
+  - capability: provider calendar integration
+    operations:
+      - getProviderCalendarTimeslots
+      - putProviderCalendarTimeslots
+      - getSchedulableEntities
+      - putSchedulableEntitiesOverlaps
+  - capability: insurance configuration
+    operations:
+      - getProviderLocationInsuranceMappings
+      - updateProviderLocationInsuranceMappings
+      - getInsurancePlans
+      - getInsurancePlan
+  - capability: directory reference data
+    operations:
+      - getProviderNpis
+      - getSpecialties
+      - getSpecialtyById
+      - getVisitReasons
+      - getVisitReasonById
+      - getFacilities
+      - getFacility
+      - getProviderLocation
+  - capability: credentials and webhook testing
+    operations:
+      - rotateCredentials
+      - mockWebhookRequest
+    note: >-
+      rotateCredentials is present in the repo's 1.176 harvest but was WITHDRAWN
+      from the published 1.177 bundle and its reference page now 404s — see
+      lifecycle/zocdoc-lifecycle.yml.
+coverage:
+  tools_named: 3
+  tools_bound: 3
+  mcp_only: 0
+  graphql_only: 1
+  rest_operations_total: 32
+  rest_operations_with_a_tool: 4

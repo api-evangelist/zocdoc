@@ -1,0 +1,205 @@
+generated: '2026-08-15'
+method: searched
+source: https://api-docs.zocdoc.com/guides
+docs:
+  authentication: https://api-docs.zocdoc.com/guides/authentication
+  performance: https://api-docs.zocdoc.com/guides/performance
+  webhooks: https://api-docs.zocdoc.com/guides/webhooks
+  faqs: https://api-docs.zocdoc.com/guides/faqs
+  glossary: https://api-docs.zocdoc.com/guides/glossary
+  testing: https://api-docs.zocdoc.com/guides/testing-data
+derived_from: openapi/ (v1.177)
+authentication:
+  style: oauth2-bearer
+  header: 'Authorization: Bearer <access_token>'
+  flows:
+    - flow: clientCredentials
+      token_url: https://auth.zocdoc.com/oauth/token
+      sandbox_token_url: https://auth-api-developer-sandbox.zocdoc.com/oauth/token
+      audience: https://api-developer.zocdoc.com/
+      sandbox_audience: https://api-developer-sandbox.zocdoc.com/
+    - flow: authorizationCode
+      authorization_url: https://auth.zocdoc.com/authorize
+      token_url: https://auth.zocdoc.com/oauth/token
+      pkce: required
+      code_challenge_method: S256
+      plain_supported: false
+      audience: DeveloperApiPatient
+      sandbox_audience: DeveloperApiPatient-Sandbox
+    - flow: anonymous-user-token
+      endpoint: POST /v1/token/anonymous-user
+      note: >-
+        Zocdoc-specific. A client-credentials token is exchanged for a
+        per-end-user anonymous token so a patient can search providers and
+        availability without logging in; the anonymous token can later be passed
+        into the Authorization Code flow to link the anonymous session to the
+        authenticated account. Documented in the auth guide but NOT present as
+        an operation in the OpenAPI.
+  token_lifetimes:
+    access_token: 60 minutes
+    refresh_token: 15 days inactivity, 30 days maximum
+    login_session: 30 minutes inactivity, 1 day maximum
+  refresh: 'Request the `offline_access` scope during the Authorization Code flow.'
+  environment_separation: >-
+    Credentials and tokens are environment-specific. A sandbox token against the
+    production base URL 401s, and vice versa — Zocdoc names this as the first
+    thing to check on a 401.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    Zocdoc documents NO idempotency key, and the OpenAPI declares no
+    Idempotency-Key parameter on any of the 32 operations — including
+    createAppointment, cancelAppointment, rescheduleAppointment and
+    uploadAppointmentAttachment, all of which are non-idempotent POSTs that
+    mutate real-world healthcare appointments. A retried booking has no
+    contract-level protection against creating a duplicate appointment. The
+    partial mitigation Zocdoc offers is a 409 Conflict on state-machine
+    violations and an `appointment_id` returned on create, so a client can
+    reconcile after the fact — reconciliation, not idempotency. This is the
+    single largest agent-safety gap in the contract.
+pagination:
+  styles:
+    - style: offset
+      schema: PaginatedBaseResult
+      request_params: [page, page_size]
+      response_fields: [page, page_size, total_count, next_url]
+      zero_indexed: true
+      note: >-
+        Used by getProviderLocations, getAppointments, getProviderNpis,
+        getSchedulableEntities, getInsurancePlans, getSpecialties,
+        getVisitReasons, getFacilities.
+      limits:
+        - endpoint: /v1/appointments
+          page_max: 10
+          page_size_max: 100
+          note: Hard ceiling of 1,000 appointments across all pages; filter and batch beyond that.
+        - endpoint: /v1/schedulable_entities
+          page_size_default: 5000
+          page_size_max: 10000
+          note: Default dropped from 60,000 to 5,000 in June 2026.
+        - endpoint: /v1/reference/npi
+          page_size_max: 60000
+        - endpoint: /v1/insurance_plans
+          page_max: 200
+          page_size_default: 100
+          page_size_max: 500
+        - endpoint: /v1/specialties
+          page_max: 200
+          page_size_default: 100
+          page_size_max: 500
+    - style: cursor
+      schema: IteratedBaseResult
+      response_fields: [limit, next_page_token, next_url]
+      note: >-
+        Opaque DynamoDB-style cursor. Zocdoc warns that `limit` may not match
+        the number of items returned, so a client must follow `next_page_token`
+        until null rather than counting.
+  next_url: >-
+    Both styles return a complete `next_url` convenience field — follow it
+    rather than reconstructing the query.
+request_tracing:
+  field: request_id
+  location: response body (BaseResult, inherited by every success AND error response)
+  required: true
+  header: null
+  note: >-
+    Zocdoc traces in the BODY, not in a header. There is no X-Request-Id /
+    traceparent documented, so a client cannot correlate a request that fails
+    before a body is produced — which includes every 401 and most 500s, none of
+    which declare a body.
+versioning:
+  scheme: uri-path
+  current: v1
+  prerelease: v1-beta
+  prerelease_paths:
+    - /v1-beta/facilities
+    - /v1-beta/facilities/{facility_id}
+  document_version: '1.177'
+  note: >-
+    Two version signals coexist. The URI path carries `v1` (stable) or
+    `v1-beta` (facilities only). Separately the OpenAPI `info.version` is an
+    incrementing document version (1.177 at 2026-08-15) that changes when the
+    contract changes — it is not a negotiable API version and there is no
+    version header or date-pinning.
+error_envelope:
+  schema: ErrorResult
+  discriminator: error_type
+  values: [api_error, invalid_request]
+  rfc9457: false
+  detail: errors/zocdoc-problem-types.yml
+rate_limit_signaling:
+  status: 429
+  response_headers: none documented
+  retry_after: not documented
+  published_limit: none
+  strategy: exponential backoff (Zocdoc's stated expectation)
+  detail: rate-limits/zocdoc-rate-limits.yml
+compression:
+  request: 'Content-Encoding: gzip'
+  response: 'Accept-Encoding: gzip'
+  note: Optional on both request and response bodies. Added August 2025.
+field_expansion:
+  supported: false
+  note: No expand/fields/sparse-fieldset parameter anywhere in the contract.
+metadata:
+  supported: false
+  note: >-
+    No generic customer metadata bag. The closest analogue is
+    `developer_patient_id`, a partner-supplied patient identifier that can be
+    set on an appointment and used as a filter on getAppointments.
+identifiers:
+  prefixed: true
+  prefixes:
+    - prefix: pr_
+      entity: provider
+    - prefix: lo_
+      entity: location
+    - prefix: pt_
+      entity: practice
+    - prefix: sp_
+      entity: specialty
+    - prefix: pc_
+      entity: visit reason / procedure
+    - prefix: ip_
+      entity: insurance plan
+  composite: >-
+    `provider_location_id` is a pipe-joined composite of the provider and
+    location ids — `pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890`. It
+    must be passed whole; splitting it is a client error.
+  unprefixed:
+    - entity: appointment
+      format: uuid
+    - entity: facility
+      format: uuid
+    - entity: provider NPI
+      format: 10-digit national provider identifier
+batching:
+  comma_delimited_params: true
+  caps:
+    - param: npis
+      max: 50
+    - param: provider_location_ids
+      max: 50
+    - endpoint: /v1/providers/reviews
+      max: 100
+      note: Batch review lookup added July 2026.
+time:
+  timezone_field: time_zone
+  format: IANA (e.g. America/New_York)
+  added: '2026-06'
+  note: >-
+    Availability dates are expressed in provider-local time
+    (`start_date_in_provider_local_time`), appointment filters in UTC
+    (`start_time_utc_min` / `start_time_utc_max`). Mixing the two is the most
+    likely source of off-by-one-day bugs. Availability defaults to US Eastern
+    when no date is supplied, can be requested up to 150 days ahead, and a
+    single request window may span at most 31 days.
+cross_links:
+  authentication: authentication/zocdoc-authentication.yml
+  scopes: scopes/zocdoc-scopes.yml
+  errors: errors/zocdoc-problem-types.yml
+  lifecycle: lifecycle/zocdoc-lifecycle.yml
+  rate_limits: rate-limits/zocdoc-rate-limits.yml
+  webhooks: asyncapi/zocdoc-webhooks.yml
+  sandbox: sandbox/zocdoc-sandbox.yml

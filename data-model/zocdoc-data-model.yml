@@ -1,0 +1,251 @@
+generated: '2026-08-15'
+method: derived
+source: openapi/ (v1.177, 136 component schemas) — $ref graph + id-reference fields
+docs: https://api-docs.zocdoc.com/guides/glossary
+note: >-
+  Entity-relationship graph derived mechanically from the published OpenAPI:
+  `$ref` links give containment, `*_id` fields give references. Zocdoc's domain
+  has one unusual property worth stating up front — the central bookable entity
+  is not a provider and not a location but a COMPOSITE of the two,
+  `provider_location_id`, formatted `pr_<uuid>|lo_<uuid>`. Availability,
+  insurance acceptance and booking all hang off that composite, never off a
+  provider alone.
+id_prefixes:
+  - prefix: pr_
+    entity: Provider
+  - prefix: lo_
+    entity: Location
+  - prefix: pt_
+    entity: Practice
+  - prefix: sp_
+    entity: Specialty
+  - prefix: pc_
+    entity: VisitReason
+  - prefix: ip_
+    entity: InsurancePlan
+  - prefix: none
+    entity: Appointment
+    format: uuid
+  - prefix: none
+    entity: Facility
+    format: uuid
+  - prefix: none
+    entity: Provider (external)
+    format: NPI, 10-digit NPPES national provider identifier
+entities:
+  - name: Provider
+    schema: BaseProvider
+    id: provider_id
+    external_id: npi
+    key_fields: [full_name, gender_identity, specialties, specialty_ids, visit_reason_ids, languages, profile_url, credentials]
+    operations: [getProviders, getProviderNpis]
+  - name: ProviderLocation
+    schema: ProviderLocation
+    id: provider_location_id
+    composite_of: [Provider, Location]
+    key_fields: [provider_location_type, accepts_patient_insurance, first_availability_date_in_provider_local_time, booking_requirements]
+    operations: [getProviderLocations, getProviderLocation, getProviderLocationsAvailability]
+    note: The bookable unit. Its id is `pr_...|lo_...` and must be passed whole.
+  - name: Location
+    schema: BaseLocation / BaseLocationWithDistance / VirtualLocation
+    key_fields: [address, city, state, zip, phone_number, phone_extension, time_zone, is_virtual, distance, is_nearest_match]
+  - name: Practice
+    schema: Practice
+    id: practice_id
+    key_fields: [practice_name]
+  - name: Appointment
+    schema: AppointmentData / AppointmentStatusResponseData
+    id: appointment_id
+    key_fields: [start_time, status, source, notes, patient_type, developer_patient_id]
+    status_enum: [pending_booking, confirmed, booking_failed, cancelled, no_show, pending_reschedule, rescheduled, reschedule_failed]
+    operations: [createAppointment, getAppointment, getAppointments, confirmAppointment, cancelAppointment, rescheduleAppointment, updateAppointmentStatus, getAppointmentParticipants]
+  - name: Patient
+    schema: Patient
+    id: patient_id
+    partner_id: developer_patient_id
+    key_fields: [first_name, last_name, date_of_birth, sex_at_birth, phone_number, email_address, patient_address, insurance]
+    note: PHI. Only reachable through an appointment.
+  - name: Timeslot
+    schema: Timeslot
+    key_fields: [start_time, visit_reason_id, booking_url]
+    note: >-
+      Not independently addressable — timeslots exist only inside an
+      availability response and are consumed by passing `start_time` to
+      createAppointment.
+  - name: SchedulableEntity
+    schema: SchedulableEntity
+    id: id
+    external_id: npi
+    key_fields: [type, go_live_timestamp_utc, profile_last_modified_timestamp_utc, time_zone, main_specialty_id, main_specialty_name, recent_change_summary]
+    operations: [getSchedulableEntities, putSchedulableEntitiesOverlaps]
+    note: The bulk directory feed — the cacheable projection of the bookable graph.
+  - name: Facility
+    schema: Facility
+    id: facility_id
+    external_id: npi
+    key_fields: [name, building_type, specialties, languages, schedule]
+    operations: [getFacilities, getFacility]
+    status: beta
+    note: Only entity family still on /v1-beta.
+  - name: InsurancePlan
+    schema: InsurancePlan
+    id: id
+    key_fields: [name, network_type, program_type, status, care_categories, coverage_area]
+    operations: [getInsurancePlans, getInsurancePlan]
+  - name: InsuranceCarrier
+    schema: InsuranceCarrier
+    key_fields: [network]
+  - name: InsuranceMapping
+    schema: InsuranceMappingData / InsurancePlanMapping
+    operations: [getProviderLocationInsuranceMappings, updateProviderLocationInsuranceMappings]
+    note: >-
+      Join table between ProviderLocation and InsurancePlan. Updates are
+      ASYNCHRONOUS — a 202 means accepted for processing, not applied. Mappings
+      managed at practice or provider level reject location-level writes with
+      409.
+  - name: Specialty
+    schema: SpecialtyData
+    id: id
+    key_fields: [name, care_category, default_visit_reason_id, default_visit_reason_name]
+    operations: [getSpecialties, getSpecialtyById]
+  - name: VisitReason
+    schema: VisitReasonData
+    id: id
+    key_fields: [name, specialty_id]
+    operations: [getVisitReasons, getVisitReasonById]
+    note: >-
+      Drives appointment duration together with patient_type, which is what
+      turns raw calendar availability into bookable timeslots.
+  - name: ProviderReviews
+    schema: ProviderReviewsData
+    key_fields: [total_reviews, average_overall_rating, average_bedside_rating, average_wait_time_rating]
+    operations: [getProviderReviews, getProviderReviewsBatch]
+    note: Aggregate summary only — individual review text is not exposed.
+relationships:
+  - from: ProviderLocation
+    to: Provider
+    type: has_one
+    via: provider
+  - from: ProviderLocation
+    to: Location
+    type: has_one
+    via: location
+  - from: ProviderLocation
+    to: VirtualLocation
+    type: has_one
+    via: virtual_location
+  - from: ProviderLocation
+    to: Practice
+    type: has_one
+    via: practice
+  - from: ProviderLocation
+    to: BookingRequirements
+    type: has_one
+    via: booking_requirements
+  - from: ProviderLocation
+    to: Timeslot
+    type: has_many
+    via: availability.timeslots
+  - from: ProviderLocation
+    to: InsurancePlan
+    type: has_many
+    via: insurance_mappings
+    through: InsuranceMapping
+  - from: Provider
+    to: Specialty
+    type: has_many
+    via: specialty_ids
+  - from: Provider
+    to: VisitReason
+    type: has_many
+    via: visit_reason_ids
+  - from: Provider
+    to: VisitReason
+    type: has_one
+    via: default_visit_reason_id
+  - from: Provider
+    to: ProviderCredentials
+    type: has_one
+    via: credentials
+  - from: Provider
+    to: ProviderReviews
+    type: has_one
+    via: provider_id
+  - from: Appointment
+    to: ProviderLocation
+    type: belongs_to
+    via: provider_location_id
+  - from: Appointment
+    to: VisitReason
+    type: belongs_to
+    via: visit_reason_id
+  - from: Appointment
+    to: Patient
+    type: has_one
+    via: patient
+  - from: Appointment
+    to: UploadedAttachment
+    type: has_many
+    via: patient.uploaded_attachments
+  - from: Patient
+    to: PatientInsurance
+    type: has_one
+    via: insurance
+  - from: PatientInsurance
+    to: InsurancePlan
+    type: belongs_to
+    via: insurance_plan_id
+  - from: PatientInsurance
+    to: InsuranceCarrier
+    type: belongs_to
+    via: insurance_carrier_id
+  - from: InsurancePlan
+    to: InsuranceCarrier
+    type: belongs_to
+    via: carrier
+  - from: InsurancePlan
+    to: CoverageArea
+    type: has_one
+    via: coverage_area
+  - from: SchedulableEntity
+    to: Provider
+    type: belongs_to
+    via: npi
+  - from: SchedulableEntity
+    to: Specialty
+    type: belongs_to
+    via: main_specialty_id
+  - from: SchedulableEntity
+    to: AvailabilityInfo
+    type: has_many
+    via: new_patient_availability / existing_patient_availability
+  - from: Facility
+    to: Location
+    type: has_one
+    via: location
+  - from: Facility
+    to: Practice
+    type: has_one
+    via: practice
+  - from: Facility
+    to: FacilitySchedule
+    type: has_one
+    via: schedule
+  - from: VisitReason
+    to: Specialty
+    type: belongs_to
+    via: specialty_id
+  - from: Specialty
+    to: VisitReason
+    type: has_one
+    via: default_visit_reason_id
+traversal:
+  canonical_booking_path:
+    - getProviderNpis or getSchedulableEntities — cache the directory
+    - getProviders (by NPI) or getProviderLocations (by zip + specialty/visit reason) — obtain provider_location_id
+    - getProviderLocationsAvailability — obtain start_time for a provider_location_id + visit_reason_id + patient_type
+    - createAppointment — book that exact start_time
+    - getAppointment — poll status until it leaves pending_booking
+  note: >-
+    The graph is strictly directional for booking: only a `start_time` returned
+    by getProviderLocationsAvailability is accepted by createAppointment.
