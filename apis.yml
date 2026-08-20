@@ -43,6 +43,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Appointments
+  tags_raw:
   - appointments
   properties:
   - type: OpenAPI
@@ -99,6 +101,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Credentials
+  tags_raw:
   - credentials
   properties:
   - type: OpenAPI
@@ -127,6 +131,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Facilities
+  tags_raw:
   - facilities
   properties:
   - type: OpenAPI
@@ -213,6 +219,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Providers
+  tags_raw:
   - providers
   properties:
   - type: OpenAPI
@@ -241,6 +249,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Reference
+  tags_raw:
   - reference
   properties:
   - type: OpenAPI
@@ -297,6 +307,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Webhook
+  tags_raw:
   - webhook
   properties:
   - type: OpenAPI
@@ -327,6 +339,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Reviews
+  tags_raw:
   - reviews
   properties:
   - type: OpenAPI
@@ -357,6 +371,8 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
+  - Specialties
+  tags_raw:
   - specialties
   properties:
   - type: OpenAPI
