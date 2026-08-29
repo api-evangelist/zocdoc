@@ -438,6 +438,9 @@ apis:
   - type: FAQ
     url: https://api-docs.zocdoc.com/guides/faqs
 common:
+  - type: CapabilityMap
+    url: capabilities/zocdoc-capability-edges.yml
+    name: Zocdoc Business Capability Map
   - type: AgenticAccess
     url: agentic-access/zocdoc-agentic-access.yml
   - type: DomainSecurity
