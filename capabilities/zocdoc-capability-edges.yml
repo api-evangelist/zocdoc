@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 3
+edge_count: 2
 edges:
 - tag: appointments
   spec_file: zocdoc-appointments-api-openapi.yml
@@ -21,27 +21,15 @@ edges:
   confidence: 0.95
   evidence: '''Endpoints for booking, cancelling, and rescheduling appointments''; createAppointment,
     cancelAppointment, rescheduleAppointment, confirmAppointment'
-  reason: The operations plainly perform patient appointment booking, confirmation, cancellation and rescheduling
-    — appointment management within patient access. No other reading fits.
+  reason: Plainly patient appointment booking and lifecycle management, which is Scheduling & Appointment
+    Management under Patient Access.
 - tag: calendar-integration-timeslots
   spec_file: zocdoc-calendar-integration-timeslots-api-openapi.yml
   capability_id: BC-2800.10
   capability_id_l1: BC-2800
   capability_name: Scheduling & Appointment Management
-  confidence: 0.9
-  evidence: '''Endpoints to manage timeslots for providers''; getProviderCalendarTimeslots ''Get timeslots
-    for provider on date''; putProviderCalendarTimeslots'
-  reason: Reading and writing provider calendar timeslots is provider/resource scheduling availability
-    management, the core of Scheduling & Appointment Management. Slight discount because it is the calendar-integration
-    plumbing rather than the booking act itself.
-- tag: schedulable-entities
-  spec_file: zocdoc-schedulable-entities-api-openapi.yml
-  capability_id: BC-2800.10
-  capability_id_l1: BC-2800
-  capability_name: Scheduling & Appointment Management
-  confidence: 0.75
-  evidence: 'Retrieve the schedulable entities currently in your directory with availability information
-    ... schemas: AvailabilityStatus, AvailabilityInfo, SchedulableEntity'
-  reason: Operations manage which providers are schedulable and expose their availability, which directly
-    supports provider/resource scheduling and appointment booking. Some ambiguity remains as the surface
-    is partly directory/master-data oriented rather than booking itself.
+  confidence: 0.88
+  evidence: '''Endpoints to manage timeslots for providers''; GET /v1/providers/{provider_id}/calendar/timeslots
+    ''Get timeslots for provider on date'''
+  reason: Provider calendar timeslot publication and retrieval is provider/resource scheduling feeding
+    appointment booking.
