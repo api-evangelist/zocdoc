@@ -113,7 +113,7 @@ apis:
   humanURL: https://api-docs.zocdoc.com/guides
   baseURL: https://api-developer.zocdoc.com
   tags:
-  - Credentials
+  - credentials
   tags_raw:
   - credentials
   properties:
