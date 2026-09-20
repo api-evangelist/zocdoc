@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 2
+edge_count: 3
 edges:
 - tag: appointments
   spec_file: zocdoc-appointments-api-openapi.yml
@@ -33,3 +33,15 @@ edges:
     ''Get timeslots for provider on date'''
   reason: Provider calendar timeslot publication and retrieval is provider/resource scheduling feeding
     appointment booking.
+- tag: schedulable-entities
+  spec_file: zocdoc-schedulable-entities-api-openapi.yml
+  capability_id: BC-2800.10
+  capability_id_l1: BC-2800
+  capability_name: Scheduling & Appointment Management
+  confidence: 0.75
+  evidence: 'Retrieve the schedulable entities currently in your directory with availability information
+    ... schemas: AvailabilityStatus, AvailabilityInfo, SchedulableEntity'
+  reason: Operations manage which providers are schedulable and expose their availability, which directly
+    supports provider/resource scheduling and appointment booking. Some ambiguity remains as the surface
+    is partly directory/master-data oriented rather than booking itself.
+  recovered_from: healthcare-vertical-edges.json
