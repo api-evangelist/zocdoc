@@ -1,24 +1,22 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: '1.177'
-  title: API Documentation appointments API
-  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving
-    current appointment statuses and updated information.
+  title: Documentation Appointments API
+  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
   description: Sandbox
 - url: https://api-developer.zocdoc.com
   description: Production
 tags:
-- name: appointments
-  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving
-    current appointment statuses and updated information.
+- name: Appointments
+  description: Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.
   x-displayName: Appointments
 paths:
   /v1/appointments:
     post:
       tags:
-      - appointments
+      - Appointments
       summary: Create appointment
       security:
       - ClientCredentialsFlow:
@@ -55,19 +53,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      description: 'This endpoint is used for creating new appointments. Developers should gather the
-        necessary information to pass in the request body as inputs for this endpoint. Only timeslots
-        retrieved from the /v1/provider_locations/availability endpoint will be accepted. After an /appointments
-        call is successfully processed, the system will return an appointment ID.
+      description: 'This endpoint is used for creating new appointments. Developers should gather the necessary information to pass in the request body as inputs for this endpoint. Only timeslots retrieved from the /v1/provider_locations/availability endpoint will be accepted. After an /appointments call is successfully processed, the system will return an appointment ID.
 
 
-        The `appointment_id` returned is used in the endpoint /v1/appointments/{appointment_id} to track
-        the status of the appointment, and in the endpoint /v1/appointments/cancel to cancel an appointment.
-
-        '
+        The `appointment_id` returned is used in the endpoint /v1/appointments/{appointment_id} to track the status of the appointment, and in the endpoint /v1/appointments/cancel to cancel an appointment.'
     get:
       tags:
-      - appointments
+      - Appointments
       summary: Get appointments
       security:
       - ClientCredentialsFlow:
@@ -75,31 +67,23 @@ paths:
       - AuthorizationCodeFlow:
         - external.appointment.read
       operationId: getAppointments
-      description: 'This endpoint retrieves the paginated list of appointment details and statuses for
-        the given credential. By default, appointments will be returned in descending order of start time.
+      description: 'This endpoint retrieves the paginated list of appointment details and statuses for the given credential. By default, appointments will be returned in descending order of start time.
 
 
-        A maximum of 1,000 total appointments will be returned via pagination; if more are expected, use
-        filters and batch requests.
+        A maximum of 1,000 total appointments will be returned via pagination; if more are expected, use filters and batch requests.
 
 
-        If the request comes from a Zocdoc user credential, only appointments that user has created will
-        be returned. If the request comes from a machine-to-machine credential, any appointments that
-        were booked with that developer will be returned.
-
-        '
+        If the request comes from a Zocdoc user credential, only appointments that user has created will be returned. If the request comes from a machine-to-machine credential, any appointments that were booked with that developer will be returned.'
       parameters:
       - name: page
         in: query
-        description: The zero indexed page of results. A mimimum value of 0 and a maximum of 10 will be
-          accepted.
+        description: The zero indexed page of results. A mimimum value of 0 and a maximum of 10 will be accepted.
         required: false
         schema:
           type: integer
       - name: page_size
         in: query
-        description: The number of results to return per page. A mimimum value of 1 and a maximum of 100
-          will be accepted.
+        description: The number of results to return per page. A mimimum value of 1 and a maximum of 100 will be accepted.
         required: false
         schema:
           type: integer
@@ -152,8 +136,7 @@ paths:
       - name: start_time_utc_min
         in: query
         required: false
-        description: The minimum UTC start time of the appointments to fetch. Exclude appointments that
-          start before this time.
+        description: The minimum UTC start time of the appointments to fetch. Exclude appointments that start before this time.
         schema:
           type: string
           format: instant
@@ -161,8 +144,7 @@ paths:
       - name: start_time_utc_max
         in: query
         required: false
-        description: The maximum UTC start time of the appointments to fetch. Exclude appointments that
-          start after this time.
+        description: The maximum UTC start time of the appointments to fetch. Exclude appointments that start after this time.
         schema:
           type: string
           format: instant
@@ -170,8 +152,7 @@ paths:
       - name: created_time_utc_min
         in: query
         required: false
-        description: The minimum UTC created time of the appointments to fetch. Exclude appointments that
-          were created before this time.
+        description: The minimum UTC created time of the appointments to fetch. Exclude appointments that were created before this time.
         schema:
           type: string
           format: instant
@@ -179,8 +160,7 @@ paths:
       - name: created_time_utc_max
         in: query
         required: false
-        description: The maximum UTC created time of the appointments to fetch. Exclude appointments that
-          were created after this time.
+        description: The maximum UTC created time of the appointments to fetch. Exclude appointments that were created after this time.
         schema:
           type: string
           format: instant
@@ -188,8 +168,7 @@ paths:
       - name: last_modified_time_utc_min
         in: query
         required: false
-        description: The minimum UTC last modified time of the appointments to fetch. Exclude appointments
-          that were last modified before this time.
+        description: The minimum UTC last modified time of the appointments to fetch. Exclude appointments that were last modified before this time.
         schema:
           type: string
           format: instant
@@ -197,8 +176,7 @@ paths:
       - name: last_modified_time_utc_max
         in: query
         required: false
-        description: The maximum UTC last modified time of the appointments to fetch. Exclude appointments
-          that were last modified after this time.
+        description: The maximum UTC last modified time of the appointments to fetch. Exclude appointments that were last modified after this time.
         schema:
           type: string
           format: instant
@@ -223,7 +201,7 @@ paths:
   /v1/appointments/{appointment_id}:
     get:
       tags:
-      - appointments
+      - Appointments
       summary: Get appointment by id
       security:
       - ClientCredentialsFlow:
@@ -256,20 +234,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      description: 'This endpoint retrieves updated appointment details and the status of a single existing
-        appointment. Developers must send a valid `appointment_id` as input in the request body, and Zocdoc
-        returns the appointment details and status for that appointment. See [Appointment Status definitions](/guides/glossary).
+      description: 'This endpoint retrieves updated appointment details and the status of a single existing appointment. Developers must send a valid `appointment_id` as input in the request body, and Zocdoc returns the appointment details and status for that appointment. See Appointment Status definitions.
 
 
-        If the appointment was booked with a Zocdoc user credential, only that user will have access to
-        view or modify the appointment. If the appointment was booked with a machine-to-machine credential,
-        the appointment can be viewed and modified by any of the developer''s machine-to-machine credentials.
-
-        '
+        If the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed and modified by any of the developer''s machine-to-machine credentials.'
   /v1/appointments/{appointment_id}/participants:
     get:
       tags:
-      - appointments
+      - Appointments
       summary: Get participants for appointment
       security:
       - ClientCredentialsFlow:
@@ -302,14 +274,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      description: 'This endpoint retrieves the participants of an appointment. Developers must provide
-        a valid `appointment_id` as a path parameter, and Zocdoc returns the participants of that appointment.
-
-        '
+      description: This endpoint retrieves the participants of an appointment. Developers must provide a valid `appointment_id` as a path parameter, and Zocdoc returns the participants of that appointment.
   /v1/appointments/cancel:
     post:
       tags:
-      - appointments
+      - Appointments
       summary: Cancel appointment
       security:
       - ClientCredentialsFlow:
@@ -348,26 +317,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      description: 'This endpoint is used to request the cancellation of an appointment in a non-cancelled
-        status. (Non-cancelled statuses include: pending_booking, booking_failed, confirmed, pending_reschedule,
-        reschedule_failed and rescheduled)
+      description: 'This endpoint is used to request the cancellation of an appointment in a non-cancelled status. (Non-cancelled statuses include: pending_booking, booking_failed, confirmed, pending_reschedule, reschedule_failed and rescheduled)
 
 
-        Developers must send a valid `appointment_id` as input in the request body and may choose to pass
-        a cancellation reason using the standardized `cancellation_reason_type` field. The optional `cancellation_reason`
-        field should only be used when the cancellation reason type is ''other_patient_reason'' or ''other_provider_reason''
-        to provide additional context.
+        Developers must send a valid `appointment_id` as input in the request body and may choose to pass a cancellation reason using the standardized `cancellation_reason_type` field. The optional `cancellation_reason` field should only be used when the cancellation reason type is ''other_patient_reason'' or ''other_provider_reason'' to provide additional context.
 
 
-        If the appointment was booked with a Zocdoc user credential, only that user will have access to
-        view or modify the appointment. If the appointment was booked with a machine-to-machine credential,
-        the appointment can be viewed and modified by any of the developer''s machine-to-machine credentials.
-
-        '
+        If the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed and modified by any of the developer''s machine-to-machine credentials.'
   /v1/appointments/confirm:
     post:
       tags:
-      - appointments
+      - Appointments
       summary: Confirm appointment
       security:
       - ClientCredentialsFlow:
@@ -410,14 +370,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      description: 'This endpoint is used to confirm an appointment in pending booking status. Developers
-        must send a valid `appointment_id` as input in the request body.
-
-        '
+      description: This endpoint is used to confirm an appointment in pending booking status. Developers must send a valid `appointment_id` as input in the request body.
   /v1/appointments/reschedule:
     post:
       tags:
-      - appointments
+      - Appointments
       summary: Reschedule appointment
       security:
       - ClientCredentialsFlow:
@@ -454,20 +411,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResult'
-      description: 'This endpoint is used to only modify the appointment time and request the reschedule
-        of an appointment in pending_booking, confirmed, pending_reschedule, or rescheduled status. Developers
-        must send a valid `appointment_id` and a new start time as input in the request body.
+      description: 'This endpoint is used to only modify the appointment time and request the reschedule of an appointment in pending_booking, confirmed, pending_reschedule, or rescheduled status. Developers must send a valid `appointment_id` and a new start time as input in the request body.
 
 
-        If the appointment was booked with a Zocdoc user credential, only that user will have access to
-        view or modify the appointment. If the appointment was booked with a machine-to-machine credential,
-        the appointment can be viewed and modified by any of the developer''s machine-to-machine credentials.
-
-        '
+        If the appointment was booked with a Zocdoc user credential, only that user will have access to view or modify the appointment. If the appointment was booked with a machine-to-machine credential, the appointment can be viewed and modified by any of the developer''s machine-to-machine credentials.'
   /v1/appointments/{appointment_id}/attachments:
     post:
       tags:
-      - appointments
+      - Appointments
       summary: Create attachment for appointment
       security:
       - ClientCredentialsFlow:
@@ -512,26 +463,20 @@ paths:
                 $ref: '#/components/schemas/ErrorResult'
         '500':
           description: Internal Server Error
-      description: "This endpoint is used to upload attachment documents related to the appointment for\
-        \ the provider to view. You can upload more than one attachment with the same attachment_type\
-        \ for the same appointment_id if needed. The provider will be able to receive all uploaded attachments.\
-        \ \n\nOnly documents of type jpg, png, pdf, and docx are supported. Documents must be less than\
-        \ 100MB. You may not upload attachments to appointments in a failed state or over 7 days after\
-        \ the appointment.\n"
+      description: 'This endpoint is used to upload attachment documents related to the appointment for the provider to view. You can upload more than one attachment with the same attachment_type for the same appointment_id if needed. The provider will be able to receive all uploaded attachments.
+
+
+        Only documents of type jpg, png, pdf, and docx are supported. Documents must be less than 100MB. You may not upload attachments to appointments in a failed state or over 7 days after the appointment.'
   /v1/appointments/update-status:
     put:
       summary: Update appointment status
-      description: 'Use this endpoint to update the status of an appointment to either ''arrived'' or
-        ''no_show''.
+      description: 'Use this endpoint to update the status of an appointment to either ''arrived'' or ''no_show''.
 
         - `arrived`: Indicates the patient has arrived at the office.
 
-        - `no_show`: Indicates the patient did not show up for their scheduled appointment. Appointment
-        start time should be in the past but no older than 2 days to be marked as no_show.
-
-        '
+        - `no_show`: Indicates the patient did not show up for their scheduled appointment. Appointment start time should be in the past but no older than 2 days to be marked as no_show.'
       tags:
-      - appointments
+      - Appointments
       security:
       - ClientCredentialsFlow:
         - external.appointment.write
@@ -569,15 +514,31 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    AppointmentBaseResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/AppointmentBaseResponseData'
+    PatientAddress:
+      required:
+      - address1
+      - city
+      - state
+      - zip_code
+      type: object
+      properties:
+        address1:
+          type: string
+          description: The patient's address, line 1.
+        city:
+          type: string
+          description: The patient's address, city.
+        state:
+          type: string
+          description: The patient's address, two letter state code.
+          example: NY
+        zip_code:
+          type: string
+          description: The patient's address, 5 digit zip code.
+          example: 36925
+        address2:
+          type: string
+          description: The patient's address, line 2.
     AppointmentBaseResponseData:
       required:
       - appointment_status
@@ -593,15 +554,133 @@ components:
         developer_patient_id:
           type: string
           description: The patient identifier provided by 3P developer. Null if not provided.
-    AppointmentConfirmationType:
+    CancelAppointmentRequestBody:
+      type: object
+      required:
+      - appointment_id
+      properties:
+        appointment_id:
+          type: string
+          description: The Zocdoc ID of the appointment.
+          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+        cancellation_reason:
+          type: string
+          description: Optional free text description for the appointment cancellation. Only use this field when cancellation_reason_type is set to 'other_patient_reason' or 'other_provider_reason'.
+        cancellation_reason_type:
+          description: 'Enum field describing why the appointment was cancelled. This field is optional but recommended when known for metrics purposes. If the cancellation reason does not match any predefined enum values, use ''other_patient_reason'' or ''other_provider_reason'' and provide a free text explanation in the cancellation_reason field.
+
+            '
+          $ref: '#/components/schemas/CancellationReasonType'
+    Patient:
+      required:
+      - first_name
+      - last_name
+      - date_of_birth
+      - sex_at_birth
+      - phone_number
+      - email_address
+      - patient_address
+      type: object
+      properties:
+        patient_id:
+          type: string
+          description: The Zocdoc ID of the patient.
+        developer_patient_id:
+          type: string
+          description: The patient identifier provided by 3P developer.
+        first_name:
+          type: string
+          description: The patient's first name.
+        last_name:
+          type: string
+          description: The patient's last name.
+        date_of_birth:
+          type: string
+          format: date
+          description: The patient's date of birth in the format, YYYY-MM-DD.
+        sex_at_birth:
+          $ref: '#/components/schemas/PatientSex'
+        phone_number:
+          type: string
+          description: The patient's unformatted 10 digit phone number. The first and fourth digits cannot be a 0 or 1.
+          example: '9999999999'
+        email_address:
+          type: string
+          description: The patient's email address.
+          example: test@example.com
+        patient_address:
+          $ref: '#/components/schemas/PatientAddress'
+        insurance:
+          $ref: '#/components/schemas/PatientInsurance'
+        gender:
+          type: array
+          items:
+            $ref: '#/components/schemas/Gender'
+          description: none_apply and prefer_not_to_say must be used independently, all other gender identities can be used in combination with each other.
+    AppointmentBaseResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/AppointmentBaseResponseData'
+    UploadAppointmentAttachmentRequest:
+      type: object
+      required:
+      - attachment
+      - attachment_type
+      properties:
+        attachment:
+          type: string
+          format: binary
+        attachment_type:
+          $ref: '#/components/schemas/AttachmentType'
+    ErrorType:
       type: string
-      description: "Specifies how the appointment confirmation will be handled.\n  * auto: means the system\
-        \ will automatically confirm.\n  * manual: means confirmation requires user action.\n  * pending_evaluation:\
-        \ indicates that the confirmation approach is pending evaluation.\n"
       enum:
-      - auto
-      - manual
-      - pending_evaluation
+      - api_error
+      - invalid_request
+    SharedAppointmentResponseData:
+      allOf:
+      - $ref: '#/components/schemas/AppointmentBaseResponseData'
+      - type: object
+        required:
+        - is_provider_resource
+        - confirmation_type
+        properties:
+          is_provider_resource:
+            type: boolean
+            description: Whether the appointment will be performed by a professional under the supervision of the booked provider.
+          location_phone_number:
+            type: string
+            description: The appointment location's unformatted 10 digit phone number
+            example: '9999999999'
+          location_phone_extension:
+            type: string
+            description: The appointment location's unformatted extension number, as digits
+          waiting_room_path:
+            type: string
+            description: Patient facing url that can be used to navigate to Zocdoc video service appointments
+          confirmation_type:
+            $ref: '#/components/schemas/AppointmentConfirmationType'
+    BookAppointmentRequestBody:
+      required:
+      - appointment_type
+      - data
+      type: object
+      properties:
+        appointment_type:
+          $ref: '#/components/schemas/AppointmentType'
+        data:
+          $ref: '#/components/schemas/AppointmentData'
+    PatientSex:
+      type: string
+      description: The patient's sex assigned at birth.
+      enum:
+      - male
+      - female
     AppointmentData:
       required:
       - start_time
@@ -614,8 +693,7 @@ components:
         start_time:
           type: string
           format: date-time
-          description: Date & time of the appointment in ISO-8601 format with a timezone offset. Must
-            be a valid start time from the /v1/provider_locations/availability endpoint.
+          description: Date & time of the appointment in ISO-8601 format with a timezone offset. Must be a valid start time from the /v1/provider_locations/availability endpoint.
           example: '2022-04-27T09:00:00-04:00'
         visit_reason_id:
           type: string
@@ -632,33 +710,6 @@ components:
         notes:
           type: string
           description: Patient notes. 100 character maximum limit.
-    AppointmentParticipantPatient:
-      allOf:
-      - $ref: '#/components/schemas/Patient'
-      - type: object
-        required:
-        - uploaded_attachments
-        - is_booked_by_another_patient
-        properties:
-          uploaded_attachments:
-            type: array
-            items:
-              $ref: '#/components/schemas/UploadedAttachment'
-            description: Documents and files that have been uploaded by the patient for this appointment,
-              such as insurance cards, ID cards, or intake forms.
-          is_booked_by_another_patient:
-            type: boolean
-            description: Indicates whether this patient's appointment was booked by another patient (e.g.,
-              a parent booking for their child or someone booking for a dependent)
-    AppointmentParticipantsResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/AppointmentParticipantsResponseData'
     AppointmentParticipantsResponseData:
       type: object
       required:
@@ -674,15 +725,6 @@ components:
         location_id:
           type: string
           description: The Zocdoc id of the location
-    AppointmentResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/AppointmentResponseData'
     AppointmentResponseData:
       allOf:
       - $ref: '#/components/schemas/SharedAppointmentResponseData'
@@ -696,26 +738,94 @@ components:
             type: string
             description: Patient notes. 100 character maximum limit.
         description: Data that will be returned upon a sucessful booking request
-    AppointmentSortByType:
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    PatientInsurance:
+      type: object
+      properties:
+        insurance_plan_id:
+          type: string
+          description: The ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans) endpoint to retrieve available plans.
+          example: ip_2224
+        insurance_group_number:
+          type: string
+          description: The patients insurance group number.
+        insurance_member_id:
+          type: string
+          description: The patients insurance card member ID.
+        is_self_pay:
+          type: boolean
+          description: Indicates is a patient is self paying
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    PatientType:
       type: string
+      description: Whether or not the patient has been to the provider's practice.
       enum:
-      - start_time_utc
-      - created_time_utc
-      - last_modified_time_utc
-      description: 'Field to sort appointments by:
-
-        * start_time_utc - Sort by appointment start time (default)
-
-        * created_time_utc - Sort by when appointment was created
-
-        * last_modified_time_utc - Sort by when appointment was last modified
-
-        '
+      - existing
+      - new
+      example: new
+    AppointmentStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/AppointmentStatusResponseData'
+    UploadedAppointmentAttachment:
+      type: object
+      required:
+      - attachment_type
+      properties:
+        attachment_type:
+          $ref: '#/components/schemas/AttachmentType'
     AppointmentSortDirectionType:
       type: string
       enum:
       - ascending
       - descending
+    ExternalUpdateAppointmentStatusRequestBody:
+      type: object
+      required:
+      - appointment_id
+      - appointment_status
+      properties:
+        appointment_id:
+          type: string
+          description: The Zocdoc ID of the appointment.
+          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
+        appointment_status:
+          $ref: '#/components/schemas/AppointmentStatusToSet'
+    Gender:
+      type: string
+      description: "Patient's gender values\n  * Female at birth - Assigned female at birth\n  * Male at birth - Assigned male at birth\n  * Cisgender - A person whose current gender corresponds to the sex they were assigned at birth\n  * Genderfluid - A person who does not identify with a fixed gender\n  * Genderqueer - A person who does not follow binary gender norms\n  * Intersex - A person born with traits, including genital anatomy, reproductive organs, hormone function, and/or chromosome patterns that may not fit the typical definition of male or female\n  * Non-binary - Umbrella term for a person whose gender identity lies outside the gender binary\n  * Transgender man - A person whose gender is male and whose sex assigned at birth was female\n  * Transgender woman - A person whose gender is female and whose sex assigned at birth was male\n"
+      enum:
+      - female_at_birth
+      - male_at_birth
+      - cisgender
+      - genderfluid
+      - genderqueer
+      - intersex
+      - non_binary
+      - transgender_man
+      - transgender_woman
+      - prefer_not_to_say
+      - none_apply
     AppointmentStatus:
       type: string
       description: The status of the appointment. See [Appointment Status definitions](/guides/glossary).
@@ -728,26 +838,6 @@ components:
       - pending_reschedule
       - rescheduled
       - reschedule_failed
-    AppointmentStatusListResponse:
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/AppointmentStatusResponseData'
-    AppointmentStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/AppointmentStatusResponseData'
     AppointmentStatusResponseData:
       allOf:
       - $ref: '#/components/schemas/SharedAppointmentResponseData'
@@ -789,102 +879,10 @@ components:
             description: Patient notes. 100 character maximum limit.
           cancellation_reason:
             type: string
-            description: Optional free text description for the appointment cancellation. Only use this
-              field when cancellation_reason_type is set to 'other_patient_reason' or 'other_provider_reason'.
+            description: Optional free text description for the appointment cancellation. Only use this field when cancellation_reason_type is set to 'other_patient_reason' or 'other_provider_reason'.
           source:
             type: string
-            description: The channel where the appointment was booked (e.g., "Zocdoc Marketplace", "Your
-              website").
-    AppointmentStatusToSet:
-      type: string
-      enum:
-      - arrived
-      - no_show
-      description: 'New status to set for the appointment. Accepted values:
-
-        - `arrived`: Patient has arrived at the office.
-
-        - `no_show`: Patient did not show up for their appointment.
-
-        '
-    AppointmentType:
-      type: string
-      enum:
-      - providers
-      description: The type of appointment.
-    AppointmentVisitType:
-      type: string
-      description: The appointment's [visit type](/guides/glossary)
-      enum:
-      - in_person
-      - zocdoc_video_service
-      - third_party_video_service
-    AttachmentType:
-      type: string
-      enum:
-      - community_care_packet
-      - pcp_patient_referral
-      - patient_front_insurance_card
-      - patient_back_insurance_card
-      description: "The type of attachment being uploaded. \n- `community_care_packet`: Required for VA\
-        \ referrals to Community Care Providers. Use when submitting referral documents required by the\
-        \ Department  of Veterans Affairs for appointments within its extended network.\n- `pcp_patient_referral`:\
-        \ Use to support appointments booked with an approved referral from a primary care doctor.\n"
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    BookAppointmentRequestBody:
-      required:
-      - appointment_type
-      - data
-      type: object
-      properties:
-        appointment_type:
-          $ref: '#/components/schemas/AppointmentType'
-        data:
-          $ref: '#/components/schemas/AppointmentData'
-    CancelAppointmentRequestBody:
-      type: object
-      required:
-      - appointment_id
-      properties:
-        appointment_id:
-          type: string
-          description: The Zocdoc ID of the appointment.
-          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
-        cancellation_reason:
-          type: string
-          description: Optional free text description for the appointment cancellation. Only use this
-            field when cancellation_reason_type is set to 'other_patient_reason' or 'other_provider_reason'.
-        cancellation_reason_type:
-          description: 'Enum field describing why the appointment was cancelled. This field is optional
-            but recommended when known for metrics purposes. If the cancellation reason does not match
-            any predefined enum values, use ''other_patient_reason'' or ''other_provider_reason'' and
-            provide a free text explanation in the cancellation_reason field.
-
-            '
-          $ref: '#/components/schemas/CancellationReasonType'
-    CancellationReasonType:
-      type: string
-      description: Enum field describing why the appointment was cancelled. This field is optional but
-        recommended when known for metrics purposes. If the cancellation reason does not match any predefined
-        enum values, use 'other_patient_reason' or 'other_provider_reason' and provide a free text explanation
-        in the cancellation_reason field.
-      enum:
-      - patient_no_longer_needs_appointment
-      - patient_no_longer_available
-      - other_patient_reason
-      - missing_needed_patient_information
-      - payment_or_insurance_issue
-      - patient_or_visit_type_not_accepted
-      - provider_not_available
-      - rescheduling_patient
-      - other_provider_reason
+            description: The channel where the appointment was booked (e.g., "Zocdoc Marketplace", "Your website").
     ConfirmAppointmentRequestBody:
       type: object
       required:
@@ -893,76 +891,17 @@ components:
         appointment_id:
           type: string
           example: d04b049a-41b1-4aba-9268-d8973cf72cdd
-    DocumentSide:
-      type: string
-      description: Indicates whether the document image is of the front or back side. This field is typically
-        used for documents like insurance cards or ID cards that have information on both sides.
-      enum:
-      - front
-      - back
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    ErrorResult:
+    AppointmentStatusListResponse:
       allOf:
-      - $ref: '#/components/schemas/BaseResult'
+      - $ref: '#/components/schemas/PaginatedBaseResult'
       - type: object
         required:
-        - error_type
-        - errors
+        - data
         properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
+          data:
             type: array
             items:
-              $ref: '#/components/schemas/Error'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    ExternalUpdateAppointmentStatusRequestBody:
-      type: object
-      required:
-      - appointment_id
-      - appointment_status
-      properties:
-        appointment_id:
-          type: string
-          description: The Zocdoc ID of the appointment.
-          example: d04b049a-41b1-4aba-9268-d8973cf72cdd
-        appointment_status:
-          $ref: '#/components/schemas/AppointmentStatusToSet'
-    Gender:
-      type: string
-      description: "Patient's gender values\n  * Female at birth - Assigned female at birth\n  * Male\
-        \ at birth - Assigned male at birth\n  * Cisgender - A person whose current gender corresponds\
-        \ to the sex they were assigned at birth\n  * Genderfluid - A person who does not identify with\
-        \ a fixed gender\n  * Genderqueer - A person who does not follow binary gender norms\n  * Intersex\
-        \ - A person born with traits, including genital anatomy, reproductive organs, hormone function,\
-        \ and/or chromosome patterns that may not fit the typical definition of male or female\n  * Non-binary\
-        \ - Umbrella term for a person whose gender identity lies outside the gender binary\n  * Transgender\
-        \ man - A person whose gender is male and whose sex assigned at birth was female\n  * Transgender\
-        \ woman - A person whose gender is female and whose sex assigned at birth was male\n"
-      enum:
-      - female_at_birth
-      - male_at_birth
-      - cisgender
-      - genderfluid
-      - genderqueer
-      - intersex
-      - non_binary
-      - transgender_man
-      - transgender_woman
-      - prefer_not_to_say
-      - none_apply
+              $ref: '#/components/schemas/AppointmentStatusResponseData'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -985,109 +924,34 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    Patient:
-      required:
-      - first_name
-      - last_name
-      - date_of_birth
-      - sex_at_birth
-      - phone_number
-      - email_address
-      - patient_address
-      type: object
-      properties:
-        patient_id:
-          type: string
-          description: The Zocdoc ID of the patient.
-        developer_patient_id:
-          type: string
-          description: The patient identifier provided by 3P developer.
-        first_name:
-          type: string
-          description: The patient's first name.
-        last_name:
-          type: string
-          description: The patient's last name.
-        date_of_birth:
-          type: string
-          format: date
-          description: The patient's date of birth in the format, YYYY-MM-DD.
-        sex_at_birth:
-          $ref: '#/components/schemas/PatientSex'
-        phone_number:
-          type: string
-          description: The patient's unformatted 10 digit phone number. The first and fourth digits cannot
-            be a 0 or 1.
-          example: '9999999999'
-        email_address:
-          type: string
-          description: The patient's email address.
-          example: test@example.com
-        patient_address:
-          $ref: '#/components/schemas/PatientAddress'
-        insurance:
-          $ref: '#/components/schemas/PatientInsurance'
-        gender:
-          type: array
-          items:
-            $ref: '#/components/schemas/Gender'
-          description: none_apply and prefer_not_to_say must be used independently, all other gender identities
-            can be used in combination with each other.
-    PatientAddress:
-      required:
-      - address1
-      - city
-      - state
-      - zip_code
-      type: object
-      properties:
-        address1:
-          type: string
-          description: The patient's address, line 1.
-        city:
-          type: string
-          description: The patient's address, city.
-        state:
-          type: string
-          description: The patient's address, two letter state code.
-          example: NY
-        zip_code:
-          type: string
-          description: The patient's address, 5 digit zip code.
-          example: 36925
-        address2:
-          type: string
-          description: The patient's address, line 2.
-    PatientInsurance:
-      type: object
-      properties:
-        insurance_plan_id:
-          type: string
-          description: The ID of the patient's insurance plan. Use the [Get Insurance Plans](#operation/getInsurancePlans)
-            endpoint to retrieve available plans.
-          example: ip_2224
-        insurance_group_number:
-          type: string
-          description: The patients insurance group number.
-        insurance_member_id:
-          type: string
-          description: The patients insurance card member ID.
-        is_self_pay:
-          type: boolean
-          description: Indicates is a patient is self paying
-    PatientSex:
+    AppointmentStatusToSet:
       type: string
-      description: The patient's sex assigned at birth.
       enum:
-      - male
-      - female
-    PatientType:
-      type: string
-      description: Whether or not the patient has been to the provider's practice.
-      enum:
-      - existing
-      - new
-      example: new
+      - arrived
+      - no_show
+      description: 'New status to set for the appointment. Accepted values:
+
+        - `arrived`: Patient has arrived at the office.
+
+        - `no_show`: Patient did not show up for their appointment.
+
+        '
+    AppointmentParticipantPatient:
+      allOf:
+      - $ref: '#/components/schemas/Patient'
+      - type: object
+        required:
+        - uploaded_attachments
+        - is_booked_by_another_patient
+        properties:
+          uploaded_attachments:
+            type: array
+            items:
+              $ref: '#/components/schemas/UploadedAttachment'
+            description: Documents and files that have been uploaded by the patient for this appointment, such as insurance cards, ID cards, or intake forms.
+          is_booked_by_another_patient:
+            type: boolean
+            description: Indicates whether this patient's appointment was booked by another patient (e.g., a parent booking for their child or someone booking for a dependent)
     RescheduleAppointmentRequestBody:
       type: object
       required:
@@ -1103,41 +967,41 @@ components:
           format: date-time
           description: Date & time of the appointment in ISO-8601 format with a timezone offset
           example: '2022-04-27T09:00:00-04:00'
-    SharedAppointmentResponseData:
-      allOf:
-      - $ref: '#/components/schemas/AppointmentBaseResponseData'
-      - type: object
-        required:
-        - is_provider_resource
-        - confirmation_type
-        properties:
-          is_provider_resource:
-            type: boolean
-            description: Whether the appointment will be performed by a professional under the supervision
-              of the booked provider.
-          location_phone_number:
-            type: string
-            description: The appointment location's unformatted 10 digit phone number
-            example: '9999999999'
-          location_phone_extension:
-            type: string
-            description: The appointment location's unformatted extension number, as digits
-          waiting_room_path:
-            type: string
-            description: Patient facing url that can be used to navigate to Zocdoc video service appointments
-          confirmation_type:
-            $ref: '#/components/schemas/AppointmentConfirmationType'
-    UploadAppointmentAttachmentRequest:
-      type: object
-      required:
-      - attachment
-      - attachment_type
-      properties:
-        attachment:
-          type: string
-          format: binary
-        attachment_type:
-          $ref: '#/components/schemas/AttachmentType'
+    AppointmentVisitType:
+      type: string
+      description: The appointment's [visit type](/guides/glossary)
+      enum:
+      - in_person
+      - zocdoc_video_service
+      - third_party_video_service
+    CancellationReasonType:
+      type: string
+      description: Enum field describing why the appointment was cancelled. This field is optional but recommended when known for metrics purposes. If the cancellation reason does not match any predefined enum values, use 'other_patient_reason' or 'other_provider_reason' and provide a free text explanation in the cancellation_reason field.
+      enum:
+      - patient_no_longer_needs_appointment
+      - patient_no_longer_available
+      - other_patient_reason
+      - missing_needed_patient_information
+      - payment_or_insurance_issue
+      - patient_or_visit_type_not_accepted
+      - provider_not_available
+      - rescheduling_patient
+      - other_provider_reason
+    AppointmentConfirmationType:
+      type: string
+      description: "Specifies how the appointment confirmation will be handled.\n  * auto: means the system will automatically confirm.\n  * manual: means confirmation requires user action.\n  * pending_evaluation: indicates that the confirmation approach is pending evaluation.\n"
+      enum:
+      - auto
+      - manual
+      - pending_evaluation
+    AttachmentType:
+      type: string
+      enum:
+      - community_care_packet
+      - pcp_patient_referral
+      - patient_front_insurance_card
+      - patient_back_insurance_card
+      description: "The type of attachment being uploaded. \n- `community_care_packet`: Required for VA referrals to Community Care Providers. Use when submitting referral documents required by the Department  of Veterans Affairs for appointments within its extended network.\n- `pcp_patient_referral`: Use to support appointments booked with an approved referral from a primary care doctor.\n"
     UploadAppointmentAttachmentResponse:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -1159,13 +1023,50 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UploadedAppointmentAttachment'
-    UploadedAppointmentAttachment:
-      type: object
-      required:
-      - attachment_type
-      properties:
-        attachment_type:
-          $ref: '#/components/schemas/AttachmentType'
+    DocumentSide:
+      type: string
+      description: Indicates whether the document image is of the front or back side. This field is typically used for documents like insurance cards or ID cards that have information on both sides.
+      enum:
+      - front
+      - back
+    AppointmentSortByType:
+      type: string
+      enum:
+      - start_time_utc
+      - created_time_utc
+      - last_modified_time_utc
+      description: 'Field to sort appointments by:
+
+        * start_time_utc - Sort by appointment start time (default)
+
+        * created_time_utc - Sort by when appointment was created
+
+        * last_modified_time_utc - Sort by when appointment was last modified
+
+        '
+    AppointmentResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/AppointmentResponseData'
+    AppointmentType:
+      type: string
+      enum:
+      - providers
+      description: The type of appointment.
+    AppointmentParticipantsResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/AppointmentParticipantsResponseData'
     UploadedAttachment:
       type: object
       required:
@@ -1176,11 +1077,23 @@ components:
           $ref: '#/components/schemas/UploadedAttachmentType'
         attachment_url:
           type: string
-          description: A full URL to download the attachment pointing to one of auxiliary endpoints in
-            the same API. To access the url the same authentication must be used as the one used to make
-            the request to /participants endpoint.
+          description: A full URL to download the attachment pointing to one of auxiliary endpoints in the same API. To access the url the same authentication must be used as the one used to make the request to /participants endpoint.
         side:
           $ref: '#/components/schemas/DocumentSide'
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     UploadedAttachmentType:
       type: string
       enum:

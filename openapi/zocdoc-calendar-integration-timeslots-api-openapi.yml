@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: '1.177'
-  title: API Documentation calendar-integration-timeslots API
+  title: Documentation Calendar Integration Timeslots API
   description: Endpoints to manage timeslots for providers.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
@@ -29,10 +29,7 @@ paths:
       - name: date
         in: query
         required: true
-        description: The date for which to get timeslots in YYYY-MM-DD format. This parameter will match
-          against the local date part of the time slot's `start_time`. For example, a timeslot with start_time
-          of 2024-10-01T22:00 and time_zone of America/New_York is considered 2024-10-01 when querying
-          timeslots, even though it resolves to 2024-10-02 in UTC.
+        description: The date for which to get timeslots in YYYY-MM-DD format. This parameter will match against the local date part of the time slot's `start_time`. For example, a timeslot with start_time of 2024-10-01T22:00 and time_zone of America/New_York is considered 2024-10-01 when querying timeslots, even though it resolves to 2024-10-02 in UTC.
         schema:
           type: string
           format: date
@@ -46,8 +43,7 @@ paths:
       - name: limit
         in: query
         required: false
-        description: The limit of objects to get in the response. For this endpoint, this is equivalent
-          to page_size.
+        description: The limit of objects to get in the response. For this endpoint, this is equivalent to page_size.
         schema:
           type: integer
       responses:
@@ -65,20 +61,34 @@ paths:
           description: Forbidden
       summary: Get timeslots for provider on date
     put:
-      description: "This endpoint sets the complete list of available slots for a specific provider on\
-        \ a specific date. Each request must include the entire set of slots for that date. If a provider\
-        \ wishes to list times at multiple locations for a single date, each location must have its own\
-        \ timeslot object added to the array. A new request made for the same provider and date will overwrite\
-        \ the previous set of slots. If you send an empty array, all slots for that provider across all\
-        \ locations on that date will be deleted.\n\n**Note**: The timeslots are stored in an eventually\
-        \ consistent data store. This means there is a small\npossibility that a fetch might not include\
-        \ recently created slots if you fetch timeslots immediately after inserting them.\n\n**Parameter\
-        \ Validations**:\n* The user must have access to the specified `provider_id`.\n\n**Validations\
-        \ for each timeslot in the request body**:\n* `slot.provider_id`:\n    * Must match the `provider_id`\
-        \ specified in the endpoint parameter.\n* `slot.start_time`:\n    * Must be a valid \"local date-time\"\
-        \ string in ISO 8601 format, e.g., `2024-09-15T12:13:00`. The seconds component is optional.\n\
-        \    * The date component must match the `date` parameter.\n* `slot.time_zone`:\n    * Must be\
-        \ a valid IANA time zone ID (e.g., `America/New_York` or `America/Denver`).\n"
+      description: 'This endpoint sets the complete list of available slots for a specific provider on a specific date. Each request must include the entire set of slots for that date. If a provider wishes to list times at multiple locations for a single date, each location must have its own timeslot object added to the array. A new request made for the same provider and date will overwrite the previous set of slots. If you send an empty array, all slots for that provider across all locations on that date will be deleted.
+
+
+        **Note**: The timeslots are stored in an eventually consistent data store. This means there is a small
+
+        possibility that a fetch might not include recently created slots if you fetch timeslots immediately after inserting them.
+
+
+        **Parameter Validations**:
+
+        * The user must have access to the specified `provider_id`.
+
+
+        **Validations for each timeslot in the request body**:
+
+        * `slot.provider_id`:
+
+        * Must match the `provider_id` specified in the endpoint parameter.
+
+        * `slot.start_time`:
+
+        * Must be a valid "local date-time" string in ISO 8601 format, e.g., `2024-09-15T12:13:00`. The seconds component is optional.
+
+        * The date component must match the `date` parameter.
+
+        * `slot.time_zone`:
+
+        * Must be a valid IANA time zone ID (e.g., `America/New_York` or `America/Denver`).'
       operationId: putProviderCalendarTimeslots
       tags:
       - calendar-integration-timeslots
@@ -119,14 +129,42 @@ paths:
       summary: Put provider calendar timeslots
 components:
   schemas:
-    BaseResult:
+    TimeslotPutRequest:
       required:
-      - request_id
+      - timeslots
       type: object
       properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
+        timeslots:
+          type: array
+          minItems: 0
+          maxItems: 1500
+          items:
+            $ref: '#/components/schemas/TimeslotBaseRequest'
+    PatientType:
+      type: string
+      description: Whether or not the patient has been to the provider's practice.
+      enum:
+      - existing
+      - new
+      example: new
+    IteratedBaseResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        properties:
+          limit:
+            type: integer
+            description: 'Maximum number of items requested.
+
+              Note: For DynamoDB-style pagination, this may not match the number of items returned.
+
+              '
+          next_page_token:
+            type: string
+            description: Opaque cursor token for the next page. Null if no more pages.
+          next_url:
+            type: string
+            description: Complete URL for fetching the next page (convenience field)
     CalendarIntegrationTimeslotWeb:
       description: A bookable appointment start time for a particular provider
       type: object
@@ -153,15 +191,12 @@ components:
           example: America/New_York
         allowed_visit_reason_ids:
           type: array
-          description: 'Restrict the timeslot to these visit reasons. Both `null` and an empty array will
-            not restrict the timeslot.
+          description: 'Restrict the timeslot to these visit reasons. Both `null` and an empty array will not restrict the timeslot.
 
 
-            Can work in conjunction with `excluded_visit_reason_ids`. `allowed_visit_reason_ids` are superceded
-            by `excluded_visit_reason_ids`.
+            Can work in conjunction with `excluded_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
 
-            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`,
-            the net effect is that visit reason
+            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
 
             being excluded.
 
@@ -191,15 +226,12 @@ components:
             type: string
           example:
           - pc_TlZW-r06U0W3pCsIGtSI5B
-          description: 'Exclude these visit reasons. Both `null` and an empty array means no visit reasons
-            will be excluded.
+          description: 'Exclude these visit reasons. Both `null` and an empty array means no visit reasons will be excluded.
 
 
-            Can work in conjunction with `allowed_visit_reason_ids`. `allowed_visit_reason_ids` are superceded
-            by `excluded_visit_reason_ids`.
+            Can work in conjunction with `allowed_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
 
-            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`,
-            the net effect is that visit reason
+            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
 
             being excluded.
 
@@ -230,31 +262,14 @@ components:
           format: instant
           description: the time this timeslot was created in Zocdoc's system.
           example: '2024-01-01T09:30:00Z'
-    IteratedBaseResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        properties:
-          limit:
-            type: integer
-            description: 'Maximum number of items requested.
-
-              Note: For DynamoDB-style pagination, this may not match the number of items returned.
-
-              '
-          next_page_token:
-            type: string
-            description: Opaque cursor token for the next page. Null if no more pages.
-          next_url:
-            type: string
-            description: Complete URL for fetching the next page (convenience field)
-    PatientType:
-      type: string
-      description: Whether or not the patient has been to the provider's practice.
-      enum:
-      - existing
-      - new
-      example: new
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
     TimeslotBaseRequest:
       description: a bookable appointment start time for a particular provider
       type: object
@@ -283,15 +298,12 @@ components:
           example: America/New_York
         allowed_visit_reason_ids:
           type: array
-          description: 'Restrict the timeslot to these visit reasons. Both `null` and an empty array will
-            not restrict the timeslot.
+          description: 'Restrict the timeslot to these visit reasons. Both `null` and an empty array will not restrict the timeslot.
 
 
-            Can work in conjunction with `excluded_visit_reason_ids`. `allowed_visit_reason_ids` are superceded
-            by `excluded_visit_reason_ids`.
+            Can work in conjunction with `excluded_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
 
-            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`,
-            the net effect is that visit reason
+            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
 
             being excluded.
 
@@ -321,15 +333,12 @@ components:
             type: string
           example:
           - pc_TAZW-r16U0B3pZeIutSI3L
-          description: 'Exclude these visit reasons. Both `null` and an empty array means no visit reasons
-            will be excluded.
+          description: 'Exclude these visit reasons. Both `null` and an empty array means no visit reasons will be excluded.
 
 
-            Can work in conjunction with `allowed_visit_reason_ids`. `allowed_visit_reason_ids` are superceded
-            by `excluded_visit_reason_ids`.
+            Can work in conjunction with `allowed_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
 
-            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`,
-            the net effect is that visit reason
+            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
 
             being excluded.
 
@@ -351,6 +360,16 @@ components:
             '
         patient_type:
           $ref: '#/components/schemas/PatientType'
+    TimeslotPutErrors:
+      type: object
+      required:
+      - not_found_location_ids
+      properties:
+        not_found_location_ids:
+          type: array
+          items:
+            type: string
+          description: Location IDs that were not found on the Zocdoc side.
     TimeslotListResponse:
       allOf:
       - $ref: '#/components/schemas/IteratedBaseResult'
@@ -363,27 +382,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/CalendarIntegrationTimeslotWeb'
-    TimeslotPutErrors:
-      type: object
-      required:
-      - not_found_location_ids
-      properties:
-        not_found_location_ids:
-          type: array
-          items:
-            type: string
-          description: Location IDs that were not found on the Zocdoc side.
-    TimeslotPutRequest:
-      required:
-      - timeslots
-      type: object
-      properties:
-        timeslots:
-          type: array
-          minItems: 0
-          maxItems: 1500
-          items:
-            $ref: '#/components/schemas/TimeslotBaseRequest'
     TimeslotPutResponse:
       type: object
       properties:

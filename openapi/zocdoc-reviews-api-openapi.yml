@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: '1.177'
-  title: API Documentation reviews API
+  title: Documentation Reviews API
   description: Endpoints to retrieve provider reviews and ratings.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
@@ -9,14 +9,14 @@ servers:
 - url: https://api-developer.zocdoc.com
   description: Production
 tags:
-- name: reviews
+- name: Reviews
   description: Endpoints to retrieve provider reviews and ratings.
   x-displayName: Reviews
 paths:
   /v1/providers/{provider_id}/reviews:
     get:
       tags:
-      - reviews
+      - Reviews
       description: Get review summary for a provider by their Zocdoc provider ID.
       security:
       - ClientCredentialsFlow: []
@@ -56,16 +56,14 @@ paths:
   /v1/providers/reviews:
     get:
       tags:
-      - reviews
+      - Reviews
       description: 'Get review summaries for up to 100 providers in a single call, by their
 
         Zocdoc provider IDs. Duplicate IDs are collapsed; returns one item per
 
         distinct requested ID, in request order. Providers that are unknown or
 
-        not accessible to the caller are returned with zero/null ratings.
-
-        '
+        not accessible to the caller are returned with zero/null ratings.'
       security:
       - ClientCredentialsFlow: []
       - AuthorizationCodeFlow: []
@@ -74,10 +72,7 @@ paths:
       - name: provider_ids
         in: query
         required: true
-        description: A comma-delimited list of Zocdoc provider IDs to fetch review summaries for. Duplicate
-          IDs are collapsed; a maximum of 100 distinct items will be accepted at a time. IDs that are
-          unknown or not accessible to the caller are returned with zero reviews and null ratings (not
-          an error).
+        description: A comma-delimited list of Zocdoc provider IDs to fetch review summaries for. Duplicate IDs are collapsed; a maximum of 100 distinct items will be accepted at a time. IDs that are unknown or not accessible to the caller are returned with zero reviews and null ratings (not an error).
         schema:
           type: string
           example: pr_xyz123,pr_abc456
@@ -101,14 +96,6 @@ paths:
       summary: Get reviews for providers
 components:
   schemas:
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
     Error:
       required:
       - message
@@ -118,20 +105,14 @@ components:
           type: string
         message:
           type: string
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
     ErrorType:
       type: string
       enum:
@@ -149,6 +130,29 @@ components:
             description: One item for each distinct requested provider_id, in request order.
             items:
               $ref: '#/components/schemas/ProviderReviewsData'
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ProviderReviewsResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/ProviderReviewsData'
     ProviderReviewsData:
       type: object
       required:
@@ -173,15 +177,6 @@ components:
           type: number
           format: double
           description: The average wait time rating of the provider (1-5), rounded to 1 decimal place
-    ProviderReviewsResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/ProviderReviewsData'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

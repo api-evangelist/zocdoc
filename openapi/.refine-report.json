@@ -1,32 +1,46 @@
 {
   "provider": "zocdoc",
   "sources": [
-    "zocdoc-appointments-api-openapi.yml",
-    "zocdoc-calendar-integration-timeslots-api-openapi.yml",
-    "zocdoc-credentials-api-openapi.yml",
-    "zocdoc-facilities-api-openapi.yml",
-    "zocdoc-insurance-reference-api-openapi.yml",
-    "zocdoc-provider-locations-api-openapi.yml",
-    "zocdoc-providers-api-openapi.yml",
-    "zocdoc-reference-api-openapi.yml",
-    "zocdoc-schedulable-entities-api-openapi.yml",
-    "zocdoc-webhook-api-openapi.yml"
+    "_original/zocdoc-zocdoc-api-openapi.yml",
+    "zocdoc-credentials-api-openapi.yml"
   ],
   "outputs": [
     "zocdoc-appointments-api-openapi.yml",
     "zocdoc-calendar-integration-timeslots-api-openapi.yml",
-    "zocdoc-credentials-api-openapi.yml",
     "zocdoc-facilities-api-openapi.yml",
     "zocdoc-insurance-reference-api-openapi.yml",
     "zocdoc-provider-locations-api-openapi.yml",
     "zocdoc-providers-api-openapi.yml",
     "zocdoc-reference-api-openapi.yml",
+    "zocdoc-reviews-api-openapi.yml",
     "zocdoc-schedulable-entities-api-openapi.yml",
-    "zocdoc-webhook-api-openapi.yml"
+    "zocdoc-specialties-api-openapi.yml",
+    "zocdoc-visit-reasons-api-openapi.yml",
+    "zocdoc-webhook-api-openapi.yml",
+    "zocdoc-credentials-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
-  "warnings": [],
-  "notes": [],
-  "skipped": []
+  "warnings": [
+    "zocdoc-credentials-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. /v1/credentials/rotate post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "zocdoc-zocdoc-api-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "zocdoc-appointments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-calendar-integration-timeslots-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-facilities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-insurance-reference-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-provider-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-providers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-reference-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-reviews-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-schedulable-entities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-specialties-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-visit-reasons-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zocdoc-webhook-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

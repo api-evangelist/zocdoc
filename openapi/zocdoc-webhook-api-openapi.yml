@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: '1.177'
-  title: API Documentation webhook API
+  title: Documentation Webhook API
   description: Sandbox endpoints to mock webhook behavior
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
@@ -9,14 +9,14 @@ servers:
 - url: https://api-developer.zocdoc.com
   description: Production
 tags:
-- name: webhook
+- name: Webhook
   description: Sandbox endpoints to mock webhook behavior
   x-displayName: Webhook
 paths:
   /v1/webhook/mock-request:
     post:
       tags:
-      - webhook
+      - Webhook
       security:
       - ClientCredentialsFlow: []
       - AuthorizationCodeFlow: []
@@ -48,43 +48,20 @@ paths:
       summary: Mock webhook request
 components:
   schemas:
-    AppointmentUpdateType:
-      type: string
-      enum:
-      - updated
-      - cancelled
-      - created
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    ChangedAttribute:
+    WebhookMockDataRequest:
       type: object
       required:
-      - attribute_path
+      - webhook_url
+      - webhook_key
       properties:
-        attribute_path:
+        webhook_url:
           type: string
-          description: The path to the changed attribute in dot notation (e.g., "appointment.start_time",
-            "patient.uploaded_attachments")
-          example: appointment.start_time
-        attachment_type:
+          description: a valid url to receive the mock webhook request
+        webhook_key:
           type: string
-          description: Required when attribute_path is "appointment.attachments", indicates the type of
-            attachment
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
+          description: a valid key for the signature in base64 format
+        appointment_update_type:
+          $ref: '#/components/schemas/AppointmentUpdateType'
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -99,11 +76,38 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
+    WebhookMockResponse:
+      type: object
+      required:
+      - event_type
+      - webhook_timestamp
+      - data
+      properties:
+        event_type:
+          type: string
+        webhook_timestamp:
+          type: string
+        data:
+          $ref: '#/components/schemas/WebhookMockRequestData'
+    WebhookMockRequestData:
+      type: object
+      required:
+      - data_type
+      - appointment_data
+      properties:
+        data_type:
+          type: string
+        appointment_data:
+          $ref: '#/components/schemas/WebhookMockAppointmentData'
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
     WebhookMockAppointmentData:
       type: object
       required:
@@ -121,45 +125,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChangedAttribute'
-          description: Array of changed attributes when webhook is triggered due to attribute changes.
-            Each object must contain at least an attribute_path indicating the changed field.
-    WebhookMockDataRequest:
+          description: Array of changed attributes when webhook is triggered due to attribute changes. Each object must contain at least an attribute_path indicating the changed field.
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    ChangedAttribute:
       type: object
       required:
-      - webhook_url
-      - webhook_key
+      - attribute_path
       properties:
-        webhook_url:
+        attribute_path:
           type: string
-          description: a valid url to receive the mock webhook request
-        webhook_key:
+          description: The path to the changed attribute in dot notation (e.g., "appointment.start_time", "patient.uploaded_attachments")
+          example: appointment.start_time
+        attachment_type:
           type: string
-          description: a valid key for the signature in base64 format
-        appointment_update_type:
-          $ref: '#/components/schemas/AppointmentUpdateType'
-    WebhookMockRequestData:
-      type: object
-      required:
-      - data_type
-      - appointment_data
-      properties:
-        data_type:
-          type: string
-        appointment_data:
-          $ref: '#/components/schemas/WebhookMockAppointmentData'
-    WebhookMockResponse:
-      type: object
-      required:
-      - event_type
-      - webhook_timestamp
-      - data
-      properties:
-        event_type:
-          type: string
-        webhook_timestamp:
-          type: string
-        data:
-          $ref: '#/components/schemas/WebhookMockRequestData'
+          description: Required when attribute_path is "appointment.attachments", indicates the type of attachment
+    AppointmentUpdateType:
+      type: string
+      enum:
+      - updated
+      - cancelled
+      - created
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

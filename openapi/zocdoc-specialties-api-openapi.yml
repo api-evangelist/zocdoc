@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: '1.177'
-  title: API Documentation specialties API
+  title: Documentation Specialties API
   description: Endpoints to retrieve specialties supported by Zocdoc.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
@@ -9,14 +9,14 @@ servers:
 - url: https://api-developer.zocdoc.com
   description: Production
 tags:
-- name: specialties
+- name: Specialties
   description: Endpoints to retrieve specialties supported by Zocdoc.
   x-displayName: Specialties
 paths:
   /v1/specialties:
     get:
       tags:
-      - specialties
+      - Specialties
       summary: Get specialties
       description: Get specialties with optional filtering by care category
       security:
@@ -65,9 +65,8 @@ paths:
   /v1/specialties/{specialty_id}:
     get:
       tags:
-      - specialties
+      - Specialties
       summary: Get specialty by id
-      description: Get specialty by id
       security:
       - ClientCredentialsFlow: []
       - AuthorizationCodeFlow: []
@@ -100,22 +99,6 @@ paths:
           description: Not found
 components:
   schemas:
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    CareCategory:
-      type: string
-      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n\
-        \  * Dental: Dental Care\n  * Vision: Vision Care\n"
-      enum:
-      - health
-      - dental
-      - vision
     Error:
       required:
       - message
@@ -125,25 +108,6 @@ components:
           type: string
         message:
           type: string
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -166,6 +130,14 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
     SpecialtiesResponse:
       type: object
       allOf:
@@ -188,6 +160,13 @@ components:
         properties:
           data:
             $ref: '#/components/schemas/SpecialtyData'
+    CareCategory:
+      type: string
+      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
+      enum:
+      - health
+      - dental
+      - vision
     SpecialtyData:
       type: object
       required:
@@ -208,6 +187,25 @@ components:
           type: string
         default_visit_reason_name:
           type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

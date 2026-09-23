@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: '1.177'
-  title: API Documentation schedulable-entities API
-  description: Endpoints to manage the providers in the developer's directory. Retrieve the schedulable
-    entities currently in your directory with availability information, or submit a list of NPIs to determine
-    which of those providers are already schedulable.
+  title: Documentation Schedulable Entities API
+  description: Endpoints to manage the providers in the developer's directory. Retrieve the schedulable entities currently in your directory with availability information, or submit a list of NPIs to determine which of those providers are already schedulable.
 servers:
 - url: https://api-developer-sandbox.zocdoc.com
   description: Sandbox
@@ -12,9 +10,7 @@ servers:
   description: Production
 tags:
 - name: schedulable-entities
-  description: Endpoints to manage the providers in the developer's directory. Retrieve the schedulable
-    entities currently in your directory with availability information, or submit a list of NPIs to determine
-    which of those providers are already schedulable.
+  description: Endpoints to manage the providers in the developer's directory. Retrieve the schedulable entities currently in your directory with availability information, or submit a list of NPIs to determine which of those providers are already schedulable.
   x-displayName: Directory Management
 paths:
   /v1/schedulable_entities:
@@ -22,22 +18,13 @@ paths:
       tags:
       - schedulable-entities
       summary: Get schedulable entities
-      description: 'Get the list of schedulable entities within the developer''s Zocdoc directory (provider-locations,
-        etc.) with availability information.
+      description: 'Get the list of schedulable entities within the developer''s Zocdoc directory (provider-locations, etc.) with availability information.
 
 
-        NPIs can be used to search for providers in the /v1/providers endpoint to facilitate availability,
-        discovery, and booking. Schedulable entity ids can be used to find provider-locations in the /v1/provider_locations/{provider_location_id}
-        endpoint to facilitate availability, discovery, and booking.
+        NPIs can be used to search for providers in the /v1/providers endpoint to facilitate availability, discovery, and booking. Schedulable entity ids can be used to find provider-locations in the /v1/provider_locations/{provider_location_id} endpoint to facilitate availability, discovery, and booking.
 
 
-        Developers can fetch the schedulable entities list and cache in their system. The available schedulable
-        entities do not change frequently. Pulling this data once a week and/or after known directory
-        change events should be sufficient. However, you may use the `recent_changes_72hrs` parameter
-        and the `recent_change_summary` field to get the list of entities that have changed in the last
-        72 hours.
-
-        '
+        Developers can fetch the schedulable entities list and cache in their system. The available schedulable entities do not change frequently. Pulling this data once a week and/or after known directory change events should be sufficient. However, you may use the `recent_changes_72hrs` parameter and the `recent_change_summary` field to get the list of entities that have changed in the last 72 hours.'
       security:
       - ClientCredentialsFlow:
         - external.schedulable_entity.read
@@ -53,8 +40,7 @@ paths:
           type: integer
       - name: page_size
         in: query
-        description: The number of results to return per page. The default value is 5000. A mimimum value
-          of 1 and a maximum of 10000 will be accepted.
+        description: The number of results to return per page. The default value is 5000. A mimimum value of 1 and a maximum of 10000 will be accepted.
         required: false
         schema:
           type: integer
@@ -62,8 +48,7 @@ paths:
           maximum: 10000
       - name: schedule_types
         in: query
-        description: The comma-delimited list of schedule types to include. Will return all schedule types
-          if not provided.
+        description: The comma-delimited list of schedule types to include. Will return all schedule types if not provided.
         required: false
         schema:
           type: string
@@ -101,9 +86,7 @@ paths:
 
         (`developer_app_state`), unverified addresses and other data required
 
-        for joint provider operations.
-
-        '
+        for joint provider operations.'
       security:
       - ClientCredentialsFlow:
         - external.schedulable_entity.read
@@ -135,181 +118,6 @@ paths:
           description: Forbidden
 components:
   schemas:
-    AvailabilityInfo:
-      type: object
-      required:
-      - next_28_days
-      - url
-      properties:
-        next_available_utc:
-          type: string
-          format: date-time
-          description: The next available date and time in UTC, across all visit reasons, up to 90 days
-            in the future.
-        next_28_days:
-          $ref: '#/components/schemas/AvailabilityStatus'
-        url:
-          type: string
-          description: The GET URL to receive the schedulable entity's availability in this API for their
-            default visit reason and the corresponding patient type.
-    AvailabilityStatus:
-      type: string
-      enum:
-      - none
-      - limited
-      - available
-      description: The availability status of the schedulable entity for the next 28 days. Limited availablility
-        means that the entity has less than 20 timeslots available for the next 28 days.
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    DeveloperAppStateInput:
-      type: string
-      enum:
-      - disabled
-      - enabled
-      description: Whether the developer's app is enabled or disabled
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    MatchRequestInput:
-      type: object
-      required:
-      - npi
-      properties:
-        npi:
-          type: string
-          description: National Provider Identifier
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/MatchRequestMetadataItem'
-    MatchRequestMetadataItem:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-    MatchRequestResponseItem:
-      type: object
-      required:
-      - npi
-      - schedule_state
-      - schedulable_entities
-      properties:
-        npi:
-          type: string
-          description: National Provider Identifier
-        schedule_state:
-          $ref: '#/components/schemas/ZocdocSchedulableStatus'
-        schedulable_entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/OverlapsSchedulableEntityItem'
-    OverlapsSchedulableEntityItem:
-      type: object
-      required:
-      - id
-      - entity_type
-      properties:
-        id:
-          type: string
-          description: Zocdoc provider location ID (e.g., pr_zzzz|lo_yyyy)
-        entity_type:
-          $ref: '#/components/schemas/OverlapsSchedulableEntityType'
-    OverlapsSchedulableEntityType:
-      type: string
-      description: Entity type
-      enum:
-      - provider_location
-    PaginatedBaseResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - page
-        - page_size
-        - total_count
-        - next_url
-        properties:
-          page:
-            description: The zero based index of the current page.
-            type: integer
-          page_size:
-            description: The size of the current page.
-            type: integer
-          total_count:
-            description: The total number of result items.
-            type: integer
-          next_url:
-            description: A link to the next page of results; null if this is the last page of results.
-            type: string
-    RecentChangeSummary:
-      type: object
-      required:
-      - schedulable_entities_added
-      - schedulable_entities_removed
-      - schedulable_entities_profile_updated
-      properties:
-        schedulable_entities_added:
-          type: array
-          items:
-            type: string
-          description: A provider location was activated
-        schedulable_entities_removed:
-          type: array
-          items:
-            type: string
-          description: A provider location was deactivated
-        schedulable_entities_profile_updated:
-          type: array
-          items:
-            type: string
-          description: provider or location profile data changed (NPI, name, specialty, address, default
-            visit reason)
-    SchedulableEntitiesData:
-      type: object
-      required:
-      - recent_change_summary
-      - schedulable_entities
-      properties:
-        recent_change_summary:
-          $ref: '#/components/schemas/RecentChangeSummary'
-        schedulable_entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/SchedulableEntity'
     SchedulableEntitiesOverlapsRequestBody:
       type: object
       required:
@@ -323,26 +131,6 @@ components:
             $ref: '#/components/schemas/MatchRequestInput'
         developer_app_state:
           $ref: '#/components/schemas/DeveloperAppStateInput'
-    SchedulableEntitiesOverlapsResponseBody:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/MatchRequestResponseItem'
-    SchedulableEntitiesResponse:
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/SchedulableEntitiesData'
     SchedulableEntity:
       type: object
       required:
@@ -366,8 +154,7 @@ components:
         profile_last_modified_timestamp_utc:
           type: string
           format: date-time
-          description: The timestamp when the schedulable entity's profile was last modified in the developer's
-            directory. This includes basic information on the provider and location records.
+          description: The timestamp when the schedulable entity's profile was last modified in the developer's directory. This includes basic information on the provider and location records.
         new_patient_availability:
           $ref: '#/components/schemas/AvailabilityInfo'
         existing_patient_availability:
@@ -378,24 +165,213 @@ components:
           example: America/New_York
         main_specialty_id:
           type: string
-          description: Zocdoc specialty ID of the provider's main specialty (format sp_<id>). Omitted
-            when the provider has no main specialty.
+          description: Zocdoc specialty ID of the provider's main specialty (format sp_<id>). Omitted when the provider has no main specialty.
           example: sp_123
         main_specialty_name:
           type: string
-          description: Display name of the provider's main specialty. Omitted when the specialty id is
-            absent or cannot be resolved.
+          description: Display name of the provider's main specialty. Omitted when the specialty id is absent or cannot be resolved.
           example: Cardiologist
+    OverlapsSchedulableEntityType:
+      type: string
+      description: Entity type
+      enum:
+      - provider_location
+    AvailabilityStatus:
+      type: string
+      enum:
+      - none
+      - limited
+      - available
+      description: The availability status of the schedulable entity for the next 28 days. Limited availablility means that the entity has less than 20 timeslots available for the next 28 days.
+    MatchRequestMetadataItem:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    DeveloperAppStateInput:
+      type: string
+      enum:
+      - disabled
+      - enabled
+      description: Whether the developer's app is enabled or disabled
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    RecentChangeSummary:
+      type: object
+      required:
+      - schedulable_entities_added
+      - schedulable_entities_removed
+      - schedulable_entities_profile_updated
+      properties:
+        schedulable_entities_added:
+          type: array
+          items:
+            type: string
+          description: A provider location was activated
+        schedulable_entities_removed:
+          type: array
+          items:
+            type: string
+          description: A provider location was deactivated
+        schedulable_entities_profile_updated:
+          type: array
+          items:
+            type: string
+          description: provider or location profile data changed (NPI, name, specialty, address, default visit reason)
     SchedulableEntityType:
       type: string
       enum:
       - provider_location
+    AvailabilityInfo:
+      type: object
+      required:
+      - next_28_days
+      - url
+      properties:
+        next_available_utc:
+          type: string
+          format: date-time
+          description: The next available date and time in UTC, across all visit reasons, up to 90 days in the future.
+        next_28_days:
+          $ref: '#/components/schemas/AvailabilityStatus'
+        url:
+          type: string
+          description: The GET URL to receive the schedulable entity's availability in this API for their default visit reason and the corresponding patient type.
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    SchedulableEntitiesResponse:
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/SchedulableEntitiesData'
+    OverlapsSchedulableEntityItem:
+      type: object
+      required:
+      - id
+      - entity_type
+      properties:
+        id:
+          type: string
+          description: Zocdoc provider location ID (e.g., pr_zzzz|lo_yyyy)
+        entity_type:
+          $ref: '#/components/schemas/OverlapsSchedulableEntityType'
+    SchedulableEntitiesData:
+      type: object
+      required:
+      - recent_change_summary
+      - schedulable_entities
+      properties:
+        recent_change_summary:
+          $ref: '#/components/schemas/RecentChangeSummary'
+        schedulable_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchedulableEntity'
+    PaginatedBaseResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - page
+        - page_size
+        - total_count
+        - next_url
+        properties:
+          page:
+            description: The zero based index of the current page.
+            type: integer
+          page_size:
+            description: The size of the current page.
+            type: integer
+          total_count:
+            description: The total number of result items.
+            type: integer
+          next_url:
+            description: A link to the next page of results; null if this is the last page of results.
+            type: string
+    MatchRequestResponseItem:
+      type: object
+      required:
+      - npi
+      - schedule_state
+      - schedulable_entities
+      properties:
+        npi:
+          type: string
+          description: National Provider Identifier
+        schedule_state:
+          $ref: '#/components/schemas/ZocdocSchedulableStatus'
+        schedulable_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/OverlapsSchedulableEntityItem'
+    MatchRequestInput:
+      type: object
+      required:
+      - npi
+      properties:
+        npi:
+          type: string
+          description: National Provider Identifier
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchRequestMetadataItem'
     ZocdocSchedulableStatus:
       type: string
       enum:
       - schedulable
       - not_schedulable
       - added_to_queue
+    SchedulableEntitiesOverlapsResponseBody:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/MatchRequestResponseItem'
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2
