@@ -96,63 +96,6 @@ paths:
       summary: Get reviews for providers
 components:
   schemas:
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    ProviderReviewsBatchResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            description: One item for each distinct requested provider_id, in request order.
-            items:
-              $ref: '#/components/schemas/ProviderReviewsData'
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    ProviderReviewsResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/ProviderReviewsData'
     ProviderReviewsData:
       type: object
       required:
@@ -177,6 +120,63 @@ components:
           type: number
           format: double
           description: The average wait time rating of the provider (1-5), rounded to 1 decimal place
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    ProviderReviewsBatchResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            description: One item for each distinct requested provider_id, in request order.
+            items:
+              $ref: '#/components/schemas/ProviderReviewsData'
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    ProviderReviewsResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/ProviderReviewsData'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

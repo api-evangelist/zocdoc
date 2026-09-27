@@ -108,6 +108,20 @@ components:
           type: string
         message:
           type: string
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -130,26 +144,13 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    SpecialtiesResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/SpecialtyData'
+    CareCategory:
+      type: string
+      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
+      enum:
+      - health
+      - dental
+      - vision
     SpecialtyByIdResponse:
       type: object
       allOf:
@@ -160,13 +161,19 @@ components:
         properties:
           data:
             $ref: '#/components/schemas/SpecialtyData'
-    CareCategory:
+    ErrorType:
       type: string
-      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
       enum:
-      - health
-      - dental
-      - vision
+      - api_error
+      - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
     SpecialtyData:
       type: object
       required:
@@ -187,25 +194,18 @@ components:
           type: string
         default_visit_reason_name:
           type: string
-    ErrorResult:
+    SpecialtiesResponse:
+      type: object
       allOf:
-      - $ref: '#/components/schemas/BaseResult'
+      - $ref: '#/components/schemas/PaginatedBaseResult'
       - type: object
         required:
-        - error_type
-        - errors
+        - data
         properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
+          data:
             type: array
             items:
-              $ref: '#/components/schemas/Error'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
+              $ref: '#/components/schemas/SpecialtyData'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2
