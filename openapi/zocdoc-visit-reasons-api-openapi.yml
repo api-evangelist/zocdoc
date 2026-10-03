@@ -99,15 +99,6 @@ paths:
           description: Not found
 components:
   schemas:
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -122,6 +113,43 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    VisitReasonByIdResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/VisitReasonData'
+    VisitReasonData:
+      type: object
+      required:
+      - id
+      - name
+      - specialty_id
+      properties:
+        id:
+          type: string
+          description: Zocdoc visit reason id
+        name:
+          type: string
+        specialty_id:
+          type: string
+          description: Zocdoc specialty id this visit reason belongs to
+    VisitReasonsResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/VisitReasonData'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -149,31 +177,6 @@ components:
       enum:
       - api_error
       - invalid_request
-    VisitReasonData:
-      type: object
-      required:
-      - id
-      - name
-      - specialty_id
-      properties:
-        id:
-          type: string
-          description: Zocdoc visit reason id
-        name:
-          type: string
-        specialty_id:
-          type: string
-          description: Zocdoc specialty id this visit reason belongs to
-    VisitReasonByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/VisitReasonData'
     BaseResult:
       required:
       - request_id
@@ -182,18 +185,15 @@ components:
         request_id:
           type: string
           description: Unique request identifier for tracing
-    VisitReasonsResponse:
+    Error:
+      required:
+      - message
       type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/VisitReasonData'
+      properties:
+        field:
+          type: string
+        message:
+          type: string
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

@@ -121,49 +121,19 @@ paths:
           description: Not found
 components:
   schemas:
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    InsurancePlan:
-      type: object
-      required:
-      - id
-      - name
-      - carrier
-      - network_type
-      - program_type
-      - care_categories
-      - status
-      - coverage_area
-      - ref_metadata
-      properties:
-        id:
-          type: string
-          description: Zocdoc id for insurance plan
-        name:
-          type: string
-        carrier:
-          $ref: '#/components/schemas/InsuranceCarrier'
-        network_type:
-          $ref: '#/components/schemas/InsuranceNetworkType'
-        program_type:
-          $ref: '#/components/schemas/InsuranceProgramType'
-        status:
-          $ref: '#/components/schemas/InsuranceStatus'
-        care_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/CareCategory'
-        coverage_area:
-          $ref: '#/components/schemas/CoverageArea'
-        ref_metadata:
-          $ref: '#/components/schemas/ReferenceMetadata'
+    InsuranceProgramType:
+      type: string
+      enum:
+      - commercial
+      - commercial_exchange
+      - medicare
+      - medicaid
+      - workers_compensation
+      - uncategorized
+      - medicare_advantage
+      - medicaid_managed_care
+      - federal
+      description: "We've categorized plan types offered by each carrier into their associated programs:\n  * Commercial: The most common plans offered by private companies. Providers contract directly with the private insurance company.\n  * ACA Marketplace (Commercial exchange): Plans available for patients to buy on online marketplaces under the Affordable Care Act. Providers contract with the insurance carrier offering the plan, not the marketplace itself.\n  * Medicare: Medicare advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved by Medicare. They provide coverage to individuals, families, and employer groups, typically through employer-sponsored plans.\n  * Medicaid: Medicaid Managed Care plans provide Medicaid benefits through contracted arrangements between state Medicaid agencies and a managed care organization (MCOs).\n  * Worker's Compensation: State-mandated programs for work-related injuries and illnesses. Providers contract with the employer or a state-designated agency.\n  * Uncategorized: Uncategorized insurance plans\n"
     InsuranceCarrier:
       type: object
       description: The insurance carrier for the insurance plan
@@ -176,6 +146,16 @@ components:
           description: Zocdoc id for insurance carrier
         name:
           type: string
+    InsurancePlanByIdResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/InsurancePlan'
     InsuranceNetworkType:
       type: string
       description: "The type of insurance plan\n  * HMO: Health Maintenance Organization\n  * PPO: Preferred Provider Organization\n  * POS: Point-of-Service\n  * EPO: Exclusive Provider Organization\n  * Indemnity: Traditional fee-for-service plans\n  * ASO: Administrative Services Only\n  * ACO: Accountable Care Organizations\n  * ACP: Accountable Care Program\n  * Medicare: Medicare Advantage plans\n  * Medicaid: Medicaid Managed Care plans\n  * Other\n  * Uncategorized: Uncategorized insurance plans\n"
@@ -236,11 +216,15 @@ components:
       - health
       - dental
       - vision
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
     InsurancePlansResponse:
       type: object
       allOf:
@@ -253,18 +237,18 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/InsurancePlan'
-    CoverageArea:
-      type: object
-      required:
-      - is_national
-      properties:
-        is_national:
-          type: boolean
-        states:
-          type: array
-          description: The two letter state codes where the insurance plan has coverage. Will be null when is_national true.
-          items:
-            type: string
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    InsuranceStatus:
+      type: string
+      description: Status of the insurance plan
+      enum:
+      - inactive
+      - active
+      - deleted
     BaseResult:
       required:
       - request_id
@@ -273,26 +257,40 @@ components:
         request_id:
           type: string
           description: Unique request identifier for tracing
-    InsuranceStatus:
-      type: string
-      description: Status of the insurance plan
-      enum:
-      - inactive
-      - active
-      - deleted
-    InsuranceProgramType:
-      type: string
-      enum:
-      - commercial
-      - commercial_exchange
-      - medicare
-      - medicaid
-      - workers_compensation
-      - uncategorized
-      - medicare_advantage
-      - medicaid_managed_care
-      - federal
-      description: "We've categorized plan types offered by each carrier into their associated programs:\n  * Commercial: The most common plans offered by private companies. Providers contract directly with the private insurance company.\n  * ACA Marketplace (Commercial exchange): Plans available for patients to buy on online marketplaces under the Affordable Care Act. Providers contract with the insurance carrier offering the plan, not the marketplace itself.\n  * Medicare: Medicare advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved by Medicare. They provide coverage to individuals, families, and employer groups, typically through employer-sponsored plans.\n  * Medicaid: Medicaid Managed Care plans provide Medicaid benefits through contracted arrangements between state Medicaid agencies and a managed care organization (MCOs).\n  * Worker's Compensation: State-mandated programs for work-related injuries and illnesses. Providers contract with the employer or a state-designated agency.\n  * Uncategorized: Uncategorized insurance plans\n"
+    InsurancePlan:
+      type: object
+      required:
+      - id
+      - name
+      - carrier
+      - network_type
+      - program_type
+      - care_categories
+      - status
+      - coverage_area
+      - ref_metadata
+      properties:
+        id:
+          type: string
+          description: Zocdoc id for insurance plan
+        name:
+          type: string
+        carrier:
+          $ref: '#/components/schemas/InsuranceCarrier'
+        network_type:
+          $ref: '#/components/schemas/InsuranceNetworkType'
+        program_type:
+          $ref: '#/components/schemas/InsuranceProgramType'
+        status:
+          $ref: '#/components/schemas/InsuranceStatus'
+        care_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareCategory'
+        coverage_area:
+          $ref: '#/components/schemas/CoverageArea'
+        ref_metadata:
+          $ref: '#/components/schemas/ReferenceMetadata'
     ReferenceMetadata:
       type: object
       properties:
@@ -306,16 +304,18 @@ components:
           format: date-time
           description: Date & time of when the reference data was last updated in ISO-8601 format with a timezone offset representing UTC
           example: '2022-04-27T09:00:00-00:00'
-    InsurancePlanByIdResponse:
+    CoverageArea:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/InsurancePlan'
+      required:
+      - is_national
+      properties:
+        is_national:
+          type: boolean
+        states:
+          type: array
+          description: The two letter state codes where the insurance plan has coverage. Will be null when is_national true.
+          items:
+            type: string
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

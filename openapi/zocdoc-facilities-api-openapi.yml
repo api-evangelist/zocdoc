@@ -127,78 +127,6 @@ paths:
           description: Not found
 components:
   schemas:
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    PaginatedBaseResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - page
-        - page_size
-        - total_count
-        - next_url
-        properties:
-          page:
-            description: The zero based index of the current page.
-            type: integer
-          page_size:
-            description: The size of the current page.
-            type: integer
-          total_count:
-            description: The total number of result items.
-            type: integer
-          next_url:
-            description: A link to the next page of results; null if this is the last page of results.
-            type: string
-    FacilitiesResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/Facility'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    Practice:
-      type: object
-      required:
-      - practice_id
-      - practice_name
-      properties:
-        practice_id:
-          type: string
-        practice_name:
-          type: string
     BaseLocation:
       type: object
       required:
@@ -242,6 +170,129 @@ components:
           type: string
           description: IANA time zone identifier for the location, e.g., America/New_York.
           example: America/New_York
+    FacilitySchedule:
+      type: object
+      required:
+      - schedule_id
+      - provider_location_id
+      - booking_requirements
+      properties:
+        schedule_id:
+          type: string
+          description: Zocdoc id for bookable schedule
+        provider_location_id:
+          type: string
+          description: Zocdoc provider location id for availability and booking requests
+        booking_requirements:
+          $ref: '#/components/schemas/BookingRequirements'
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    BookingRequirements:
+      type: object
+      required:
+      - required_fields
+      - accepts_booking_requests_from
+      properties:
+        required_fields:
+          type: array
+          items:
+            type: string
+            description: Options include `data.patient.insurance.insurance_plan_id` and `data.patient.insurance.insurance_member_id`
+        accepts_booking_requests_from:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingRequestInsuranceSource'
+      description: Criteria for booking appointments, defines requirements and mandatory fields specified by Zocdoc providers
+    Practice:
+      type: object
+      required:
+      - practice_id
+      - practice_name
+      properties:
+        practice_id:
+          type: string
+        practice_name:
+          type: string
+    FacilityByIdResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Facility'
+    PaginatedBaseResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - page
+        - page_size
+        - total_count
+        - next_url
+        properties:
+          page:
+            description: The zero based index of the current page.
+            type: integer
+          page_size:
+            description: The size of the current page.
+            type: integer
+          total_count:
+            description: The total number of result items.
+            type: integer
+          next_url:
+            description: A link to the next page of results; null if this is the last page of results.
+            type: string
+    BookingRequestInsuranceSource:
+      type: string
+      description: The types of insurance coverage that a provider accepts
+      enum:
+      - in_network
+      - out_of_network
+      - self_pay
+    BuildingType:
+      type: string
+      description: The type of facility building, which can be clinic or hospital.
+      enum:
+      - clinic
+      - hospital
+    FacilitiesResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Facility'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
     Facility:
       type: object
       required:
@@ -283,66 +334,15 @@ components:
           $ref: '#/components/schemas/FacilitySchedule'
         practice:
           $ref: '#/components/schemas/Practice'
-    BookingRequirements:
-      type: object
+    Error:
       required:
-      - required_fields
-      - accepts_booking_requests_from
-      properties:
-        required_fields:
-          type: array
-          items:
-            type: string
-            description: Options include `data.patient.insurance.insurance_plan_id` and `data.patient.insurance.insurance_member_id`
-        accepts_booking_requests_from:
-          type: array
-          items:
-            $ref: '#/components/schemas/BookingRequestInsuranceSource'
-      description: Criteria for booking appointments, defines requirements and mandatory fields specified by Zocdoc providers
-    BaseResult:
-      required:
-      - request_id
+      - message
       type: object
       properties:
-        request_id:
+        field:
           type: string
-          description: Unique request identifier for tracing
-    BuildingType:
-      type: string
-      description: The type of facility building, which can be clinic or hospital.
-      enum:
-      - clinic
-      - hospital
-    FacilitySchedule:
-      type: object
-      required:
-      - schedule_id
-      - provider_location_id
-      - booking_requirements
-      properties:
-        schedule_id:
+        message:
           type: string
-          description: Zocdoc id for bookable schedule
-        provider_location_id:
-          type: string
-          description: Zocdoc provider location id for availability and booking requests
-        booking_requirements:
-          $ref: '#/components/schemas/BookingRequirements'
-    BookingRequestInsuranceSource:
-      type: string
-      description: The types of insurance coverage that a provider accepts
-      enum:
-      - in_network
-      - out_of_network
-      - self_pay
-    FacilityByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        properties:
-          data:
-            $ref: '#/components/schemas/Facility'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

@@ -365,21 +365,79 @@ components:
             type: string
         operation:
           $ref: '#/components/schemas/InsuranceMappingUpdateOperation'
-    Practice:
+    BaseVirtualLocation:
       type: object
       required:
-      - practice_id
-      - practice_name
+      - state
       properties:
-        practice_id:
+        state:
+          description: The location's two letter state code.
+          example: NY
           type: string
-        practice_name:
+        location_name:
           type: string
-    ProviderLocationType:
+        time_zone:
+          type: string
+          description: IANA time zone identifier for the location, e.g., America/New_York.
+          example: America/New_York
+    InsurancePlanMapping:
+      type: object
+      required:
+      - insurance_plan_id
+      properties:
+        insurance_plan_id:
+          type: string
+    ProviderLocation:
+      type: object
+      required:
+      - provider_location_id
+      - provider_location_type
+      - accepts_patient_insurance
+      - provider
+      - booking_requirements
+      properties:
+        provider_location_id:
+          type: string
+          example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
+        provider_location_type:
+          $ref: '#/components/schemas/ProviderLocationType'
+        accepts_patient_insurance:
+          $ref: '#/components/schemas/AcceptsPatientInsuranceType'
+        first_availability_date_in_provider_local_time:
+          type: string
+          format: date
+          description: The first date where provider has availability for new patients with any visit reason in provider's local time zone, formatted as YYYY-MM-DD and up to 90 days in the future.
+        provider:
+          $ref: '#/components/schemas/BaseProvider'
+        location:
+          $ref: '#/components/schemas/BaseLocationWithDistance'
+        virtual_location:
+          $ref: '#/components/schemas/BaseVirtualLocation'
+        practice:
+          $ref: '#/components/schemas/Practice'
+        booking_requirements:
+          $ref: '#/components/schemas/BookingRequirements'
+    AcceptsPatientInsuranceType:
       type: string
+      description: Whether the provider location accepts the patient's insurance
       enum:
-      - in_person_provider
-      - virtual_provider
+      - accepted
+      - not_accepted
+      - insurance_not_specified
+    SearchParameters:
+      type: object
+      required:
+      - specialty_id
+      - visit_reason_id
+      properties:
+        specialty_id:
+          type: string
+          description: The Zocdoc ID of the specialty used to search with. If no specialty was provided by the developer, this will be the specialty associated with the visit reason ID that was provided.
+          example: sp_153
+        visit_reason_id:
+          type: string
+          description: The Zocdoc ID of the visit reason used to search with. If no visit reason was provided by the developer, this will be the default visit reason for the specialty id that was provided.
+          example: pc_FRO-18leckytNKtruw5dLR
     InsuranceCarrierNetwork:
       type: object
       required:
@@ -395,45 +453,31 @@ components:
           type: array
           items:
             type: string
-    GetInsuranceMappingsResults:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/InsuranceMappingData'
-    VisitType:
-      type: string
-      description: The type of patient visit with the provider.
-      enum:
-      - all
-      - in_person
-      - video_visit
-      example: all
-    InsuranceMappingUpdateOperation:
-      type: string
-      enum:
-      - Add
-      - Remove
-      - Replace
-    InsurancePlanMapping:
+    ProviderCredentials:
       type: object
       required:
-      - insurance_plan_id
+      - certifications
+      - education
       properties:
-        insurance_plan_id:
-          type: string
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
+        certifications:
+          type: array
+          items:
+            type: string
+        education:
+          $ref: '#/components/schemas/Education'
+      description: Provider Credentials include education and certifications.
+    BookingRequestInsuranceSource:
+      type: string
+      description: The types of insurance coverage that a provider accepts
+      enum:
+      - in_network
+      - out_of_network
+      - self_pay
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
     ProviderListResult:
       allOf:
       - $ref: '#/components/schemas/PaginatedBaseResult'
@@ -443,63 +487,6 @@ components:
         properties:
           data:
             $ref: '#/components/schemas/ProviderSearchResult'
-    SearchParameters:
-      type: object
-      required:
-      - specialty_id
-      - visit_reason_id
-      properties:
-        specialty_id:
-          type: string
-          description: The Zocdoc ID of the specialty used to search with. If no specialty was provided by the developer, this will be the specialty associated with the visit reason ID that was provided.
-          example: sp_153
-        visit_reason_id:
-          type: string
-          description: The Zocdoc ID of the visit reason used to search with. If no visit reason was provided by the developer, this will be the default visit reason for the specialty id that was provided.
-          example: pc_FRO-18leckytNKtruw5dLR
-    BaseLocation:
-      type: object
-      required:
-      - address1
-      - city
-      - state
-      - zip_code
-      - latitude
-      - longitude
-      properties:
-        address1:
-          type: string
-        address2:
-          type: string
-        city:
-          type: string
-        state:
-          description: The location's two letter state code.
-          example: NY
-          type: string
-        zip_code:
-          description: The location's 5 digit zip code.
-          type: string
-        latitude:
-          type: number
-          format: float
-        longitude:
-          type: number
-          format: float
-        location_name:
-          type: string
-        phone_number:
-          type: string
-          description: Unformatted phone number for the location. Returns null for certain API products.
-          example: '9999999999'
-        phone_extension:
-          type: string
-          description: Unformatted extension digits for the location phone number.
-          example: '123'
-        time_zone:
-          type: string
-          description: IANA time zone identifier for the location, e.g., America/New_York.
-          example: America/New_York
     BaseResult:
       required:
       - request_id
@@ -521,33 +508,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Timeslot'
-    BookingRequestInsuranceSource:
-      type: string
-      description: The types of insurance coverage that a provider accepts
-      enum:
-      - in_network
-      - out_of_network
-      - self_pay
-    AcceptsPatientInsuranceType:
-      type: string
-      description: Whether the provider location accepts the patient's insurance
-      enum:
-      - accepted
-      - not_accepted
-      - insurance_not_specified
-    ProviderCredentials:
+    InsuranceMappingData:
       type: object
       required:
-      - certifications
-      - education
+      - insurance_plan_mappings
+      - eligible_insurances
       properties:
-        certifications:
+        insurance_plan_mappings:
+          description: List of insurance plans that are mapped
           type: array
           items:
-            type: string
-        education:
-          $ref: '#/components/schemas/Education'
-      description: Provider Credentials include education and certifications.
+            $ref: '#/components/schemas/InsurancePlanMapping'
+        eligible_insurances:
+          description: List of insurance networks and their plans that can be mapped
+          type: array
+          items:
+            $ref: '#/components/schemas/EligibleInsurance'
+    VisitType:
+      type: string
+      description: The type of patient visit with the provider.
+      enum:
+      - all
+      - in_person
+      - video_visit
+      example: all
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -562,9 +546,112 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    UpdateInsuranceMappingsResult:
+    ProviderSearchResult:
+      type: object
+      required:
+      - search_parameters
+      - provider_locations
+      properties:
+        search_parameters:
+          $ref: '#/components/schemas/SearchParameters'
+        provider_locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderLocation'
+    Practice:
+      type: object
+      required:
+      - practice_id
+      - practice_name
+      properties:
+        practice_id:
+          type: string
+        practice_name:
+          type: string
+    Timeslot:
+      type: object
+      required:
+      - start_time
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          description: Date & time of the appointment in ISO-8601 format with a timezone offset. The timezone offset will be the provider's local time zone.
+          example: '2022-04-27T09:00:00-04:00'
+        visit_reason_id:
+          type: string
+          description: The Zocdoc ID of the visit reason this timeslot is valid for.
+          example: pc_FRO-18leckytNKtruw5dLR
+        booking_url:
+          type: string
+          description: Non-PHI deep link URL that allows developers to book this specific timeslot on zocdoc.com. Utm parameters (utm_medium=partnersynd and utm_source={appClientId}) will be automatically added. Developers will not be able to see the result of the booking.
+          example: https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844
+    ProviderLocationResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/ProviderLocation'
+    BookingRequirements:
+      type: object
+      required:
+      - required_fields
+      - accepts_booking_requests_from
+      properties:
+        required_fields:
+          type: array
+          items:
+            type: string
+            description: Options include `data.patient.insurance.insurance_plan_id` and `data.patient.insurance.insurance_member_id`
+        accepts_booking_requests_from:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingRequestInsuranceSource'
+      description: Criteria for booking appointments, defines requirements and mandatory fields specified by Zocdoc providers
+    AvailabilityResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Availability'
+            description: Response containing the availaibility information.
+    GetInsuranceMappingsResults:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/InsuranceMappingData'
+    ProviderLocationType:
+      type: string
+      enum:
+      - in_person_provider
+      - virtual_provider
+    Education:
+      type: object
+      properties:
+        institutions:
+          type: array
+          items:
+            type: string
+    EligibleInsurance:
+      type: object
+      required:
+      - insurance_carrier_id
+      - insurance_carrier_networks
+      properties:
+        insurance_carrier_id:
+          type: string
+        insurance_carrier_networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/InsuranceCarrierNetwork'
     BaseProvider:
       type: object
       properties:
@@ -618,6 +705,65 @@ components:
           example: https://zocdoc.com/doctor/capivarudo-nojeira-md-517507?utm_source=FakeSource
         credentials:
           $ref: '#/components/schemas/ProviderCredentials'
+    PatientType:
+      type: string
+      description: Whether or not the patient has been to the provider's practice.
+      enum:
+      - existing
+      - new
+      example: new
+    BaseLocation:
+      type: object
+      required:
+      - address1
+      - city
+      - state
+      - zip_code
+      - latitude
+      - longitude
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        state:
+          description: The location's two letter state code.
+          example: NY
+          type: string
+        zip_code:
+          description: The location's 5 digit zip code.
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+        location_name:
+          type: string
+        phone_number:
+          type: string
+          description: Unformatted phone number for the location. Returns null for certain API products.
+          example: '9999999999'
+        phone_extension:
+          type: string
+          description: Unformatted extension digits for the location phone number.
+          example: '123'
+        time_zone:
+          type: string
+          description: IANA time zone identifier for the location, e.g., America/New_York.
+          example: America/New_York
+    InsuranceMappingUpdateOperation:
+      type: string
+      enum:
+      - Add
+      - Remove
+      - Replace
+    UpdateInsuranceMappingsResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -640,132 +786,6 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    BaseVirtualLocation:
-      type: object
-      required:
-      - state
-      properties:
-        state:
-          description: The location's two letter state code.
-          example: NY
-          type: string
-        location_name:
-          type: string
-        time_zone:
-          type: string
-          description: IANA time zone identifier for the location, e.g., America/New_York.
-          example: America/New_York
-    ProviderLocation:
-      type: object
-      required:
-      - provider_location_id
-      - provider_location_type
-      - accepts_patient_insurance
-      - provider
-      - booking_requirements
-      properties:
-        provider_location_id:
-          type: string
-          example: pr_abc123-def456_wxyz7890|lo_abc123-def456_wxyz7890
-        provider_location_type:
-          $ref: '#/components/schemas/ProviderLocationType'
-        accepts_patient_insurance:
-          $ref: '#/components/schemas/AcceptsPatientInsuranceType'
-        first_availability_date_in_provider_local_time:
-          type: string
-          format: date
-          description: The first date where provider has availability for new patients with any visit reason in provider's local time zone, formatted as YYYY-MM-DD and up to 90 days in the future.
-        provider:
-          $ref: '#/components/schemas/BaseProvider'
-        location:
-          $ref: '#/components/schemas/BaseLocationWithDistance'
-        virtual_location:
-          $ref: '#/components/schemas/BaseVirtualLocation'
-        practice:
-          $ref: '#/components/schemas/Practice'
-        booking_requirements:
-          $ref: '#/components/schemas/BookingRequirements'
-    Timeslot:
-      type: object
-      required:
-      - start_time
-      properties:
-        start_time:
-          type: string
-          format: date-time
-          description: Date & time of the appointment in ISO-8601 format with a timezone offset. The timezone offset will be the provider's local time zone.
-          example: '2022-04-27T09:00:00-04:00'
-        visit_reason_id:
-          type: string
-          description: The Zocdoc ID of the visit reason this timeslot is valid for.
-          example: pc_FRO-18leckytNKtruw5dLR
-        booking_url:
-          type: string
-          description: Non-PHI deep link URL that allows developers to book this specific timeslot on zocdoc.com. Utm parameters (utm_medium=partnersynd and utm_source={appClientId}) will be automatically added. Developers will not be able to see the result of the booking.
-          example: https://www.zocdoc.com/booking/start?startTime=638874819000000000&locationId=274383&procedureId=75&professionalId=405844
-    Education:
-      type: object
-      properties:
-        institutions:
-          type: array
-          items:
-            type: string
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    ProviderLocationResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        properties:
-          data:
-            $ref: '#/components/schemas/ProviderLocation'
-    BookingRequirements:
-      type: object
-      required:
-      - required_fields
-      - accepts_booking_requests_from
-      properties:
-        required_fields:
-          type: array
-          items:
-            type: string
-            description: Options include `data.patient.insurance.insurance_plan_id` and `data.patient.insurance.insurance_member_id`
-        accepts_booking_requests_from:
-          type: array
-          items:
-            $ref: '#/components/schemas/BookingRequestInsuranceSource'
-      description: Criteria for booking appointments, defines requirements and mandatory fields specified by Zocdoc providers
-    InsuranceMappingData:
-      type: object
-      required:
-      - insurance_plan_mappings
-      - eligible_insurances
-      properties:
-        insurance_plan_mappings:
-          description: List of insurance plans that are mapped
-          type: array
-          items:
-            $ref: '#/components/schemas/InsurancePlanMapping'
-        eligible_insurances:
-          description: List of insurance networks and their plans that can be mapped
-          type: array
-          items:
-            $ref: '#/components/schemas/EligibleInsurance'
-    EligibleInsurance:
-      type: object
-      required:
-      - insurance_carrier_id
-      - insurance_carrier_networks
-      properties:
-        insurance_carrier_id:
-          type: string
-        insurance_carrier_networks:
-          type: array
-          items:
-            $ref: '#/components/schemas/InsuranceCarrierNetwork'
     BaseLocationWithDistance:
       allOf:
       - $ref: '#/components/schemas/BaseLocation'
@@ -775,40 +795,20 @@ components:
             type: number
             format: float
             description: Distance from patient to provider in miles.
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
     PublishedContext:
       type: string
       enum:
       - direct_listing
       - condition_driven_search
-    ProviderSearchResult:
-      type: object
-      required:
-      - search_parameters
-      - provider_locations
-      properties:
-        search_parameters:
-          $ref: '#/components/schemas/SearchParameters'
-        provider_locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderLocation'
-    PatientType:
-      type: string
-      description: Whether or not the patient has been to the provider's practice.
-      enum:
-      - existing
-      - new
-      example: new
-    AvailabilityResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/Availability'
-            description: Response containing the availaibility information.
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

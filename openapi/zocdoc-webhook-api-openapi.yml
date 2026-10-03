@@ -48,27 +48,6 @@ paths:
       summary: Mock webhook request
 components:
   schemas:
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    ChangedAttribute:
-      type: object
-      required:
-      - attribute_path
-      properties:
-        attribute_path:
-          type: string
-          description: The path to the changed attribute in dot notation (e.g., "appointment.start_time", "patient.uploaded_attachments")
-          example: appointment.start_time
-        attachment_type:
-          type: string
-          description: Required when attribute_path is "appointment.attachments", indicates the type of attachment
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -83,6 +62,34 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    ChangedAttribute:
+      type: object
+      required:
+      - attribute_path
+      properties:
+        attribute_path:
+          type: string
+          description: The path to the changed attribute in dot notation (e.g., "appointment.start_time", "patient.uploaded_attachments")
+          example: appointment.start_time
+        attachment_type:
+          type: string
+          description: Required when attribute_path is "appointment.attachments", indicates the type of attachment
+    WebhookMockRequestData:
+      type: object
+      required:
+      - data_type
+      - appointment_data
+      properties:
+        data_type:
+          type: string
+        appointment_data:
+          $ref: '#/components/schemas/WebhookMockAppointmentData'
+    AppointmentUpdateType:
+      type: string
+      enum:
+      - updated
+      - cancelled
+      - created
     WebhookMockDataRequest:
       type: object
       required:
@@ -110,27 +117,28 @@ components:
           type: string
         data:
           $ref: '#/components/schemas/WebhookMockRequestData'
-    AppointmentUpdateType:
-      type: string
-      enum:
-      - updated
-      - cancelled
-      - created
-    WebhookMockRequestData:
-      type: object
-      required:
-      - data_type
-      - appointment_data
-      properties:
-        data_type:
-          type: string
-        appointment_data:
-          $ref: '#/components/schemas/WebhookMockAppointmentData'
     ErrorType:
       type: string
       enum:
       - api_error
       - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
     WebhookMockAppointmentData:
       type: object
       required:
@@ -149,14 +157,6 @@ components:
           items:
             $ref: '#/components/schemas/ChangedAttribute'
           description: Array of changed attributes when webhook is triggered due to attribute changes. Each object must contain at least an attribute_path indicating the changed field.
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

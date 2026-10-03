@@ -99,15 +99,6 @@ paths:
           description: Not found
 components:
   schemas:
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -122,6 +113,28 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    SpecialtyByIdResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/SpecialtyData'
+    SpecialtiesResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/SpecialtyData'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -151,16 +164,6 @@ components:
       - health
       - dental
       - vision
-    SpecialtyByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/SpecialtyData'
     ErrorType:
       type: string
       enum:
@@ -174,6 +177,15 @@ components:
         request_id:
           type: string
           description: Unique request identifier for tracing
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
     SpecialtyData:
       type: object
       required:
@@ -194,18 +206,6 @@ components:
           type: string
         default_visit_reason_name:
           type: string
-    SpecialtiesResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/SpecialtyData'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

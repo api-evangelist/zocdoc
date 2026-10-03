@@ -129,96 +129,6 @@ paths:
       summary: Put provider calendar timeslots
 components:
   schemas:
-    TimeslotBaseRequest:
-      description: a bookable appointment start time for a particular provider
-      type: object
-      required:
-      - provider_id
-      - start_time
-      - location_id
-      - time_zone
-      properties:
-        provider_id:
-          type: string
-          description: Provider id
-          example: pr_abc123-def456_wxyz7890
-        location_id:
-          type: string
-          description: Location id
-          example: lo_abc123-def456_wxyz7890
-        start_time:
-          type: string
-          format: date-time-local
-          description: the local date and time within the timezone. The seconds may be omitted.
-          example: '2024-10-16T09:30:00'
-        time_zone:
-          type: string
-          description: The IANA time zone id of the appointment. Must be valid.
-          example: America/New_York
-        allowed_visit_reason_ids:
-          type: array
-          description: 'Restrict the timeslot to these visit reasons. Both `null` and an empty array will not restrict the timeslot.
-
-
-            Can work in conjunction with `excluded_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
-
-            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
-
-            being excluded.
-
-
-            | allowed | excluded | => Result |
-
-            | -----   | -------- | --------- |
-
-            | null    | null     | all visit reasons allowed |
-
-            | [A,B]   | null     | only A & B are allowed |
-
-            | null    | [A,B]    | all visit reasons except A & B are allowed |
-
-            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
-
-            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot |
-
-            '
-          items:
-            type: string
-          example:
-          - pc_TlZW-r06U0W3pCsIGtSI5B
-        excluded_visit_reason_ids:
-          type: array
-          items:
-            type: string
-          example:
-          - pc_TAZW-r16U0B3pZeIutSI3L
-          description: 'Exclude these visit reasons. Both `null` and an empty array means no visit reasons will be excluded.
-
-
-            Can work in conjunction with `allowed_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
-
-            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
-
-            being excluded.
-
-
-            | allowed | excluded | => Result |
-
-            | -----   | -------- | --------- |
-
-            | null    | null     | all visit reasons allowed |
-
-            | [A,B]   | null     | only A & B are allowed |
-
-            | null    | [A,B]    | all visit reasons except A & B are allowed |
-
-            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
-
-            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot |
-
-            '
-        patient_type:
-          $ref: '#/components/schemas/PatientType'
     TimeslotPutRequest:
       required:
       - timeslots
@@ -230,6 +140,16 @@ components:
           maxItems: 1500
           items:
             $ref: '#/components/schemas/TimeslotBaseRequest'
+    TimeslotPutErrors:
+      type: object
+      required:
+      - not_found_location_ids
+      properties:
+        not_found_location_ids:
+          type: array
+          items:
+            type: string
+          description: Location IDs that were not found on the Zocdoc side.
     TimeslotListResponse:
       allOf:
       - $ref: '#/components/schemas/IteratedBaseResult'
@@ -242,24 +162,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/CalendarIntegrationTimeslotWeb'
-    IteratedBaseResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        properties:
-          limit:
-            type: integer
-            description: 'Maximum number of items requested.
-
-              Note: For DynamoDB-style pagination, this may not match the number of items returned.
-
-              '
-          next_page_token:
-            type: string
-            description: Opaque cursor token for the next page. Null if no more pages.
-          next_url:
-            type: string
-            description: Complete URL for fetching the next page (convenience field)
     CalendarIntegrationTimeslotWeb:
       description: A bookable appointment start time for a particular provider
       type: object
@@ -357,21 +259,119 @@ components:
           format: instant
           description: the time this timeslot was created in Zocdoc's system.
           example: '2024-01-01T09:30:00Z'
+    IteratedBaseResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        properties:
+          limit:
+            type: integer
+            description: 'Maximum number of items requested.
+
+              Note: For DynamoDB-style pagination, this may not match the number of items returned.
+
+              '
+          next_page_token:
+            type: string
+            description: Opaque cursor token for the next page. Null if no more pages.
+          next_url:
+            type: string
+            description: Complete URL for fetching the next page (convenience field)
     TimeslotPutResponse:
       type: object
       properties:
         errors:
           $ref: '#/components/schemas/TimeslotPutErrors'
-    TimeslotPutErrors:
+    TimeslotBaseRequest:
+      description: a bookable appointment start time for a particular provider
       type: object
       required:
-      - not_found_location_ids
+      - provider_id
+      - start_time
+      - location_id
+      - time_zone
       properties:
-        not_found_location_ids:
+        provider_id:
+          type: string
+          description: Provider id
+          example: pr_abc123-def456_wxyz7890
+        location_id:
+          type: string
+          description: Location id
+          example: lo_abc123-def456_wxyz7890
+        start_time:
+          type: string
+          format: date-time-local
+          description: the local date and time within the timezone. The seconds may be omitted.
+          example: '2024-10-16T09:30:00'
+        time_zone:
+          type: string
+          description: The IANA time zone id of the appointment. Must be valid.
+          example: America/New_York
+        allowed_visit_reason_ids:
+          type: array
+          description: 'Restrict the timeslot to these visit reasons. Both `null` and an empty array will not restrict the timeslot.
+
+
+            Can work in conjunction with `excluded_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
+
+            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
+
+            being excluded.
+
+
+            | allowed | excluded | => Result |
+
+            | -----   | -------- | --------- |
+
+            | null    | null     | all visit reasons allowed |
+
+            | [A,B]   | null     | only A & B are allowed |
+
+            | null    | [A,B]    | all visit reasons except A & B are allowed |
+
+            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
+
+            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot |
+
+            '
+          items:
+            type: string
+          example:
+          - pc_TlZW-r06U0W3pCsIGtSI5B
+        excluded_visit_reason_ids:
           type: array
           items:
             type: string
-          description: Location IDs that were not found on the Zocdoc side.
+          example:
+          - pc_TAZW-r16U0B3pZeIutSI3L
+          description: 'Exclude these visit reasons. Both `null` and an empty array means no visit reasons will be excluded.
+
+
+            Can work in conjunction with `allowed_visit_reason_ids`. `allowed_visit_reason_ids` are superceded by `excluded_visit_reason_ids`.
+
+            So if a visit reason is included in both `allowed_visit_reason_ids` and `excluded_visit_reason_ids`, the net effect is that visit reason
+
+            being excluded.
+
+
+            | allowed | excluded | => Result |
+
+            | -----   | -------- | --------- |
+
+            | null    | null     | all visit reasons allowed |
+
+            | [A,B]   | null     | only A & B are allowed |
+
+            | null    | [A,B]    | all visit reasons except A & B are allowed |
+
+            | [A,B]   | [B,C]    | only A is allowed (C is irrelevant) |
+
+            | [A,B]   | [A,B]    | No visit reasons allowed, unbookable timeslot |
+
+            '
+        patient_type:
+          $ref: '#/components/schemas/PatientType'
     BaseResult:
       required:
       - request_id
