@@ -129,39 +129,37 @@ paths:
       summary: Put provider calendar timeslots
 components:
   schemas:
-    TimeslotPutRequest:
-      required:
-      - timeslots
-      type: object
-      properties:
-        timeslots:
-          type: array
-          minItems: 0
-          maxItems: 1500
-          items:
-            $ref: '#/components/schemas/TimeslotBaseRequest'
-    TimeslotPutErrors:
-      type: object
-      required:
-      - not_found_location_ids
-      properties:
-        not_found_location_ids:
-          type: array
-          items:
-            type: string
-          description: Location IDs that were not found on the Zocdoc side.
-    TimeslotListResponse:
+    IteratedBaseResult:
       allOf:
-      - $ref: '#/components/schemas/IteratedBaseResult'
+      - $ref: '#/components/schemas/BaseResult'
       - type: object
-        description: A list of timeslots.
-        required:
-        - data
         properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/CalendarIntegrationTimeslotWeb'
+          limit:
+            type: integer
+            description: 'Maximum number of items requested.
+
+              Note: For DynamoDB-style pagination, this may not match the number of items returned.
+
+              '
+          next_page_token:
+            type: string
+            description: Opaque cursor token for the next page. Null if no more pages.
+          next_url:
+            type: string
+            description: Complete URL for fetching the next page (convenience field)
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    TimeslotPutResponse:
+      type: object
+      properties:
+        errors:
+          $ref: '#/components/schemas/TimeslotPutErrors'
     CalendarIntegrationTimeslotWeb:
       description: A bookable appointment start time for a particular provider
       type: object
@@ -259,29 +257,28 @@ components:
           format: instant
           description: the time this timeslot was created in Zocdoc's system.
           example: '2024-01-01T09:30:00Z'
-    IteratedBaseResult:
+    TimeslotListResponse:
       allOf:
-      - $ref: '#/components/schemas/BaseResult'
+      - $ref: '#/components/schemas/IteratedBaseResult'
       - type: object
+        description: A list of timeslots.
+        required:
+        - data
         properties:
-          limit:
-            type: integer
-            description: 'Maximum number of items requested.
-
-              Note: For DynamoDB-style pagination, this may not match the number of items returned.
-
-              '
-          next_page_token:
-            type: string
-            description: Opaque cursor token for the next page. Null if no more pages.
-          next_url:
-            type: string
-            description: Complete URL for fetching the next page (convenience field)
-    TimeslotPutResponse:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/CalendarIntegrationTimeslotWeb'
+    TimeslotPutErrors:
       type: object
+      required:
+      - not_found_location_ids
       properties:
-        errors:
-          $ref: '#/components/schemas/TimeslotPutErrors'
+        not_found_location_ids:
+          type: array
+          items:
+            type: string
+          description: Location IDs that were not found on the Zocdoc side.
     TimeslotBaseRequest:
       description: a bookable appointment start time for a particular provider
       type: object
@@ -372,14 +369,17 @@ components:
             '
         patient_type:
           $ref: '#/components/schemas/PatientType'
-    BaseResult:
+    TimeslotPutRequest:
       required:
-      - request_id
+      - timeslots
       type: object
       properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
+        timeslots:
+          type: array
+          minItems: 0
+          maxItems: 1500
+          items:
+            $ref: '#/components/schemas/TimeslotBaseRequest'
     PatientType:
       type: string
       description: Whether or not the patient has been to the provider's practice.

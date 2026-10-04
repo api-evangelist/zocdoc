@@ -56,6 +56,28 @@ paths:
           description: Forbidden
 components:
   schemas:
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -70,6 +92,13 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    ProviderNpis:
+      type: object
+      properties:
+        npis:
+          type: array
+          items:
+            type: string
     ProviderNpiResponse:
       allOf:
       - $ref: '#/components/schemas/PaginatedBaseResult'
@@ -101,35 +130,6 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    ProviderNpis:
-      type: object
-      properties:
-        npis:
-          type: array
-          items:
-            type: string
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

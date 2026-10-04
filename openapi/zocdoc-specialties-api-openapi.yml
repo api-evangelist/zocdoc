@@ -99,6 +99,60 @@ paths:
           description: Not found
 components:
   schemas:
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    SpecialtyData:
+      type: object
+      required:
+      - id
+      - name
+      - care_category
+      - default_visit_reason_id
+      - default_visit_reason_name
+      properties:
+        id:
+          type: string
+          description: Zocdoc specialty id
+        name:
+          type: string
+        care_category:
+          $ref: '#/components/schemas/CareCategory'
+        default_visit_reason_id:
+          type: string
+        default_visit_reason_name:
+          type: string
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    SpecialtiesResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/SpecialtyData'
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -113,28 +167,13 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    SpecialtyByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/SpecialtyData'
-    SpecialtiesResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/SpecialtyData'
+    CareCategory:
+      type: string
+      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
+      enum:
+      - health
+      - dental
+      - vision
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -157,55 +196,16 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    CareCategory:
-      type: string
-      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
-      enum:
-      - health
-      - dental
-      - vision
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
-      required:
-      - request_id
+    SpecialtyByIdResponse:
       type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    SpecialtyData:
-      type: object
-      required:
-      - id
-      - name
-      - care_category
-      - default_visit_reason_id
-      - default_visit_reason_name
-      properties:
-        id:
-          type: string
-          description: Zocdoc specialty id
-        name:
-          type: string
-        care_category:
-          $ref: '#/components/schemas/CareCategory'
-        default_visit_reason_id:
-          type: string
-        default_visit_reason_name:
-          type: string
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/SpecialtyData'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

@@ -96,32 +96,19 @@ paths:
       summary: Get reviews for providers
 components:
   schemas:
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    ProviderReviewsBatchResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            description: One item for each distinct requested provider_id, in request order.
-            items:
-              $ref: '#/components/schemas/ProviderReviewsData'
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
     ProviderReviewsData:
       type: object
       required:
@@ -155,19 +142,6 @@ components:
         properties:
           data:
             $ref: '#/components/schemas/ProviderReviewsData'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
     Error:
       required:
       - message
@@ -177,6 +151,32 @@ components:
           type: string
         message:
           type: string
+    ProviderReviewsBatchResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            description: One item for each distinct requested provider_id, in request order.
+            items:
+              $ref: '#/components/schemas/ProviderReviewsData'
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

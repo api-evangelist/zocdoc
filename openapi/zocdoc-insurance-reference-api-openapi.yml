@@ -121,41 +121,6 @@ paths:
           description: Not found
 components:
   schemas:
-    InsuranceProgramType:
-      type: string
-      enum:
-      - commercial
-      - commercial_exchange
-      - medicare
-      - medicaid
-      - workers_compensation
-      - uncategorized
-      - medicare_advantage
-      - medicaid_managed_care
-      - federal
-      description: "We've categorized plan types offered by each carrier into their associated programs:\n  * Commercial: The most common plans offered by private companies. Providers contract directly with the private insurance company.\n  * ACA Marketplace (Commercial exchange): Plans available for patients to buy on online marketplaces under the Affordable Care Act. Providers contract with the insurance carrier offering the plan, not the marketplace itself.\n  * Medicare: Medicare advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved by Medicare. They provide coverage to individuals, families, and employer groups, typically through employer-sponsored plans.\n  * Medicaid: Medicaid Managed Care plans provide Medicaid benefits through contracted arrangements between state Medicaid agencies and a managed care organization (MCOs).\n  * Worker's Compensation: State-mandated programs for work-related injuries and illnesses. Providers contract with the employer or a state-designated agency.\n  * Uncategorized: Uncategorized insurance plans\n"
-    InsuranceCarrier:
-      type: object
-      description: The insurance carrier for the insurance plan
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: Zocdoc id for insurance carrier
-        name:
-          type: string
-    InsurancePlanByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/InsurancePlan'
     InsuranceNetworkType:
       type: string
       description: "The type of insurance plan\n  * HMO: Health Maintenance Organization\n  * PPO: Preferred Provider Organization\n  * POS: Point-of-Service\n  * EPO: Exclusive Provider Organization\n  * Indemnity: Traditional fee-for-service plans\n  * ASO: Administrative Services Only\n  * ACO: Accountable Care Organizations\n  * ACP: Accountable Care Program\n  * Medicare: Medicare Advantage plans\n  * Medicaid: Medicaid Managed Care plans\n  * Other\n  * Uncategorized: Uncategorized insurance plans\n"
@@ -173,6 +138,87 @@ components:
       - other
       - uncategorized
       - hmo_pos
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    CoverageArea:
+      type: object
+      required:
+      - is_national
+      properties:
+        is_national:
+          type: boolean
+        states:
+          type: array
+          description: The two letter state codes where the insurance plan has coverage. Will be null when is_national true.
+          items:
+            type: string
+    Error:
+      required:
+      - message
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    InsurancePlanByIdResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/InsurancePlan'
+    InsuranceProgramType:
+      type: string
+      enum:
+      - commercial
+      - commercial_exchange
+      - medicare
+      - medicaid
+      - workers_compensation
+      - uncategorized
+      - medicare_advantage
+      - medicaid_managed_care
+      - federal
+      description: "We've categorized plan types offered by each carrier into their associated programs:\n  * Commercial: The most common plans offered by private companies. Providers contract directly with the private insurance company.\n  * ACA Marketplace (Commercial exchange): Plans available for patients to buy on online marketplaces under the Affordable Care Act. Providers contract with the insurance carrier offering the plan, not the marketplace itself.\n  * Medicare: Medicare advantage plans, sometimes called “Part C” or “MA Plans,” are offered by private companies approved by Medicare. They provide coverage to individuals, families, and employer groups, typically through employer-sponsored plans.\n  * Medicaid: Medicaid Managed Care plans provide Medicaid benefits through contracted arrangements between state Medicaid agencies and a managed care organization (MCOs).\n  * Worker's Compensation: State-mandated programs for work-related injuries and illnesses. Providers contract with the employer or a state-designated agency.\n  * Uncategorized: Uncategorized insurance plans\n"
+    InsurancePlansResponse:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/PaginatedBaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/InsurancePlan'
+    InsuranceCarrier:
+      type: object
+      description: The insurance carrier for the insurance plan
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Zocdoc id for insurance carrier
+        name:
+          type: string
     ErrorResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -187,6 +233,26 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    CareCategory:
+      type: string
+      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
+      enum:
+      - health
+      - dental
+      - vision
+    ReferenceMetadata:
+      type: object
+      properties:
+        created_timestamp_utc:
+          type: string
+          format: date-time
+          description: Date & time of when the reference data was made in ISO-8601 format with a timezone offset representing UTC
+          example: '2022-04-27T09:00:00-00:00'
+        last_updated_timestamp_utc:
+          type: string
+          format: date-time
+          description: Date & time of when the reference data was last updated in ISO-8601 format with a timezone offset representing UTC
+          example: '2022-04-27T09:00:00-00:00'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -209,39 +275,6 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
-    CareCategory:
-      type: string
-      description: "The category of care for an insurance plan\n  * Health: Health and Mental Health Care\n  * Dental: Dental Care\n  * Vision: Vision Care\n"
-      enum:
-      - health
-      - dental
-      - vision
-    Error:
-      required:
-      - message
-      type: object
-      properties:
-        field:
-          type: string
-        message:
-          type: string
-    InsurancePlansResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/PaginatedBaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            type: array
-            items:
-              $ref: '#/components/schemas/InsurancePlan'
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
     InsuranceStatus:
       type: string
       description: Status of the insurance plan
@@ -249,14 +282,6 @@ components:
       - inactive
       - active
       - deleted
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
     InsurancePlan:
       type: object
       required:
@@ -291,31 +316,6 @@ components:
           $ref: '#/components/schemas/CoverageArea'
         ref_metadata:
           $ref: '#/components/schemas/ReferenceMetadata'
-    ReferenceMetadata:
-      type: object
-      properties:
-        created_timestamp_utc:
-          type: string
-          format: date-time
-          description: Date & time of when the reference data was made in ISO-8601 format with a timezone offset representing UTC
-          example: '2022-04-27T09:00:00-00:00'
-        last_updated_timestamp_utc:
-          type: string
-          format: date-time
-          description: Date & time of when the reference data was last updated in ISO-8601 format with a timezone offset representing UTC
-          example: '2022-04-27T09:00:00-00:00'
-    CoverageArea:
-      type: object
-      required:
-      - is_national
-      properties:
-        is_national:
-          type: boolean
-        states:
-          type: array
-          description: The two letter state codes where the insurance plan has coverage. Will be null when is_national true.
-          items:
-            type: string
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2
