@@ -57,3 +57,21 @@ plans:
     contact:
       url: https://developer.zocdoc.com/?utm_medium=organicpro&utm_routing=API_Sender#api-form
       description: Contact Zocdoc to inquire about production API access and pricing
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models: []
+  units: []
+  plans:
+  - name: Sandbox Access
+    access: free
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Production Partner Access
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
