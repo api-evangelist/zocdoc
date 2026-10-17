@@ -56,19 +56,13 @@ paths:
           description: Forbidden
 components:
   schemas:
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
-      required:
-      - request_id
+    ProviderNpis:
       type: object
       properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
+        npis:
+          type: array
+          items:
+            type: string
     Error:
       required:
       - message
@@ -78,27 +72,6 @@ components:
           type: string
         message:
           type: string
-    ErrorResult:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - error_type
-        - errors
-        properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    ProviderNpis:
-      type: object
-      properties:
-        npis:
-          type: array
-          items:
-            type: string
     ProviderNpiResponse:
       allOf:
       - $ref: '#/components/schemas/PaginatedBaseResult'
@@ -130,6 +103,33 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

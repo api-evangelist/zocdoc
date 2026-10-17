@@ -99,29 +99,6 @@ paths:
           description: Not found
 components:
   schemas:
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
-      required:
-      - request_id
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: Unique request identifier for tracing
-    VisitReasonByIdResponse:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/VisitReasonData'
     Error:
       required:
       - message
@@ -131,21 +108,6 @@ components:
           type: string
         message:
           type: string
-    VisitReasonData:
-      type: object
-      required:
-      - id
-      - name
-      - specialty_id
-      properties:
-        id:
-          type: string
-          description: Zocdoc visit reason id
-        name:
-          type: string
-        specialty_id:
-          type: string
-          description: Zocdoc specialty id this visit reason belongs to
     VisitReasonsResponse:
       type: object
       allOf:
@@ -158,20 +120,16 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/VisitReasonData'
-    ErrorResult:
+    VisitReasonByIdResponse:
+      type: object
       allOf:
       - $ref: '#/components/schemas/BaseResult'
       - type: object
         required:
-        - error_type
-        - errors
+        - data
         properties:
-          error_type:
-            $ref: '#/components/schemas/ErrorType'
-          errors:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+          data:
+            $ref: '#/components/schemas/VisitReasonData'
     PaginatedBaseResult:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
@@ -194,6 +152,48 @@ components:
           next_url:
             description: A link to the next page of results; null if this is the last page of results.
             type: string
+    BaseResult:
+      required:
+      - request_id
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Unique request identifier for tracing
+    VisitReasonData:
+      type: object
+      required:
+      - id
+      - name
+      - specialty_id
+      properties:
+        id:
+          type: string
+          description: Zocdoc visit reason id
+        name:
+          type: string
+        specialty_id:
+          type: string
+          description: Zocdoc specialty id this visit reason belongs to
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
+    ErrorResult:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - error_type
+        - errors
+        properties:
+          error_type:
+            $ref: '#/components/schemas/ErrorType'
+          errors:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
   securitySchemes:
     ClientCredentialsFlow:
       type: oauth2

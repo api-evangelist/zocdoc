@@ -96,19 +96,24 @@ paths:
       summary: Get reviews for providers
 components:
   schemas:
-    ErrorType:
-      type: string
-      enum:
-      - api_error
-      - invalid_request
-    BaseResult:
+    Error:
       required:
-      - request_id
+      - message
       type: object
       properties:
-        request_id:
+        field:
           type: string
-          description: Unique request identifier for tracing
+        message:
+          type: string
+    ProviderReviewsResponse:
+      allOf:
+      - $ref: '#/components/schemas/BaseResult'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/ProviderReviewsData'
     ProviderReviewsData:
       type: object
       required:
@@ -133,24 +138,19 @@ components:
           type: number
           format: double
           description: The average wait time rating of the provider (1-5), rounded to 1 decimal place
-    ProviderReviewsResponse:
-      allOf:
-      - $ref: '#/components/schemas/BaseResult'
-      - type: object
-        required:
-        - data
-        properties:
-          data:
-            $ref: '#/components/schemas/ProviderReviewsData'
-    Error:
+    BaseResult:
       required:
-      - message
+      - request_id
       type: object
       properties:
-        field:
+        request_id:
           type: string
-        message:
-          type: string
+          description: Unique request identifier for tracing
+    ErrorType:
+      type: string
+      enum:
+      - api_error
+      - invalid_request
     ProviderReviewsBatchResponse:
       allOf:
       - $ref: '#/components/schemas/BaseResult'
