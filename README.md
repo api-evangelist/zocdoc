@@ -64,24 +64,217 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Zocdoc is a healthcare appointment booking platform that provides a REST API for accessing provider availability, booking appointments, managing insurance verification, and patient scheduling. The Zocdoc for Developers platform enables integration with Zocdoc's provider network through patient booking, provider calendar integration, and insurance APIs using OAuth 2.0 authentication.
+Zocdoc is a healthcare appointment booking platform that provides a REST API for accessing provider availability, booking appointments, managing insurance verification, and patient scheduling. The Zocdoc for Developers platform enables integration with Zocdoc's provider network through patient booking, provider calendar integration, and insurance APIs using OAuth 2.0 authentication with both sandbox and production environments.
 
-## APIs
+**Areas:** Healthcare · Appointments · Booking · Providers · Insurance · Telehealth · Scheduling
 
-- **Zocdoc API** — REST API for provider search, availability, appointment booking, and calendar integration
+## Zocdoc on APIs.io
 
-## Resources
+Everything profiled for Zocdoc is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/zocdoc/](https://apis.io/providers/zocdoc/)** — or go straight to one of the APIs or properties below.
 
-- [Developer Documentation](https://api-docs.zocdoc.com/guides)
-- [API Reference](https://api-docs.zocdoc.com/apis)
-- [Authentication Guide](https://api-docs.zocdoc.com/guides/authentication)
-- [Webhooks](https://api-docs.zocdoc.com/guides/webhooks)
-- [Changelog](https://api-docs.zocdoc.com/changelog)
-- [GitHub Organization](https://github.com/Zocdoc)
-- [Engineering Blog](https://medium.com/zocdoc-engineering)
-- [LinkedIn](https://www.linkedin.com/company/zocdoc)
-- [X](https://x.com/Zocdoc)
+### APIs (13)
 
-## Maintainers
+- [Zocdoc Appointments API](https://apis.io/apis/zocdoc/zocdoc-appointments-api/) — Endpoints for booking, cancelling, and rescheduling appointments, including retrieving current appointment statuses and updated information.
+- [Zocdoc Calendar Integration Timeslots API](https://apis.io/apis/zocdoc/zocdoc-calendar-integration-timeslots-api/) — Endpoints to manage timeslots for providers.
+- [Zocdoc Credentials API](https://apis.io/apis/zocdoc/zocdoc-credentials-api/) — Endpoints for managing API credentials.
+- [Zocdoc Facilities API](https://apis.io/apis/zocdoc/zocdoc-facilities-api/) — Endpoints to retrieve facilities within the developer's directory.
+- [Zocdoc Insurance Reference API](https://apis.io/apis/zocdoc/zocdoc-insurance-reference-api/) — Endpoints to retrieve insurance plans supported by Zocdoc.
+- [Zocdoc Provider Locations API](https://apis.io/apis/zocdoc/zocdoc-provider-locations-api/) — Endpoints for retrieving and modifying provider location objects and their related insurance plans and availability.
+- [Zocdoc Providers API](https://apis.io/apis/zocdoc/zocdoc-providers-api/) — Endpoints to retrieve providers within the developer's directory.
+- [Zocdoc Reference API](https://apis.io/apis/zocdoc/zocdoc-reference-api/) — Endpoints to retrieve information about the developer's directory.
+- [Zocdoc Schedulable Entities API](https://apis.io/apis/zocdoc/zocdoc-schedulable-entities-api/) — Endpoints to retrieve schedulable entities with availability information.
+- [Zocdoc Webhook API](https://apis.io/apis/zocdoc/zocdoc-webhook-api/) — Sandbox endpoints to mock webhook behavior
+- [Zocdoc Reviews API](https://apis.io/apis/zocdoc/zocdoc-reviews-api/) — Endpoints to retrieve aggregate review summaries for providers, individually or in batches of up to 100 provider IDs.
+- [Zocdoc Specialties API](https://apis.io/apis/zocdoc/zocdoc-specialties-api/) — Reference endpoints to retrieve the specialties Zocdoc supports and their default visit reasons, optionally filtered by care category.
+- [Zocdoc Visit Reasons API](https://apis.io/apis/zocdoc/zocdoc-visit-reasons-api/) — Reference endpoints to retrieve the visit reasons Zocdoc supports and the specialty each one belongs to. Visit reason drives appointment duration and…
 
-- Kin Lane (kin@apievangelist.com)
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Zocdoc Webhooks](https://apis.io/asyncapis/zocdoc/zocdoc-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [zocdoc](https://apis.io/servers/zocdoc/zocdoc/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Zocdoc Agentic Access](https://apis.io/agentic-access/zocdoc/zocdoc-agentic-access/)
+
+#### JSON Schema (3)
+
+The data models the API reads and writes.
+
+- [Appointment](https://apis.io/schemas/zocdoc/zocdoc-appointment/)
+- [Availability](https://apis.io/schemas/zocdoc/zocdoc-availability/)
+- [Provider](https://apis.io/schemas/zocdoc/zocdoc-provider/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Zocdoc Context](https://apis.io/jsonld/zocdoc/zocdoc-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Zocdoc API Vocabulary](https://apis.io/vocabularies/zocdoc/zocdoc-vocabulary/)
+
+#### Examples (3)
+
+Example requests and responses.
+
+- [Availability Response](https://apis.io/examples/zocdoc/availability-response/)
+- [Book Appointment Request](https://apis.io/examples/zocdoc/book-appointment-request/)
+- [Book Appointment Response](https://apis.io/examples/zocdoc/book-appointment-response/)
+
+#### Collections (10)
+
+Postman and Open Collection request collections.
+
+- [API Documentation appointments API](https://apis.io/collections/zocdoc/open-zocdoc-appointments-api/)
+- [API Documentation appointments calendar-integration-timeslots API](https://apis.io/collections/zocdoc/open-zocdoc-calendar-integration-timeslots-api/)
+- [API Documentation appointments credentials API](https://apis.io/collections/zocdoc/open-zocdoc-credentials-api/)
+- [API Documentation appointments facilities API](https://apis.io/collections/zocdoc/open-zocdoc-facilities-api/)
+- [API Documentation appointments insurance-reference API](https://apis.io/collections/zocdoc/open-zocdoc-insurance-reference-api/)
+- [API Documentation appointments provider-locations API](https://apis.io/collections/zocdoc/open-zocdoc-provider-locations-api/)
+- [API Documentation appointments providers API](https://apis.io/collections/zocdoc/open-zocdoc-providers-api/)
+- [API Documentation appointments reference API](https://apis.io/collections/zocdoc/open-zocdoc-reference-api/)
+- [API Documentation appointments schedulable-entities API](https://apis.io/collections/zocdoc/open-zocdoc-schedulable-entities-api/)
+- [API Documentation appointments webhook API](https://apis.io/collections/zocdoc/open-zocdoc-webhook-api/)
+
+#### Overlays (13)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Zocdoc Appointments Overlay](https://apis.io/overlays/zocdoc/zocdoc-appointments-overlay/)
+- [Zocdoc Calendar Integration Timeslots Overlay](https://apis.io/overlays/zocdoc/zocdoc-calendar-integration-timeslots-overlay/)
+- [Zocdoc Credentials Overlay](https://apis.io/overlays/zocdoc/zocdoc-credentials-overlay/)
+- [Zocdoc Facilities Overlay](https://apis.io/overlays/zocdoc/zocdoc-facilities-overlay/)
+- [Zocdoc Insurance Reference Overlay](https://apis.io/overlays/zocdoc/zocdoc-insurance-reference-overlay/)
+- [Zocdoc Provider Locations Overlay](https://apis.io/overlays/zocdoc/zocdoc-provider-locations-overlay/)
+- [Zocdoc Providers Overlay](https://apis.io/overlays/zocdoc/zocdoc-providers-overlay/)
+- [Zocdoc Reference Overlay](https://apis.io/overlays/zocdoc/zocdoc-reference-overlay/)
+- [Zocdoc Reviews Overlay](https://apis.io/overlays/zocdoc/zocdoc-reviews-overlay/)
+- [Zocdoc Schedulable Entities Overlay](https://apis.io/overlays/zocdoc/zocdoc-schedulable-entities-overlay/)
+- [Zocdoc Specialties Overlay](https://apis.io/overlays/zocdoc/zocdoc-specialties-overlay/)
+- [Zocdoc Visit Reasons Overlay](https://apis.io/overlays/zocdoc/zocdoc-visit-reasons-overlay/)
+- [Zocdoc Webhook Overlay](https://apis.io/overlays/zocdoc/zocdoc-webhook-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Zocdoc — jsonschema rules](https://apis.io/rules/zocdoc/zocdoc-jsonschema-spectral-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Zocdoc Authentication](https://apis.io/security/zocdoc/zocdoc-authentication/)
+- [Zocdoc Domain Security](https://apis.io/security/zocdoc/zocdoc-domain-security/)
+- [Zocdoc Vulnerability Disclosure](https://apis.io/security/zocdoc/zocdoc-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Zocdoc Scopes](https://apis.io/scopes/zocdoc/zocdoc-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Zocdoc Plans Pricing](https://apis.io/plans/zocdoc/zocdoc-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Zocdoc Rate Limits](https://apis.io/rate-limits/zocdoc/zocdoc-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Zocdoc Finops](https://apis.io/finops/zocdoc/zocdoc-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.zocdoc.com)
+- [Documentation](https://api-docs.zocdoc.com/guides)
+- [Getting started](https://api-docs.zocdoc.com/guides)
+- [API reference](https://api-docs.zocdoc.com/apis)
+- [Pricing](https://www.zocdoc.com/about/news/zocdoc-launches-its-first-ever-public-api-platform-zocdoc-for-developers/)
+- [Sign up](https://developer.zocdoc.com/#api-form)
+- [Support](https://api-docs.zocdoc.com/guides/faqs)
+- [Blog](https://medium.com/zocdoc-engineering)
+- [Terms of service](https://www.zocdoc.com/about/terms)
+- [Privacy policy](https://www.zocdoc.com/about/consumer-health-data-privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 58.3** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 64.4 |
+| Contract governance | 28.0 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 64.3 |
+| Access clarity | 59.2 |
+
+**Agent readiness 50.1** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 37.5** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/zocdoc/](https://apis.io/providers/zocdoc/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Zocdoc: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/zocdoc/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
